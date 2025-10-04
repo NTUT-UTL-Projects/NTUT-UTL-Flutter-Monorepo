@@ -1,0 +1,7 @@
+name: NTUT-UTL-Flutter-Monorepo
+environment:
+  sdk: ">=3.9.2 <4.0.0"
+dev_dependencies:
+  melos: ^7.1.1
+workspace: 
+melos: 
