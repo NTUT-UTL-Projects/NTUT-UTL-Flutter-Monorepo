@@ -147,10 +147,10 @@ class HomePage extends StatelessWidget {
 
     final scanner = Builder(
       builder: (context) {
-        final controller = context.read<HomePageController>();
+        final toggleScanning = context.select<HomePageController, VoidCallback>((c) => c.toggleScanning);
         return RefreshIndicator(
           onRefresh: () async {
-            controller.toggleScanning();
+            toggleScanning();
           },
           child: Builder(
             builder: (context) {
