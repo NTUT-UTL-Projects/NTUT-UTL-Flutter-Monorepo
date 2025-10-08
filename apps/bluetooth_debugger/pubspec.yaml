@@ -1,0 +1,45 @@
+name: bluetooth_debugger
+description: "Bluetooth Debugger."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: any
+  equatable: any
+  flutter_blue_plus: any
+  flutter_blue_plus_platform_interface: any
+  keyboard_actions: any
+  package_info_plus: any
+  path_provider: any
+  permission_handler: any
+  provider: any
+  shared_preferences: any
+  synchronized: any
+  talkjs_flutter_inappwebview: any
+
+  # --------------------------------------------------
+  # Packages
+  bluetooth_utils: any
+  data_utils: any
+  file_utils: any
+  path_provider_utils: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: BluetoothIcons
+      fonts:
+        - asset: assets/bluetooth_icons/flutter-icons/BluetoothIcons.ttf
+  generate: true
+
+resolution: workspace

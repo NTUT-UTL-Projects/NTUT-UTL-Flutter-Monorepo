@@ -2,6 +2,7 @@ name: ntut_utl_flutter_monorepo
 environment:
   sdk: ">=3.9.2 <4.0.0"
 workspace: 
+  - apps/bluetooth_debugger
   - packages/bluetooth_utils
   - packages/data_utils
   - packages/file_utils

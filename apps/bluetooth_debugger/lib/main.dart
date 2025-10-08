@@ -1,0 +1,220 @@
+import 'dart:async';
+import 'package:bluetooth_utils/permisssion/bluetooth_permissions.dart';
+import 'package:bluetooth_utils/persentation/tile/details/tile.dart';
+import 'package:bluetooth_utils/persentation/view/bluetooth_status_view.dart';
+import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
+import 'package:data_utils/persentation/view/bytes_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import 'application/write_bluetooth_packet_file.dart';
+import 'assets/bluetooth_icons_icons.dart' as asset;
+import 'presentation/dto/bluetooth_devices_filter.dart';
+import 'presentation/screen/home_page/home_page.dart';
+
+late final WriteBluetoothPacketFile writeBluetoothPacketFile;
+
+late final bool fbpIsSupported;
+List<fbp.BluetoothDevice> fbpSystemDevices = [];
+late final Timer updateRssi;
+
+Future<void> init() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Flutter Blue Plus
+  try {
+    fbpIsSupported = await fbp.FlutterBluePlus.isSupported;
+  } catch(e) {
+    fbpIsSupported = false;
+  }
+  if(fbpIsSupported) {
+    await fbp.FlutterBluePlus.setLogLevel(fbp.LogLevel.none, color: true);
+    await BondFlutterBluePlus.init();
+    CharacteristicFlutterBluePlus.init();
+    DescriptorFlutterBluePlus.init();
+    RssiFlutterBluePlus.init();
+    ScanResultFlutterBluePlus.init();
+    fbpSystemDevices = await fbp.FlutterBluePlus.systemDevices([]);
+    updateRssi = Timer.periodic(
+      const Duration(milliseconds: 100),
+      (_) async {
+        for(final d in fbp.FlutterBluePlus.connectedDevices) {
+          try {
+            await d.readRssi();
+          } catch(e) {}
+        }
+      }
+    );
+  }
+  writeBluetoothPacketFile = WriteBluetoothPacketFile(
+    fbpIsSupported: fbpIsSupported,
+    fileNameCreator: (DateTime time) {
+      return "Bluetooth_Debugger_${time
+        .toString()
+        .replaceAll(" ", "_")
+        .replaceAll(":", "-")
+        .replaceAll(".", "-")
+      }";
+    },
+  );
+  return;
+}
+
+Future<void> main() async {
+  await init();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    final homePage = MultiProvider(
+      providers: [
+        ChangeNotifierProvider<HomePageController>(create: (_) => HomePageController(
+          fbpIsSupported: fbpIsSupported,
+          fbpSystemDevices: fbpSystemDevices,
+        )),
+        Provider<BluetoothDevicesFilterIcons>(create: (_) => BluetoothDevicesFilterIcons(
+          get: (filter) {
+            switch(filter) {
+              case BluetoothDevicesFilter.inSystem:
+                return asset.BluetoothIcons.system;
+              case BluetoothDevicesFilter.nameIsNotEmpty:
+                return asset.BluetoothIcons.name;
+              case BluetoothDevicesFilter.isConnected:
+                return asset.BluetoothIcons.connected;
+              case BluetoothDevicesFilter.isConnectable:
+                return asset.BluetoothIcons.connectable;
+            }
+          },
+        )),
+        Provider<BluetoothDeviceIcons>(create: (_) => BluetoothDeviceIcons(
+          classic: asset.BluetoothIcons.classic,
+          connected: asset.BluetoothIcons.connected,
+          disconnected: asset.BluetoothIcons.disconnected,
+          highSpeed: asset.BluetoothIcons.high_speed,
+          inSystem: asset.BluetoothIcons.system,
+          lowPower: asset.BluetoothIcons.low_power,
+          nullRssi: asset.BluetoothIcons.null_rssi,
+          paired: asset.BluetoothIcons.paired,
+          unpaired: asset.BluetoothIcons.unpaired,
+        )),
+        Provider<WriteBluetoothPacketFile>(create: (_) => writeBluetoothPacketFile),
+      ],
+      child: HomePage(),
+    );
+
+    final bluetoothOffPage = Provider<BluetoothStatus>(
+      create: (_) => BluetoothStatus(
+        onPressedButton: () async {
+          for(final permission in bluetoothPermissions) {
+            if(!(await permission.request()).isGranted) {
+              return;
+            }
+          }
+          try {
+            await fbp.FlutterBluePlus.turnOn();
+          } catch(e) {}
+        },
+      ),
+      child: BluetoothStatusView(),
+    );
+
+    return MaterialApp(
+      title: 'Bluetooth Debugger',
+      theme: ThemeData.light(
+        useMaterial3: true,
+      ).copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
+        extensions: [
+          BluetoothDeviceTileTheme(
+            selectedColor: Colors.green,
+            connectedColor: Colors.blue,
+            disconnectedColor: Colors.red,
+            highlightColor: Colors.black,
+            typeIconColor: Colors.orange,
+          ),
+          BluetoothStatusTheme.recommended().copyWith(
+            backGroundColor: Colors.blue,
+          ),
+          BytesTheme(),
+          HomePageTheme(
+            highlightColor: Colors.black,
+            startTaskColor: Colors.green,
+            stopTaskColor: Colors.red,
+            timestampColor: Colors.grey,
+            toggleFilterColor: Colors.orange,
+          ),
+        ],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+        ),
+        listTileTheme: ListTileThemeData(
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ),
+      darkTheme: ThemeData.dark(
+        useMaterial3: true,
+      ).copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigoAccent,
+        ),
+        extensions: [
+          BluetoothDeviceTileTheme(
+            selectedColor: Colors.green[700]!,
+            connectedColor: Colors.indigoAccent,
+            disconnectedColor: Colors.red[700]!,
+            highlightColor: Colors.white,
+            typeIconColor: Colors.orange[700]!,
+          ),
+          BluetoothStatusTheme.recommended().copyWith(
+            backGroundColor: Colors.indigoAccent,
+          ),
+          BytesTheme(),
+          HomePageTheme(
+            highlightColor: Colors.white,
+            startTaskColor: Colors.green[700]!,
+            stopTaskColor: Colors.red[700]!,
+            timestampColor: Colors.grey,
+            toggleFilterColor: Colors.orange[700]!,
+          ),
+        ],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.black,
+        ),
+        listTileTheme: ListTileThemeData(
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
+      home: StreamProvider(
+        create: (_) => (fbpIsSupported)
+          ? fbp.FlutterBluePlus.adapterState
+          : null,
+        initialData: (fbpIsSupported)
+          ? fbp.FlutterBluePlus.adapterStateNow
+          : BluetoothAdapterState.on,
+        builder: (context, _) {
+          return (context.watch<fbp.BluetoothAdapterState>() == fbp.BluetoothAdapterState.on) 
+            ? homePage
+            : bluetoothOffPage;
+        },
+      ),
+      navigatorObservers: [
+        BluetoothAdapterStateObserver(),
+      ],
+    );
+  }
+}
