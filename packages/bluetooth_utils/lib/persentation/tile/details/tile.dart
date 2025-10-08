@@ -1,4 +1,9 @@
-part of '../bluetooth_device_tile.dart';
+export '../bluetooth_device_tile.dart';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../bluetooth_device_tile.dart';
 
 @immutable
 class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> {
@@ -7,22 +12,26 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
     required this.disconnectedColor, 
     required this.highlightColor,
     required this.selectedColor,
+    required this.typeIconColor,
   });
 
   final Color connectedColor;
   final Color disconnectedColor;
   final Color highlightColor;
   final Color selectedColor;
+  final Color typeIconColor;
 
   Gradient brandGradient({
     required bool isSelected,
     required bool isConnected,
   }) {
+    final leadColor = isSelected ? selectedColor : (isConnected ? connectedColor : disconnectedColor);
+    final tailColor = isConnected ? connectedColor : disconnectedColor;
     return LinearGradient(
       colors: [
-        isSelected ? selectedColor : (isConnected ? connectedColor : disconnectedColor),
-        isConnected ? connectedColor : disconnectedColor,
-        isConnected ? connectedColor : disconnectedColor,
+        leadColor,
+        Color.lerp(leadColor, tailColor, 0.5)!,
+        tailColor,
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -35,11 +44,13 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
     Color? disconnectedColor,
     Color? highlightColor,
     Color? selectedColor,
+    Color? typeIconColor,
   }) => BluetoothDeviceTileTheme(
         connectedColor: connectedColor ?? this.connectedColor,
         disconnectedColor: disconnectedColor ?? this.disconnectedColor,
         highlightColor: highlightColor ?? this.highlightColor,
         selectedColor: selectedColor ?? this.selectedColor,
+        typeIconColor: typeIconColor ?? this.typeIconColor,
       );
 
   @override
@@ -70,6 +81,12 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
           t,
         ) ??
         selectedColor,
+      typeIconColor: Color.lerp(
+          typeIconColor as Color?,
+          other.typeIconColor as Color?,
+          t,
+        ) ??
+        typeIconColor,
     );
   }
 }
@@ -184,10 +201,7 @@ class BluetoothDeviceTile extends StatelessWidget {
         final themeExtension = themeData.extension<BluetoothDeviceTileTheme>()!;
         final highlightColor = themeExtension.highlightColor;
         final isConnected = context.select<BluetoothDevice, bool>((device) => device.isConnected);
-        final isConnectable = context.select<BluetoothDevice, bool>((device) => device.isConnectable);
-        final toggleConnection = (isConnectable) 
-          ? context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleConnection)
-          : null;
+        final toggleConnection = context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleConnection);
         final iconData = (isConnected) 
           ? context.select<BluetoothDeviceIcons, IconData>(
             (i) => i.disconnected,
@@ -210,7 +224,7 @@ class BluetoothDeviceTile extends StatelessWidget {
       },
     );
 
-    final iconList = Builder(
+    final typeIconList = Builder(
       builder: (context) {
         final icons = context.watch<BluetoothDeviceIcons>();
         final vaildIcons = <IconData, bool>{};
@@ -231,6 +245,7 @@ class BluetoothDeviceTile extends StatelessWidget {
             break;
         }
         final themeData = Theme.of(context);
+        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>()!;
         final iconTheme = IconTheme.of(context);
         final tentativeIconSize = iconTheme.size ?? kDefaultFontSize;
         return Row(
@@ -242,8 +257,8 @@ class BluetoothDeviceTile extends StatelessWidget {
               children: List.generate(list.length, (index) {
                 final backgroundColor = themeData.textTheme.bodyMedium?.color;
                 final color = (list.elementAt(index).value)
-                  ? themeData.scaffoldBackgroundColor
-                  : backgroundColor;
+                  ? themeExtension.typeIconColor
+                  : null;
                 return Container(
                   margin: EdgeInsets.all(2) ,
                   decoration: BoxDecoration(
@@ -274,13 +289,13 @@ class BluetoothDeviceTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          iconList,
+          typeIconList,
           togglePairingButton,
           toggleConnectionButton,
         ],
       ),
     );
-          
+
     return Builder(
       builder: (context) {
         final themeData = Theme.of(context);

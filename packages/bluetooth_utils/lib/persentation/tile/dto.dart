@@ -1,4 +1,4 @@
-part of '../bluetooth_device_tile.dart';
+part of 'bluetooth_device_tile.dart';
 
 enum BluetoothTech {
   unknown,
@@ -18,11 +18,11 @@ class BluetoothDevice {
   final String name;
   final int rssi;
   final BluetoothTech tech;
-  final VoidCallback toggleConnection;
-  final VoidCallback togglePairing;
-  final VoidCallback toggleSelection;
+  final VoidCallback? toggleConnection;
+  final VoidCallback? togglePairing;
+  final VoidCallback? toggleSelection;
 
-  BluetoothDevice({required this.id, required this.inSystem, required this.isConnectable, required this.isConnected, required this.isPaired, required this.isScanned, required this.isSelected, required this.name, required this.rssi, required this.tech, required this.toggleConnection, required this.togglePairing, required this.toggleSelection});
+  BluetoothDevice({required this.id, required this.inSystem, required this.isConnectable, required this.isConnected, required this.isPaired, required this.isScanned, required this.isSelected, required this.name, required this.rssi, required this.tech, this.toggleConnection, this.togglePairing, this.toggleSelection});
 
   BluetoothDevice copyWith({
     String? id,
@@ -35,8 +35,11 @@ class BluetoothDevice {
     String? name,
     int? rssi,
     BluetoothTech? tech,
-    VoidCallback? togglePairing,
+    bool copyToggleConnection = true,
     VoidCallback? toggleConnection,
+    bool copyTogglePairing = true,
+    VoidCallback? togglePairing,
+    bool copyToggleSelection = true,
     VoidCallback? toggleSelection,
   }) {
     return BluetoothDevice(
@@ -50,9 +53,9 @@ class BluetoothDevice {
       name: name ?? this.name,
       rssi: rssi ?? this.rssi,
       tech: tech ?? this.tech,
-      togglePairing: togglePairing ?? this.togglePairing,
-      toggleConnection: toggleConnection ?? this.toggleConnection,
-      toggleSelection: toggleSelection ?? this.toggleSelection,
+      toggleConnection: toggleConnection ?? ((copyToggleConnection) ? this.toggleConnection : null),
+      togglePairing: togglePairing ?? ((copyTogglePairing) ? this.togglePairing : null),
+      toggleSelection: toggleSelection ?? ((copyToggleSelection) ? this.toggleSelection : null),
     );
   }
 

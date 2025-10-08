@@ -1,4 +1,9 @@
-part of '../bluetooth_device_tile.dart';
+export '../bluetooth_device_tile.dart';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../bluetooth_device_tile.dart';
 
 @immutable
 class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> {
@@ -151,10 +156,7 @@ class BluetoothDeviceTile extends StatelessWidget {
         final themeExtension = themeData.extension<BluetoothDeviceTileTheme>()!;
         final highlightColor = themeExtension.highlightColor;
         final isConnected = context.select<BluetoothDevice, bool>((device) => device.isConnected);
-        final isConnectable = context.select<BluetoothDevice, bool>((device) => device.isConnectable);
-        final toggleConnection = (isConnectable) 
-          ? context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleConnection)
-          : null;
+        final toggleConnection = context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleConnection);
         final iconData = (isConnected) 
           ? context.select<BluetoothDeviceIcons, IconData>(
             (i) => i.disconnected,
@@ -192,7 +194,7 @@ class BluetoothDeviceTile extends StatelessWidget {
         ],
       ),
     );
-          
+
     return Builder(
       builder: (context) {
         final themeData = Theme.of(context);

@@ -13,15 +13,6 @@ class BondFlutterBluePlus {
 
     _initialized = true;
 
-    // Get a list of bonded devices
-    for(final d in (await FlutterBluePlus.bondedDevices)) {
-      _bondStates[d.remoteId] = BmBondStateResponse(
-        remoteId: d.remoteId,
-        bondState: BmBondStateEnum.bonded,
-        prevState: null,
-      );
-    }
-
     // keep track of bond state
     try {
       FlutterBluePlusPlatform.instance.onBondStateChanged.listen((r) {
@@ -32,9 +23,21 @@ class BondFlutterBluePlus {
     }
   }
 
+  static Future<void> updateBondedDevices() async {
+    for(final d in (await FlutterBluePlus.bondedDevices)) {
+      if(_bondStates.containsKey(d.remoteId)) continue;
+      _bondStates[d.remoteId] = BmBondStateResponse(
+        remoteId: d.remoteId,
+        bondState: BmBondStateEnum.bonded,
+        prevState: null,
+      );
+    }
+  }
+
   static List<BluetoothDevice> get bondedDevices => _bondStates
-    .keys
-    .map((p) => BluetoothDevice.fromId(p.str))
+    .entries
+    .where((p) => p.value.bondState == BmBondStateEnum.bonded)
+    .map((p) => BluetoothDevice.fromId(p.key.str))
     .toList();
 
   static Stream<BluetoothDevice> get onBondStateChanged => FlutterBluePlusPlatform.instance.onBondStateChanged
@@ -44,6 +47,8 @@ class BondFlutterBluePlus {
 
 extension BondBluetoothDevice on BluetoothDevice {
   bool get isBonded => currBondState == BluetoothBondState.bonded;
+  bool get isBondable => !kIsWeb && Platform.isAndroid && isConnected;
+  bool get isUnBondable => !kIsWeb && Platform.isAndroid;
 
   /// Get the current bondState of the device (Android Only)
   BluetoothBondState? get currBondState {
