@@ -12,6 +12,7 @@ final decoder = WeiZheDecoder();
 late Timer timer;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // Flutter Blue Plus
   final fbpIsSupported = false;
   initializer = Initializer(

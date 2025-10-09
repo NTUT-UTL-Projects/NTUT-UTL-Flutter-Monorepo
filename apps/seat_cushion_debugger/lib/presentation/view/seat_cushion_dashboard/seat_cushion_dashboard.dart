@@ -34,7 +34,7 @@ class SeatCushionDashboard extends StatelessWidget {
             ),
             SizedBox(
               width: constraints.maxWidth * (SeatCushionSet.deviceWidth - (2 * SeatCushion.deviceWidth)) / SeatCushionSet.deviceWidth,
-              child: Spacer(),
+              child: Column(),
             ),
             Expanded(
               child: Text(

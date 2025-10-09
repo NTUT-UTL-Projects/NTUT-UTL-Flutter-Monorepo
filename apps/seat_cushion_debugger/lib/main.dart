@@ -24,6 +24,7 @@ import 'utils/seat_cushion_file.dart';
 late final Initializer initializer;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // Flutter Blue Plus
   bool fbpIsSupported;
   try {

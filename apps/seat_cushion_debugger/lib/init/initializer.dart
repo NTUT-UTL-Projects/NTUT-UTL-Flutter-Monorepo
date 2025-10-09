@@ -19,7 +19,6 @@ class Initializer {
   Initializer({required this.fbpIsSupported, required this.repository, required this.sensor});
 
   Future call() async {
-    WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
