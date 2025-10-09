@@ -46,7 +46,8 @@ class InMemorySeatCushionRepository implements SeatCushionRepository {
 
   @override
   Stream<SeatCushionEntity> fetchEntities() async* {
-    for (final entity in _entities) {
+    final entities = _entities.toList();
+    for (final entity in entities) {
       yield entity;
     }
   }
@@ -73,15 +74,16 @@ class InMemorySeatCushionRepository implements SeatCushionRepository {
 
   @override
   Future<bool> upsert({required SeatCushionEntity entity}) async {
-    await Future.delayed(const Duration(milliseconds: 200)); // 模擬網路延遲
-    final index = _entities.indexWhere((e) => e.id == entity.id);
-    if (index >= 0) {
-      _entities[index] = entity;
-    } else {
-      _entities.add(entity);
-    }
-    _lastEntityController.add(entity);
-    return true;
+    return _lock.synchronized(() {
+      final index = _entities.indexWhere((e) => e.id == entity.id);
+      if (index >= 0) {
+        _entities[index] = entity;
+      } else {
+        _entities.add(entity);
+      }
+      _lastEntityController.add(entity);
+      return true;
+    });
   }
 
   void dispose() {
