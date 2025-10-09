@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:seat_cushion/seat_cushion.dart';
