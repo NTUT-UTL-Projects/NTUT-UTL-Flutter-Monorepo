@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_utils/file_utils.dart';
@@ -22,7 +23,7 @@ extension SeatCushionFile on File {
   }
   Future<bool> writeSeatCushionEntity(SeatCushionEntity entity) async {
     await writeAsString(
-      "${entity.toJson()},",
+      "${jsonEncode(entity.toJson())},",
       mode: FileMode.append,
     );
     return true;

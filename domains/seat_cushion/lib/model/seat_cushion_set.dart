@@ -9,8 +9,10 @@ class SeatCushionSet extends Equatable {
 
   static double deviceHeight = SeatCushion.deviceHeight;
 
+  @JsonKey(toJson: LeftSeatCushion._toJson)
   final LeftSeatCushion left;
 
+  @JsonKey(toJson: RightSeatCushion._toJson)
   final RightSeatCushion right;
 
   const SeatCushionSet({
@@ -35,5 +37,7 @@ class SeatCushionSet extends Equatable {
   factory SeatCushionSet.fromJson(Map<String, dynamic> json) => _$SeatCushionSetFromJson(json);
 
   Map<String, dynamic> toJson() => _$SeatCushionSetToJson(this);
+
+  static Map<String, dynamic> _toJson(SeatCushionSet seatCushionSet) => seatCushionSet.toJson();
 
 }

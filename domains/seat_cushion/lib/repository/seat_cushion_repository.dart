@@ -5,6 +5,7 @@ part of '../seat_cushion.dart';
 class SeatCushionEntity {
   final int id;
   
+  @JsonKey(toJson: SeatCushion._toJson)
   final SeatCushion seatCushion;
 
   const SeatCushionEntity({
@@ -15,6 +16,8 @@ class SeatCushionEntity {
   factory SeatCushionEntity.fromJson(Map<String, dynamic> json) => _$SeatCushionEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$SeatCushionEntityToJson(this);
+
+  static Map<String, dynamic> _toJson(SeatCushionEntity entity) => entity.toJson();
 
 }
 

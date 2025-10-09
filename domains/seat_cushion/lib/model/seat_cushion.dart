@@ -37,6 +37,8 @@ class SeatCushion extends Equatable {
   @override
   List<Object?> get props => [
     forces,
+    time,
+    type,
   ];
 
   double totalForce() {
@@ -85,6 +87,8 @@ class SeatCushion extends Equatable {
 
   Map<String, dynamic> toJson() => _$SeatCushionToJson(this);
 
+  static Map<String, dynamic> _toJson(SeatCushion seatCushion) => seatCushion.toJson();
+
 }
 
 @CopyWith()
@@ -111,8 +115,10 @@ class LeftSeatCushion extends SeatCushion {
 
   factory LeftSeatCushion.fromJson(Map<String, dynamic> json) => _$LeftSeatCushionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$LeftSeatCushionToJson(this);
+  @override
+  Map<String, dynamic> toJson() => _$SeatCushionToJson(this);
 
+  static Map<String, dynamic> _toJson(LeftSeatCushion seatCushion) => seatCushion.toJson();
 
 }
 
@@ -140,7 +146,9 @@ class RightSeatCushion extends SeatCushion {
 
   factory RightSeatCushion.fromJson(Map<String, dynamic> json) => _$RightSeatCushionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$RightSeatCushionToJson(this);
+  @override
+  Map<String, dynamic> toJson() => _$SeatCushionToJson(this);
 
+  static Map<String, dynamic> _toJson(RightSeatCushion seatCushion) => seatCushion.toJson();
 
 }

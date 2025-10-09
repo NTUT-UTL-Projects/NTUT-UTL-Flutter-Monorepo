@@ -334,7 +334,10 @@ SeatCushionSet _$SeatCushionSetFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$SeatCushionSetToJson(SeatCushionSet instance) =>
-    <String, dynamic>{'left': instance.left, 'right': instance.right};
+    <String, dynamic>{
+      'left': LeftSeatCushion._toJson(instance.left),
+      'right': RightSeatCushion._toJson(instance.right),
+    };
 
 SeatCushion _$SeatCushionFromJson(Map<String, dynamic> json) => SeatCushion(
   forces: (json['forces'] as List<dynamic>)
@@ -401,4 +404,7 @@ SeatCushionEntity _$SeatCushionEntityFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$SeatCushionEntityToJson(SeatCushionEntity instance) =>
-    <String, dynamic>{'id': instance.id, 'seatCushion': instance.seatCushion};
+    <String, dynamic>{
+      'id': instance.id,
+      'seatCushion': SeatCushion._toJson(instance.seatCushion),
+    };
