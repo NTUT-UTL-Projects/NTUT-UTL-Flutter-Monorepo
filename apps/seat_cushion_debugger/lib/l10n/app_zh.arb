@@ -1,0 +1,32 @@
+{
+  "@@locale": "zh",
+
+  "downloadFileButtonText": "下载 {format} 文件",
+  "@downloadFileButtonText": {
+    "description": "下载指定格式的文件。",
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+
+  "downloadFileFinishedNotification": "下载 {format} 完成。",
+  "@downloadFileButtonText": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+
+  "seatCushion": "坐垫",
+
+  "force": "力量",
+
+  "centerOfForces": "力量中心",
+
+  "ischiumPosition": "坐骨位置",
+  
+  "ischiumWidth": "坐骨宽度"
+}
