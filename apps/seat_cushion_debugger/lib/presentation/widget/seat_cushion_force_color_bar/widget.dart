@@ -1,0 +1,37 @@
+part of 'seat_cushion_force_color_bar.dart';
+
+class SeatCushionForceColorBar extends StatelessWidget {
+  const SeatCushionForceColorBar({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final forceToColor = context.select<SeatCushionForceColorBarController, ForceToColorConverter>((c) => c.forceToColor);
+    final layer = 64;
+    return Column(
+      children: [
+        Container(
+          height: themeData.textTheme.bodySmall?.fontSize,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: List.generate(
+                layer,
+                (index) => forceToColor(
+                  themeData,
+                  (((SeatCushion.forceMax - SeatCushion.forceMin) * index) / layer) + SeatCushion.forceMin),
+              ),
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Text((SeatCushion.forceMin / 1000.0).toString()),
+            Spacer(),
+            Text((SeatCushion.forceMax / 1000.0).toString()),
+          ],
+        )
+      ],
+    );
+  }
+}

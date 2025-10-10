@@ -66,6 +66,8 @@ class _IschiumPoint extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
+/// **Requirements:**
+/// - [SeatCushionIschiumPointWidget]: must be provided in the widget tree.
 class SeatCushionIschiumPointWidget<T extends SeatCushion> extends StatelessWidget {
   const SeatCushionIschiumPointWidget({
     super.key,

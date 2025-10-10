@@ -3,6 +3,7 @@ environment:
   sdk: ">=3.9.2 <4.0.0"
 workspace: 
   - apps/bluetooth_debugger
+  - apps/seat_cushion_debugger
   - domains/seat_cushion
   - packages/bluetooth_utils
   - packages/data_utils
@@ -28,6 +29,7 @@ dependency_overrides:
   flutter_ringtone_player: ^4.0.0+3
   fluttertoast: ^8.2.10
   hive: ^2.2.3
+  json_annotation: ^4.9.0
   package_info_plus: ^9.0.0
   path_provider: ^2.1.5
   permission_handler: ^12.0.1

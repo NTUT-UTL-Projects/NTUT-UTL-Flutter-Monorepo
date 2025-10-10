@@ -1,9 +1,14 @@
 part of '../../seat_cushion_presentation.dart';
 
-class SeatCushion3DMeshWidgetTheme extends ThemeExtension<SeatCushion3DMeshWidgetTheme> {
+class SeatCushion3DMeshWidgetTheme
+    extends ThemeExtension<SeatCushion3DMeshWidgetTheme> {
+  /// The base fill color of the 3D mesh.
   Color baseColor;
+
+  /// The color used for stroke outlines or mesh grid lines.
   Color strokeColor;
 
+  /// Creates a theme for the seat cushion 3D mesh visualization.
   SeatCushion3DMeshWidgetTheme({
     required this.baseColor,
     required this.strokeColor,
@@ -13,63 +18,76 @@ class SeatCushion3DMeshWidgetTheme extends ThemeExtension<SeatCushion3DMeshWidge
   SeatCushion3DMeshWidgetTheme copyWith({
     Color? baseColor,
     Color? strokeColor,
-  }) => SeatCushion3DMeshWidgetTheme(
-    baseColor: baseColor ?? this.baseColor,
-    strokeColor: strokeColor ?? this.strokeColor,
-  );
+  }) =>
+      SeatCushion3DMeshWidgetTheme(
+        baseColor: baseColor ?? this.baseColor,
+        strokeColor: strokeColor ?? this.strokeColor,
+      );
 
   @override
-  SeatCushion3DMeshWidgetTheme lerp(SeatCushion3DMeshWidgetTheme? other, double t) {
+  SeatCushion3DMeshWidgetTheme lerp(
+      SeatCushion3DMeshWidgetTheme? other, double t) {
     if (other is! SeatCushion3DMeshWidgetTheme) return this;
     return SeatCushion3DMeshWidgetTheme(
       strokeColor: Color.lerp(
+            strokeColor,
+            other.strokeColor,
+            t,
+          ) ??
           strokeColor,
-          other.strokeColor,
-          t,
-        ) ??
-        strokeColor,
       baseColor: Color.lerp(
+            baseColor,
+            other.baseColor,
+            t,
+          ) ??
           baseColor,
-          other.baseColor,
-          t,
-        ) ??
-        baseColor,
     );
   }
-
 }
 
-class SeatCushion3DMeshWidgetUI {
-  final double cameraHight;
-  final double focusLength;
-  final double Function(SeatCushionUnitPoint point) pointToValue;
-  final Color Function(ThemeData themeData, double value) valueToColor;
-  final double valueScale;
+abstract class SeatCushion3DMeshWidgetUI {
+  /// The height of the virtual camera above the mesh.
+  /// Refer to [Sp3dFreeLookCamera.position]
+  double get cameraHight;
 
-  SeatCushion3DMeshWidgetUI({
-    required this.cameraHight,
-    required this.focusLength,
-    required this.pointToValue,
-    required this.valueToColor,
-    required this.valueScale,
-  });
+  /// The focal length of the camera (controls zoom perspective).
+  /// 
+  /// Refer to [Sp3dFreeLookCamera.focusLength].
+  double get focusLength;
 
-  SeatCushion3DMeshWidgetUI copyWith({
-    double? cameraHight,
-    double? focusLength,
-    double Function(SeatCushionUnitPoint point)? pointToValue,
-    Color Function(ThemeData themeData, double value)? valueToColor,
-    double ? valueScale,
-  }) => SeatCushion3DMeshWidgetUI(
-    cameraHight: cameraHight ?? this.cameraHight,
-    focusLength: focusLength ?? this.focusLength,
-    pointToValue: pointToValue ?? this.pointToValue,
-    valueToColor: valueToColor ?? this.valueToColor,
-    valueScale: valueScale ?? this.valueScale,
-  );
+  /// Maps a [SeatCushionUnitCornerPoint] (a single sensor corner point)
+  /// 
+  /// to a specific [Color] for visualization.
+  Color pointToColor(ThemeData themeData, SeatCushionUnitCornerPoint point);
 
+  /// Converts a [SeatCushionUnitCornerPoint] into a vertical displacement
+  /// in the 3D mesh, defining the surface shape.
+  double pointToHeight(ThemeData themeData, SeatCushionUnitCornerPoint point);
 }
 
+/// --------------------------------------------
+/// [SeatCushion3DMeshView]
+/// --------------------------------------------
+///
+/// A **stateless Flutter widget** built using the  
+/// [`simple_3d_renderer`](https://pub.dev/packages/simple_3d_renderer) package  
+/// that visualizes a [SeatCushionSet] as an interactive 3D mesh.
+/// 
+/// - The generic type parameter [T] represents the specific [SeatCushion3DMeshWidgetUI]
+///   implementation that controls the rendering logic.
+/// - This separation of UI logic (via [SeatCushion3DMeshWidgetUI]) and theme (via
+///   [SeatCushion3DMeshWidgetTheme]) enables modular and reusable design.
+///
+/// **Requirements:**
+/// - [SeatCushion3DMeshWidgetUI]
+///   - It's for rendering logic (e.g., camera position, color mapping)
+///   - It must be provided in the widget tree.
+/// - [SeatCushion3DMeshWidgetTheme]
+///   - It's for visual styling (e.g., base and stroke colors)
+///   - It must be provided in the widget tree.
+/// 
+/// This view typically consumes real-time sensor data from a [SeatCushionSensor]
+/// and visualizes it as a color/height mesh to represent seat pressure or deformation.
 class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends StatelessWidget {
   const SeatCushion3DMeshView({
     super.key,
@@ -84,14 +102,14 @@ class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends Statele
       0,
     );
     final cameraHight = context.select<T, double>((ui) => ui.cameraHight);
-    final cameraPoint = seatCushionCenterPoint.copyWith(
+    final cameraPositin = seatCushionCenterPoint.copyWith(
       z: cameraHight,
     );
 
-    // If you want to reduce distortion, shoot from a distance at high magnification.
+    /// If you want to reduce distortion, shoot from a distance at high magnification.
     final focusLength = context.select<T, double>((ui) => ui.focusLength);
     final camera = Sp3dFreeLookCamera(
-      cameraPoint,
+      cameraPositin,
       focusLength,
     );
     
@@ -100,13 +118,13 @@ class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends Statele
       syncCam: true,
     );
 
-    // Preserve the rotation and zoom states by keeping the controller outside the View.
+    /// Preserve the rotation and zoom states by keeping the controller outside the View.
     final rotationController = Sp3dCameraRotationController(
       lookAtTarget: seatCushionCenterPoint,
     );
     final zoomController = const Sp3dCameraZoomController();
 
-    // Keep the objects outside the View to make them traceable.
+    /// Keep the objects outside the View to make them traceable.
     Sp3dObj? leftObjBuffer;
     Sp3dObj? rightObjBuffer;
     return FutureBuilder(
@@ -128,67 +146,55 @@ class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends Statele
             {
               final unserialized = [
                 ...seatCushionSet?.left.units.expand((e) => e).map((u) {
-                  final lb = u.lbPoint;
-                  final lt = u.ltPoint;
-                  final rt = u.rtPoint;
-                  final rb = u.rbPoint;
+                  final bottomLeft = u.blPoint;
+                  final topLeft = u.tlPoint;
+                  final topRight = u.trPoint;
+                  final bottomRight = u.brPoint;
                   return [
-                    Sp3dV3D(lb.position.x, lb.position.y, ui.pointToValue(lb) * ui.valueScale),
-                    Sp3dV3D(lt.position.x, lt.position.y, ui.pointToValue(lt) * ui.valueScale),
-                    Sp3dV3D(rt.position.x, rt.position.y, ui.pointToValue(rt) * ui.valueScale),
-                    Sp3dV3D(rb.position.x, rb.position.y, ui.pointToValue(rb) * ui.valueScale),
+                    Sp3dV3D(bottomLeft.position.x, bottomLeft.position.y, ui.pointToHeight(themeData, bottomLeft)),
+                    Sp3dV3D(topLeft.position.x, topLeft.position.y, ui.pointToHeight(themeData, topLeft)),
+                    Sp3dV3D(topRight.position.x, topRight.position.y, ui.pointToHeight(themeData, topRight)),
+                    Sp3dV3D(bottomRight.position.x, bottomRight.position.y, ui.pointToHeight(themeData, bottomRight)),
                   ];
                 }) ?? List<List<Sp3dV3D>>.empty(),
-                // Base
+                /// Base
                 ...List.generate(
                   SeatCushion.unitsMaxRow,
                   (row) {
                     return List.generate(
                       SeatCushion.unitsMaxColumn,
                       (column) {
-                        final lt = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.lt,
+                        final bottomLeft = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.bottomLeft,
                           row: row,
                           column: column,
                         );
-                        final lb = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.lb,
+                        final topLeft = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.topLeft,
                           row: row,
                           column: column,
                         );
-                        final rb = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.rb,
+                        final topRight = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.topRight,
                           row: row,
                           column: column,
                         );
-                        final rt = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.rt,
+                        final bottomRight = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.bottomRight,
                           row: row,
                           column: column,
                         );
 
                         return [
-                          Sp3dV3D(lb.x, lb.y, 0.0),
-                          Sp3dV3D(lt.x, lt.y, 0.0),
-                          Sp3dV3D(rt.x, rt.y, 0.0),
-                          Sp3dV3D(rb.x, rb.y, 0.0),
+                          Sp3dV3D(bottomLeft.x, bottomLeft.y, 0.0),
+                          Sp3dV3D(topLeft.x, topLeft.y, 0.0),
+                          Sp3dV3D(topRight.x, topRight.y, 0.0),
+                          Sp3dV3D(bottomRight.x, bottomRight.y, 0.0),
                         ];
                       },
                     );
                   },
                 ).expand((e) => e),
-                ...[
-                  [
-                    // rb
-                    Sp3dV3D(0 + (SeatCushion.deviceWidth / 2.0), 0 + (SeatCushion.deviceHeight / 2.0), 0),
-                    // rt
-                    Sp3dV3D(0 + (SeatCushion.deviceWidth / 2.0), 0 - (SeatCushion.deviceHeight / 2.0), 0),
-                    // lt
-                    Sp3dV3D(0 - (SeatCushion.deviceWidth / 2.0), 0 - (SeatCushion.deviceHeight / 2.0), 0),
-                    // lb
-                    Sp3dV3D(0 - (SeatCushion.deviceWidth / 2.0), 0 + (SeatCushion.deviceHeight / 2.0), 0),
-                  ],
-                ],
               ];
               final serialized = UtilSp3dList.serialize(unserialized);
               final fragments = unserialized.indexed.map((e) {
@@ -207,13 +213,13 @@ class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends Statele
               final materials = [
                 ...seatCushionSet?.left.units.expand((e) => e).map((u) {
                   return Sp3dMaterial(
-                    ui.valueToColor(themeData, ui.pointToValue(u.mmPoint)),
+                    ui.pointToColor(themeData, u.mmPoint),
                     true,
                     1,
                     themeExtension.strokeColor,
                   );
                 }) ?? List<Sp3dMaterial>.empty(),
-                // Base
+                /// Base
                 ...List.generate(
                   SeatCushion.unitsMaxIndex,
                   (_) {
@@ -241,50 +247,50 @@ class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends Statele
             {
               final unserialized = [
                 ...seatCushionSet?.right.units.expand((e) => e).map((u) {
-                  final lb = u.lbPoint;
-                  final lt = u.ltPoint;
-                  final rt = u.rtPoint;
-                  final rb = u.rbPoint;
+                  final bottomLeft = u.blPoint;
+                  final topLeft = u.tlPoint;
+                  final topRight = u.trPoint;
+                  final bottomRight = u.brPoint;
                   return [
-                    Sp3dV3D(lb.position.x, lb.position.y, ui.pointToValue(lb) * ui.valueScale),
-                    Sp3dV3D(lt.position.x, lt.position.y, ui.pointToValue(lt) * ui.valueScale),
-                    Sp3dV3D(rt.position.x, rt.position.y, ui.pointToValue(rt) * ui.valueScale),
-                    Sp3dV3D(rb.position.x, rb.position.y, ui.pointToValue(rb) * ui.valueScale),
+                    Sp3dV3D(bottomLeft.position.x, bottomLeft.position.y, ui.pointToHeight(themeData, bottomLeft)),
+                    Sp3dV3D(topLeft.position.x, topLeft.position.y, ui.pointToHeight(themeData, topLeft)),
+                    Sp3dV3D(topRight.position.x, topRight.position.y, ui.pointToHeight(themeData, topRight)),
+                    Sp3dV3D(bottomRight.position.x, bottomRight.position.y, ui.pointToHeight(themeData, bottomRight)),
                   ];
                 }) ?? List<List<Sp3dV3D>>.empty(),
-                // Base
+                /// Base
                 ...List.generate(
                   SeatCushion.unitsMaxRow,
                   (row) {
                     return List.generate(
                       SeatCushion.unitsMaxColumn,
                       (column) {
-                        final lt = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.lt,
+                        final bottomLeft = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.bottomLeft,
                           row: row,
                           column: column,
                         );
-                        final lb = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.lb,
+                        final topLeft = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.topLeft,
                           row: row,
                           column: column,
                         );
-                        final rb = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.rb,
+                        final topRight = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.topRight,
                           row: row,
                           column: column,
                         );
-                        final rt = SeatCushionUnitPoint.typeRowColumnToPosition(
-                          type: SeatCushionUnitPointType.rt,
+                        final bottomRight = SeatCushionUnitCornerPoint.typeRowColumnToPosition(
+                          type: SeatCushionUnitCornerPointType.bottomRight,
                           row: row,
                           column: column,
                         );
 
                         return [
-                          Sp3dV3D(lb.x, lb.y, 0.0),
-                          Sp3dV3D(lt.x, lt.y, 0.0),
-                          Sp3dV3D(rt.x, rt.y, 0.0),
-                          Sp3dV3D(rb.x, rb.y, 0.0),
+                          Sp3dV3D(bottomLeft.x, bottomLeft.y, 0.0),
+                          Sp3dV3D(topLeft.x, topLeft.y, 0.0),
+                          Sp3dV3D(topRight.x, topRight.y, 0.0),
+                          Sp3dV3D(bottomRight.x, bottomRight.y, 0.0),
                         ];
                       },
                     );
@@ -308,13 +314,13 @@ class SeatCushion3DMeshView<T extends SeatCushion3DMeshWidgetUI> extends Statele
               final materials = [
                 ...seatCushionSet?.right.units.expand((e) => e).map((u) {
                   return Sp3dMaterial(
-                    ui.valueToColor(themeData, ui.pointToValue(u.mmPoint)),
+                    ui.pointToColor(themeData, u.mmPoint),
                     true,
                     1,
                     themeExtension.strokeColor,
                   );
                 }) ?? List<Sp3dMaterial>.empty(),
-                // Base
+                /// Base
                 ...List.generate(
                   SeatCushion.unitsMaxIndex,
                   (_) {

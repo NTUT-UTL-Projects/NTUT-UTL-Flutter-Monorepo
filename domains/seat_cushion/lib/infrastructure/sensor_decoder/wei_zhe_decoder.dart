@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:synchronized/synchronized.dart';
 
 import '../../seat_cushion.dart';
-import 'decoder.dart';
+import 'template.dart';
 
 @visibleForTesting
 @pragma('vm:notify-debugger-on-exception')
@@ -37,11 +37,9 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
 
   final _lock = Lock();
 
-  // LeftSeatCushion stream
   @override
   Stream<LeftSeatCushion> get leftStream => _leftController.stream;
 
-  // RightSeatCushion stream
   @override
   Stream<RightSeatCushion> get rightStream => _rightController.stream;
 
@@ -128,36 +126,36 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     }
   }
 
-  // Add the values to the buffer​ ​and then send the seat
-  // cushion data via stream when the conditions are met.
+  /// Add the values to the buffer​ ​and then send the seat
+  /// cushion data via stream when the conditions are met.
   @override
   Future<void> addValues(List<int> values) async {
     return await _lock.synchronized(() {
-      // Check the type is valid.
+      /// Check the type is valid.
       final type = valuesToSeatCushionType(values);
       if(type == null) return;
 
-      // Check the stage is valid.
+      /// Check the stage is valid.
       final stage = valuesToStage(values);
       if(stage == null) return;
 
-      // Check the length is valid.
+      /// Check the length is valid.
       final length = stageToLength(stage);
       if(length != values.length) return;
 
-      // Update the buffer.
+      /// Update the buffer.
       _buffer[type]!.update(
         stage,
         (_) => values,
       );
 
-      // Checks whether each stage values of the buffer of this type is ready.
+      /// Checks whether each stage values of the buffer of this type is ready.
       final allStageValuesIsNotEmpty = !_buffer[type]!
         .values
         .fold(false, (result, values) => result || (values == null));
       
       if(allStageValuesIsNotEmpty) {
-        // Get the force list.
+        /// Get the force list.
         final rawForces = valuesToForces(
           _buffer[type]!
             .values
@@ -165,7 +163,7 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
             .toList()
         );
 
-        // Map the force list to 2D-list.
+        /// Map the force list to 2D-list.
         final forces = List.generate(
           SeatCushion.unitsMaxRow,
           (row) {
@@ -178,10 +176,10 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
           },
         );
 
-        // Get current time.
+        /// Get current time.
         final time = DateTime.now();
 
-        // Add the seat cushion data to the corresponding stream.
+        /// Add the seat cushion data to the corresponding stream.
         switch(type) {
           case SeatCushionType.left:
             _leftController.add(LeftSeatCushion(forces: forces, time: time));
@@ -189,7 +187,7 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
             _rightController.add(RightSeatCushion(forces: forces, time: time));
         }
 
-        // Clear the buffer of this type.
+        /// Clear the buffer of this type.
         for(final stage in WeiZheDecoderValuesStage.values) {
           _buffer[type]!.update(
             stage,
@@ -200,7 +198,7 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     });
   }
 
-  // Generate a mock values for testing.
+  /// Generate a mock values for testing.
   List<int> generateMokeValues() {
     final random = Random.secure();
     final header = ((random.nextInt(2) + 1) << 4) | (random.nextInt(3) + 1);
@@ -209,7 +207,7 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     return [
       header,
       ...List.generate((length / 2.0).toInt(), (index) {
-        // Force
+        /// Force
         final force = (random.nextDouble() * (SeatCushion.forceMax - SeatCushion.forceMin)) + SeatCushion.forceMin;
         final forceBytes = (ByteData(2)
           ..setInt16(0, force.toInt(), Endian.little))
@@ -223,7 +221,7 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     ];
   }
 
-  // Close the stream.
+  /// Close the stream.
   void close() {
     _leftController.close();
     _rightController.close();

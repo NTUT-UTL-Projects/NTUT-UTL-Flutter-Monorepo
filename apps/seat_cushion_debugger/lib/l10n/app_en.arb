@@ -1,0 +1,29 @@
+{
+  "@@locale": "en",
+
+  "downloadFileButtonText": "Download {format} file",
+  "@downloadFileButtonText": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "downloadFileFinishedNotification": "Download {format} file finished.",
+  "@downloadFileButtonText": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+
+  "force": "Force",
+
+  "centerOfForces": "Center Of Forces",
+
+  "ischiumPosition": "Ischium Position",
+
+  "ischiumWidth": "Ischium Width"
+}

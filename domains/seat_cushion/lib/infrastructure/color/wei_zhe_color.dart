@@ -5,7 +5,7 @@ import 'package:seat_cushion/seat_cushion.dart';
 
 import '../../seat_cushion_presentation.dart';
 
-ForceToColorConverter weiZheforceToColorConverter = (_, force) {
+ForceToColorConverter weiZheForceToColorConverter = (_, force) {
   final hueMax = 255;
   final hueMin = -45;
   final hue = (((SeatCushion.forceMax - clampDouble(force, SeatCushion.forceMin, SeatCushion.forceMax)) / (SeatCushion.forceMax - SeatCushion.forceMin) * (hueMax - hueMin)) + hueMin) % 360.0;

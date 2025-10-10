@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:stream_utils/stream_util.dart';
 
 import '../../seat_cushion.dart';
-import '../sensor_decoder/decoder.dart';
+import '../sensor_decoder/template.dart';
 
 class DecoderMockSeatCushionSensor implements SeatCushionSensor {
   final SeatCushionSensorDecoder decoder;
