@@ -1,5 +1,8 @@
 part of 'bluetooth_devices_scanner.dart';
 
+/// **Requirements:**
+/// - [BluetoothDevicesScannerController]
+/// - [BluetoothDeviceTile]
 class BluetoothDevicesScanner extends StatelessWidget {
   const BluetoothDevicesScanner({super.key});
 

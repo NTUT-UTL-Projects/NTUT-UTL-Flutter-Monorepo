@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
           ),
           Provider(
             create: (_) => SeatCushionForceWidgetUI(
-              forceToColor: weiZheforceToColorConverter,
+              forceToColor: weiZheForceToColorConverter,
             ),
           ),
         ],

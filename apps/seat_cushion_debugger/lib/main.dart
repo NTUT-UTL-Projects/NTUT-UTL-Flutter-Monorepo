@@ -184,16 +184,14 @@ class MyApp extends StatelessWidget {
           ),
           Provider(
             create: (_) => SeatCushionForceWidgetUI(
-              forceToColor: weiZheforceToColorConverter,
+              forceToColor: weiZheForceToColorConverter,
             ),
           ),
           Provider(
-            create: (_) => home.SeatCushionForce3DMeshWidgetUI(
-              cameraHight: 1200,
-              focusLength: 1500,
-              pointToValue: (p) => p.force,
-              valueToColor: weiZheforceToColorConverter,
-              valueScale: 0.05,
+            create: (_) => home.SeatCushionForces3DMeshWidgetUI(
+              cameraHight: 1200.0,
+              focusLength: 1500.0,
+              focusScale: 0.05,
             ),
           ),
           Provider(
@@ -247,7 +245,7 @@ class MyApp extends StatelessWidget {
           ),
           Provider(
             create: (_) => SeatCushionForceColorBarController(
-              forceToColor: weiZheforceToColorConverter,
+              forceToColor: weiZheForceToColorConverter,
             ),
           ),
         ],

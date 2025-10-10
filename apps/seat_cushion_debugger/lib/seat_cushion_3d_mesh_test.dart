@@ -43,14 +43,29 @@ void main() {
 }
 
 class SeatCushionForce3DMeshWidgetUI extends SeatCushion3DMeshWidgetUI {
-  SeatCushionForce3DMeshWidgetUI() : super(
-    cameraHight: 1200,
-    focusLength: 1500,
-    pointToValue: (p) => p.force,
-    valueToColor: _valueToColor,
-    valueScale: 0.05,
-  );
-  static Color _valueToColor(ThemeData themeData, double value) => weiZheforceToColorConverter(themeData, value);
+  @override
+  final double cameraHight;
+  
+  @override
+  final double focusLength;
+
+  final double focusScale;
+
+  SeatCushionForce3DMeshWidgetUI({
+    required this.cameraHight,
+    required this.focusLength,
+    required this.focusScale,
+  });
+  
+  @override
+  Color pointToColor(ThemeData themeData, SeatCushionUnitCornerPoint point) {
+    return weiZheForceToColorConverter(themeData, point.force);
+  }
+  
+  @override
+  double pointToHeight(ThemeData themeData, SeatCushionUnitCornerPoint point) {
+    return point.force * focusScale;
+  }
 }
 
 class SeatCushionForce3dMeshWidget extends SeatCushion3DMeshView<SeatCushionForce3DMeshWidgetUI> {
@@ -79,7 +94,11 @@ class MyApp extends StatelessWidget {
             initialData: null,
           ),
           Provider(
-            create: (_) => SeatCushionForce3DMeshWidgetUI(),
+            create: (_) => SeatCushionForce3DMeshWidgetUI(
+              cameraHight: 1200.0,
+              focusLength: 1500.0,
+              focusScale: 0.05,
+            ),
           ),
         ],
         child: SeatCushionForce3dMeshWidget(),

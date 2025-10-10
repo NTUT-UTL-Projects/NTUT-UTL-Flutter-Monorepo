@@ -11,6 +11,7 @@ class Initializer {
   final bool fbpIsSupported;
   final SeatCushionRepository repository;
   final SeatCushionSensor sensor;
+  final List<StreamSubscription> _sub = [];
   late final SeatCushionSensorRecorderController sensorRecoderController;
   late final List<fbp.BluetoothDevice> fbpSystemDevices;
   late final Timer updateRssi;
@@ -41,6 +42,25 @@ class Initializer {
           }
         }
       );
+      // Auto setNotifyValue while a new [fbp.BluetoothDevice] get connected.
+      _sub.add(ConnectionStateFlutterBluePlus.onConnectionStateChanged.listen((device) async {
+        final services = await device.discoverServices();
+        for(final s in services) {
+          for(final c in s.characteristics) {
+            final properties = c.properties;
+            if(
+              properties.indicate
+              || properties.indicateEncryptionRequired
+              || properties.notify
+              || properties.notifyEncryptionRequired
+            ) {
+              try {
+                c.setNotifyValue(true);
+              } catch(e) {}
+            }
+          }
+        }
+      }));
     } else {
       fbpSystemDevices = [];
     }

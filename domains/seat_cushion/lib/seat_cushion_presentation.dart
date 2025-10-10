@@ -11,7 +11,7 @@ import 'package:util_simple_3d/util_simple_3d.dart';
 
 import 'seat_cushion.dart';
 
-part 'presentation/2d/force/seat_cushion_force_widget.dart';
+part 'presentation/2d/force/widget/seat_cushion_force_widget.dart';
 part 'presentation/2d/force/seat_cushion_forces_matrix_widget.dart';
 part 'presentation/2d/ischium/seat_cushion_ischium_point_widget.dart';
 part 'presentation/2d/seat_cushion_set_view.dart';

@@ -1,5 +1,14 @@
 part of '../../seat_cushion_presentation.dart';
 
+/// --------------------------------------------
+/// [SeatCushionSetView]
+/// --------------------------------------------
+///
+/// A **stateless Flutter widget** that visualizes a [SeatCushionSet] as an 2D view.
+/// 
+/// **Requirements:**
+/// - Refer to [SeatCushionForcesMatrixWidget].
+/// - Refer to [SeatCushionIschiumPointWidget].
 class SeatCushionSetView extends StatelessWidget {
   final bool showForcesMatrix;
   final bool showIschiumPoint;

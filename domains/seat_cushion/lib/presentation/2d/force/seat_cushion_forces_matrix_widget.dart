@@ -1,5 +1,7 @@
 part of '../../../seat_cushion_presentation.dart';
 
+/// **Requirements:**
+/// - Refer to [SeatCushionForceWidget].
 class SeatCushionForcesMatrixWidget<T extends SeatCushion> extends StatelessWidget {
   const SeatCushionForcesMatrixWidget({
     super.key,
