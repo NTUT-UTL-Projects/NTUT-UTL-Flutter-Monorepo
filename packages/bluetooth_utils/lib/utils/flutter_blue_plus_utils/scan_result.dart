@@ -15,6 +15,16 @@ class ScanResultFlutterBluePlus {
 
     // keep track of scan response
     try {
+      FlutterBluePlus.isScanning.listen((isScanning) {
+        if(!isScanning) return;
+        _scanResponse.clear();
+      });
+    } on UnimplementedError {
+      // ignored
+    }
+
+    // keep track of scan response
+    try {
       FlutterBluePlusPlatform.instance.onScanResponse.listen((r) {
         for(final adv in r.advertisements) {
           _scanResponse[adv.remoteId] = adv;

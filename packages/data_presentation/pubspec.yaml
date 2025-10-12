@@ -1,5 +1,5 @@
-name: bluetooth_utils
-description: "Bluetooth Utils."
+name: data_presentation
+description: "Data Presentation."
 publish_to: 'none'
 version: 0.0.1
 homepage:
@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_blue_plus: any
-  flutter_blue_plus_platform_interface: any
-  permission_handler: any
+  provider: any
+  theme_tailor: any
+  theme_tailor_annotation: any
 
 dev_dependencies:
   flutter_test:

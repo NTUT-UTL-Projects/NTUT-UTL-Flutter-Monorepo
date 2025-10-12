@@ -26,6 +26,7 @@ dependencies:
   seat_cushion: any
 
   # Packages
+  bluetooth_presentation: any
   bluetooth_utils: any
   data_utils: any
   file_utils: any

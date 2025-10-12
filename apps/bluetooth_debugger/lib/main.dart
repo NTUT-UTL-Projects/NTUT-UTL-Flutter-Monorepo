@@ -1,12 +1,12 @@
 import 'dart:async';
+import 'package:bluetooth_presentation/devices/details_tile/tile.dart';
+import 'package:bluetooth_presentation/flutter_blue_plus/device_view.dart';
+import 'package:bluetooth_presentation/status/bluetooth_status_view.dart';
 import 'package:bluetooth_utils/permisssion/bluetooth_permissions.dart';
-import 'package:bluetooth_utils/persentation/tile/details/tile.dart';
-import 'package:bluetooth_utils/persentation/view/bluetooth_status_view.dart';
 import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
-import 'package:data_utils/persentation/view/bytes_view.dart';
+import 'package:data_presentation/bytes/bytes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -79,38 +79,13 @@ class MyApp extends StatelessWidget {
           fbpIsSupported: fbpIsSupported,
           fbpSystemDevices: fbpSystemDevices,
         )),
-        Provider<BluetoothDevicesFilterIcons>(create: (_) => BluetoothDevicesFilterIcons(
-          get: (filter) {
-            switch(filter) {
-              case BluetoothDevicesFilter.inSystem:
-                return asset.BluetoothIcons.system;
-              case BluetoothDevicesFilter.nameIsNotEmpty:
-                return asset.BluetoothIcons.name;
-              case BluetoothDevicesFilter.isConnected:
-                return asset.BluetoothIcons.connected;
-              case BluetoothDevicesFilter.isConnectable:
-                return asset.BluetoothIcons.connectable;
-            }
-          },
-        )),
-        Provider<BluetoothDeviceIcons>(create: (_) => BluetoothDeviceIcons(
-          classic: asset.BluetoothIcons.classic,
-          connected: asset.BluetoothIcons.connected,
-          disconnected: asset.BluetoothIcons.disconnected,
-          highSpeed: asset.BluetoothIcons.high_speed,
-          inSystem: asset.BluetoothIcons.system,
-          lowPower: asset.BluetoothIcons.low_power,
-          nullRssi: asset.BluetoothIcons.null_rssi,
-          paired: asset.BluetoothIcons.paired,
-          unpaired: asset.BluetoothIcons.unpaired,
-        )),
         Provider<WriteBluetoothPacketFile>(create: (_) => writeBluetoothPacketFile),
       ],
       child: HomePage(),
     );
 
-    final bluetoothOffPage = Provider<BluetoothStatus>(
-      create: (_) => BluetoothStatus(
+    final bluetoothOffPage = Provider<BluetoothStatusController>(
+      create: (_) => BluetoothStatusController(
         onPressedButton: () async {
           for(final permission in bluetoothPermissions) {
             if(!(await permission.request()).isGranted) {
@@ -134,18 +109,59 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
         ),
         extensions: [
+          // Bluetooth Scanner
           BluetoothDeviceTileTheme(
-            selectedColor: Colors.green,
+            classicIcon: asset.BluetoothIcons.classic,
             connectedColor: Colors.blue,
+            connectedIcon: asset.BluetoothIcons.connected,
             disconnectedColor: Colors.red,
+            disconnectedIcon: asset.BluetoothIcons.disconnected,
             highlightColor: Colors.black,
+            highSpeedIcon: asset.BluetoothIcons.high_speed,
+            inSystemIcon: asset.BluetoothIcons.system,
+            lowPowerIcon: asset.BluetoothIcons.low_power,
+            nullRssiIcon: asset.BluetoothIcons.null_rssi,
+            pairedIcon: asset.BluetoothIcons.paired,
+            selectedColor: Colors.green,
             typeIconColor: Colors.orange,
+            unpairedIcon: asset.BluetoothIcons.unpaired,
           ),
-          BluetoothStatusTheme.recommended().copyWith(
+
+          // Bluetooth Status
+          BluetoothStatusTheme(
             backGroundColor: Colors.blue,
           ),
-          BytesTheme(),
+
+          // Flutter Blue Pluse Tile
+          ServiceTileTheme(
+            titleColor: Colors.blue,
+          ),
+          CharacteristicTileTheme(
+            titleColor: Colors.green,
+          ),
+          DescriptorTileTheme(
+            titleColor: Colors.orange,
+          ),
+          BytesTheme(
+            colorCycle: [Colors.red, Colors.green],
+            indexColor: Colors.grey,
+          ),
+
+          // Home
           HomePageTheme(
+            appBarBackgroundColor: Colors.white,
+            filterToIcon: (filter) {
+              switch(filter) {
+                case BluetoothDevicesFilter.inSystem:
+                  return asset.BluetoothIcons.system;
+                case BluetoothDevicesFilter.nameIsNotEmpty:
+                  return asset.BluetoothIcons.name;
+                case BluetoothDevicesFilter.isConnected:
+                  return asset.BluetoothIcons.connected;
+                case BluetoothDevicesFilter.isConnectable:
+                  return asset.BluetoothIcons.connectable;
+              }
+            },
             highlightColor: Colors.black,
             startTaskColor: Colors.green,
             stopTaskColor: Colors.red,
@@ -153,14 +169,6 @@ class MyApp extends StatelessWidget {
             toggleFilterColor: Colors.orange,
           ),
         ],
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-        ),
-        listTileTheme: ListTileThemeData(
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-          ),
-        ),
       ),
       darkTheme: ThemeData.dark(
         useMaterial3: true,
@@ -169,18 +177,59 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.indigoAccent,
         ),
         extensions: [
+          // Bluetooth Scanner
           BluetoothDeviceTileTheme(
-            selectedColor: Colors.green[700]!,
+            classicIcon: asset.BluetoothIcons.classic,
             connectedColor: Colors.indigoAccent,
+            connectedIcon: asset.BluetoothIcons.connected,
             disconnectedColor: Colors.red[700]!,
+            disconnectedIcon: asset.BluetoothIcons.disconnected,
             highlightColor: Colors.white,
+            highSpeedIcon: asset.BluetoothIcons.high_speed,
+            inSystemIcon: asset.BluetoothIcons.system,
+            lowPowerIcon: asset.BluetoothIcons.low_power,
+            nullRssiIcon: asset.BluetoothIcons.null_rssi,
+            pairedIcon: asset.BluetoothIcons.paired,
+            selectedColor: Colors.green[700]!,
             typeIconColor: Colors.orange[700]!,
+            unpairedIcon: asset.BluetoothIcons.unpaired,
           ),
-          BluetoothStatusTheme.recommended().copyWith(
+
+          // Bluetooth Status
+          BluetoothStatusTheme(
             backGroundColor: Colors.indigoAccent,
           ),
-          BytesTheme(),
+
+          // Flutter Blue Pluse Tile
+          ServiceTileTheme(
+            titleColor: Colors.indigoAccent,
+          ),
+          CharacteristicTileTheme(
+            titleColor: Colors.green[700]!,
+          ),
+          DescriptorTileTheme(
+            titleColor: Colors.orange[700]!,
+          ),
+          BytesTheme(
+            colorCycle: [Colors.red[700]!, Colors.green[700]!],
+            indexColor: Colors.grey,
+          ),
+
+          // Home
           HomePageTheme(
+            appBarBackgroundColor: Colors.black,
+            filterToIcon: (filter) {
+              switch(filter) {
+                case BluetoothDevicesFilter.inSystem:
+                  return asset.BluetoothIcons.system;
+                case BluetoothDevicesFilter.nameIsNotEmpty:
+                  return asset.BluetoothIcons.name;
+                case BluetoothDevicesFilter.isConnected:
+                  return asset.BluetoothIcons.connected;
+                case BluetoothDevicesFilter.isConnectable:
+                  return asset.BluetoothIcons.connectable;
+              }
+            },
             highlightColor: Colors.white,
             startTaskColor: Colors.green[700]!,
             stopTaskColor: Colors.red[700]!,
@@ -188,14 +237,6 @@ class MyApp extends StatelessWidget {
             toggleFilterColor: Colors.orange[700]!,
           ),
         ],
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.black,
-        ),
-        listTileTheme: ListTileThemeData(
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-          ),
-        ),
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,

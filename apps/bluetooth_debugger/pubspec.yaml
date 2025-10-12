@@ -21,10 +21,14 @@ dependencies:
   shared_preferences: any
   synchronized: any
   talkjs_flutter_inappwebview: any
+  theme_tailor: any
+  theme_tailor_annotation: any
 
   # --------------------------------------------------
   # Packages
+  bluetooth_presentation: any
   bluetooth_utils: any
+  data_presentation: any
   data_utils: any
   file_utils: any
   path_provider_utils: any

@@ -1,5 +1,5 @@
-name: bluetooth_utils
-description: "Bluetooth Utils."
+name: bluetooth_presentation
+description: "Bluetooth Presentation."
 publish_to: 'none'
 version: 0.0.1
 homepage:
@@ -14,10 +14,18 @@ dependencies:
   flutter_blue_plus: any
   flutter_blue_plus_platform_interface: any
   permission_handler: any
+  provider: any
+  theme_tailor: any
+  theme_tailor_annotation: any
+
+  # Package
+  bluetooth_utils: any
 
 dev_dependencies:
+  copy_with_extension_gen: any
   flutter_test:
     sdk: flutter
   flutter_lints: any
+  json_serializable: any
 
 resolution: workspace

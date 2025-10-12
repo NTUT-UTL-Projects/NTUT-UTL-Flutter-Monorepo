@@ -1,5 +1,5 @@
-import 'package:bluetooth_utils/persentation/tile/simple_connection/tile.dart';
-import 'package:bluetooth_utils/persentation/view/bluetooth_status_view.dart';
+import 'package:bluetooth_presentation/devices/simple_connection_tile/tile.dart';
+import 'package:bluetooth_presentation/status/bluetooth_status_view.dart';
 import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
@@ -59,12 +59,15 @@ class MyApp extends StatelessWidget {
         extensions: [
           // Bluetooth
           BluetoothDeviceTileTheme(
-            selectedColor: Colors.green,
             connectedColor: Colors.blue,
+            connectedIcon: Icons.bluetooth_connected,
             disconnectedColor: Colors.red,
+            disconnectedIcon: Icons.bluetooth_disabled,
             highlightColor: Colors.black,
+            nullRssiIcon: Icons.device_unknown,
+            selectedColor: Colors.green,
           ),
-          BluetoothStatusTheme.recommended().copyWith(
+          BluetoothStatusTheme(
             backGroundColor: Colors.blue,
           ),
           BluetoothCommandLineTheme(
@@ -98,12 +101,15 @@ class MyApp extends StatelessWidget {
         extensions: [
           // Bluetooth
           BluetoothDeviceTileTheme(
-            selectedColor: Colors.green[700]!,
             connectedColor: Colors.indigoAccent,
+            connectedIcon: Icons.bluetooth_connected,
             disconnectedColor: Colors.red[700]!,
+            disconnectedIcon: Icons.bluetooth_disabled,
             highlightColor: Colors.white,
+            nullRssiIcon: Icons.device_unknown,
+            selectedColor: Colors.green[700]!,
           ),
-          BluetoothStatusTheme.recommended().copyWith(
+          BluetoothStatusTheme(
             backGroundColor: Colors.indigoAccent,
           ),
           BluetoothCommandLineTheme(
@@ -142,17 +148,12 @@ class MyApp extends StatelessWidget {
               ? fbp.FlutterBluePlus.adapterStateNow
               : fbp.BluetoothAdapterState.on,
           ),
-          Provider<BluetoothStatus>(create: (_) => BluetoothStatus(
+          Provider<BluetoothStatusController>(create: (_) => BluetoothStatusController(
             onPressedButton: () => fbp.FlutterBluePlus.turnOn(),
           )),
           ChangeNotifierProvider<BluetoothDevicesScannerController>(create: (_) => BluetoothDevicesScannerController(
             fbpIsSupported: initializer.fbpIsSupported,
             fbpSystemDevices: initializer.fbpSystemDevices,
-          )),
-          Provider<BluetoothDeviceIcons>(create: (_) => BluetoothDeviceIcons(
-            connected: Icons.bluetooth_connected,
-            disconnected: Icons.bluetooth_disabled,
-            nullRssi: Icons.device_unknown,
           )),
           Provider(create: (_) => BluetoothCommandLineIcons(
             clear: Icons.delete,

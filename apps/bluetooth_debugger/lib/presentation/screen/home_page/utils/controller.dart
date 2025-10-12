@@ -2,7 +2,12 @@ part of '../home_page.dart';
 
 class _ValueEditingController extends TextEditingController {}
 
-class HomePageController extends ChangeNotifier with BluetoothDevicesFilterController, BluetoothDevicesController {
+/// **References**
+/// - [BluetoothDevicesController]
+/// - [BluetoothDevicesFilterController]
+class HomePageController extends ChangeNotifier 
+  with BluetoothDevicesController, 
+  BluetoothDevicesFilterController {
 
   // Flutter Blue Plus
   fbp.BluetoothDevice? _fbpSelectedDevice;
@@ -47,16 +52,16 @@ class HomePageController extends ChangeNotifier with BluetoothDevicesFilterContr
 
   @override
   void dispose() {
-    super.cancel();
+    super.cancelDevicesController();
     super.dispose();
   }
 
   BluetoothDevice? get selectedDevice {
-    return super.devices
-      .where((d) => 
-        d.id == _fbpSelectedDevice?.remoteId.str
-      )
-      .firstOrNull;
+  // Flutter Blue Plus
+    if(_fbpSelectedDevice != null) {
+      return fbpDeviceToDevice(_fbpSelectedDevice!);
+    }
+    return null;
   }
 
 }

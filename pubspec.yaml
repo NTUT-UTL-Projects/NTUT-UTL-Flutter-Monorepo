@@ -5,7 +5,9 @@ workspace:
   - apps/bluetooth_debugger
   - apps/seat_cushion_debugger
   - domains/seat_cushion
+  - packages/bluetooth_presentation
   - packages/bluetooth_utils
+  - packages/data_presentation
   - packages/data_utils
   - packages/file_utils
   - packages/path_provider_utils
@@ -42,6 +44,8 @@ dependency_overrides:
   syncfusion_flutter_xlsio: ^28.1.33
   synchronized: ^3.4.0
   talkjs_flutter_inappwebview: ^6.1.5+3
+  theme_tailor: ^3.1.1
+  theme_tailor_annotation: any
   util_simple_3d: ^12.0.2
   vector_math: ^2.2.0
   

@@ -1,5 +1,18 @@
 part of '../home_page.dart';
 
+/// **References**
+/// 
+/// **Requirements:**
+/// - [BluetoothDevicesFilterController]
+/// - [HomePageController]
+/// - [WriteBluetoothPacketFile]
+/// 
+/// **Theme**
+/// - [HomePageTheme]
+/// - [ServiceTileTheme]
+/// - [CharacteristicTileTheme]
+/// - [DescriptorTileTheme]
+/// - [BytesViewTheme]
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -13,20 +26,20 @@ class HomePage extends StatelessWidget {
         final body = Builder(
           builder: (context) {
             final themeData = Theme.of(context);
-            final themeExtension = themeData.extension<HomePageTheme>()!;
+            final themeExtension = themeData.extension<HomePageTheme>();
             final isRunning = context.watch<bool>();
             VoidCallback? onPressed = app.toggle;
             final icon = (isRunning)
               ? Icon(Icons.stop)
               : Icon(Icons.save);
             final color = (isRunning)
-              ? themeExtension.stopTaskColor
-              : themeExtension.startTaskColor;
+              ? themeExtension?.stopTaskColor
+              : themeExtension?.startTaskColor;
             return IconButton(
               onPressed: onPressed,
               icon: icon,
               color: color,
-              highlightColor: themeExtension.highlightColor,
+              highlightColor: themeExtension?.highlightColor,
             );
           },
         );
@@ -43,17 +56,18 @@ class HomePage extends StatelessWidget {
         builder: (context) {
           final check = context.select<HomePageController, bool>((n) => n.chekcBluetoothDevicesFilter(filter));
           final themeData = Theme.of(context);
-          final themeExtension = themeData.extension<HomePageTheme>()!;
-          final icons = context.watch<BluetoothDevicesFilterIcons>();
-          final icon = Icon(icons.get(filter));
+          final themeExtension = themeData.extension<HomePageTheme>();
+          final iconData = themeExtension?.filterToIcon(filter);
           final color = check
-            ? themeExtension.toggleFilterColor
+            ? themeExtension?.toggleFilterColor
             : null;
           return IconButton(
             onPressed: () => context.read<HomePageController>().toggleBluetoothDevicesFilter(filter),
-            icon: icon,
+            icon: Icon(
+              iconData,
+            ),
             color: color,
-            highlightColor: themeExtension.highlightColor,
+            highlightColor: themeExtension?.highlightColor,
           );
         },
       );
@@ -70,10 +84,10 @@ class HomePage extends StatelessWidget {
             Builder(
               builder: (context) {
                 final themeData = Theme.of(context);
-                final themeExtension = themeData.extension<HomePageTheme>()!;
+                final themeExtension = themeData.extension<HomePageTheme>();
                 return Text(
                   DateTime.now().toString(),
-                  style: TextStyle(fontSize: 13, color: themeExtension.timestampColor),
+                  style: TextStyle(fontSize: 13, color: themeExtension?.timestampColor),
                 );
               }
             ),
@@ -125,10 +139,10 @@ class HomePage extends StatelessWidget {
                         serviceTile: ServiceTile(
                           characteristicTile: CharacteristicTile(
                             descriptorTile: DescriptorTile(
-                              valueGetter: () => controller.text.hexToBytes(),
+                              writeValueGetter: () => controller.text.hexToBytes(),
                               valueTile: bytesView,
                             ),
-                            valueGetter: () => controller.text.hexToBytes(),
+                            writeValueGetter: () => controller.text.hexToBytes(),
                             valueTile: bytesView,
                           ),
                         ),
@@ -150,17 +164,22 @@ class HomePage extends StatelessWidget {
         final controller = context.read<HomePageController>();
         return RefreshIndicator(
           onRefresh: () async {
-            controller.toggleScanning();
+            await controller.setScanning(true);
           },
           child: Builder(
             builder: (context) {
-              final length = context.select<HomePageController, int>((c) => c.devices.length);
-              return ListView.builder(
-                itemCount: length,
-                itemBuilder: (context, index) {
-                  return ProxyProvider<HomePageController, BluetoothDevice>(
-                    update: (_, value, _) => value.devices.elementAt(index),
-                    child: BluetoothDeviceTile(),
+              return ProxyProvider<HomePageController, List<BluetoothDevice>>(
+                update: (_, value, _) => value.devices,
+                builder: (context, _) {
+                  final length = context.select<List<BluetoothDevice>, int>((devices) => devices.length);
+                  return ListView.builder(
+                    itemCount: length,
+                    itemBuilder: (context, index) {
+                      return ProxyProvider<List<BluetoothDevice>, BluetoothDevice>(
+                        update: (_, devices, _) => devices.elementAt(index),
+                        child: BluetoothDeviceTile(),
+                      );
+                    },
                   );
                 },
               );
@@ -170,12 +189,12 @@ class HomePage extends StatelessWidget {
       },
     );
 
-    final body = Builder(
-      builder: (context) {
+    final body = LayoutBuilder(
+      builder: (context, constraints) {
         return GestureDetector(
           onHorizontalDragUpdate: (details) {
             if (
-              details.localPosition.dx < MediaQuery.of(context).size.width * 0.5
+              details.localPosition.dx < constraints.maxWidth * 0.5
               && details.primaryDelta! > 10
             ) {
               Scaffold.of(context).openDrawer();
@@ -186,19 +205,20 @@ class HomePage extends StatelessWidget {
       },
     );
 
-    return Builder(
-      builder: (context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
         final themeData = Theme.of(context);
+        final themeExtension = themeData.extension<HomePageTheme>();
         final appBar = AppBar(
           actions: filterList,
           automaticallyImplyLeading: false,
-          backgroundColor: themeData.appBarTheme.backgroundColor,
+          backgroundColor: themeExtension?.appBarBackgroundColor,
           title: toggleWriteFileButton,
         );
         return Scaffold(
           appBar: appBar,
           drawer: Drawer(
-            width: MediaQuery.of(context).size.width * 0.80,
+            width: constraints.maxWidth * 0.80,
             child: deviceDetailView,
           ),
           body: body,

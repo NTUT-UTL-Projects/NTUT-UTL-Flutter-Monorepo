@@ -31,7 +31,7 @@ class BluetoothDevicesScannerController extends ChangeNotifier with BluetoothDev
 
   @override
   void dispose() {
-    super.cancel();
+    super.cancelDevicesController();
     super.dispose();
   }
 

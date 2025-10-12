@@ -1,4 +1,4 @@
-import 'package:bluetooth_utils/persentation/tile/details/tile.dart';
+import 'package:bluetooth_presentation/devices/bluetooth_device_tile.dart';
 import 'package:flutter/material.dart';
 
 /// Filter options for Bluetooth devices.
@@ -13,17 +13,15 @@ enum BluetoothDevicesFilter {
   nameIsNotEmpty,
 }
 
-class BluetoothDevicesFilterIcons {
-  final IconData Function(BluetoothDevicesFilter filter) get;
-
-  BluetoothDevicesFilterIcons({required this.get});
-}
+typedef BluetoothDevicesFilterToIcon = IconData Function(BluetoothDevicesFilter filter);
 
 mixin BluetoothDevicesFilterController on ChangeNotifier {
   final Map<BluetoothDevicesFilter, bool> _bluetoothDevicesFilter = { for (var k in BluetoothDevicesFilter.values) k : false };
   
+  /// Check the specific filter state.
   bool chekcBluetoothDevicesFilter(BluetoothDevicesFilter filter) => _bluetoothDevicesFilter[filter]!;
   
+  /// Set the specific filter state.
   void setBluetoothDevicesFilter({
     required BluetoothDevicesFilter filter,
     required bool value,
@@ -35,12 +33,17 @@ mixin BluetoothDevicesFilterController on ChangeNotifier {
     return;
   }
   
+  /// Toggle the specific filter state.
   void toggleBluetoothDevicesFilter(BluetoothDevicesFilter filter) {
     _bluetoothDevicesFilter.update(filter, (value) => !value);
     notifyListeners();
     return;
   }
 
+  /// Applies the active Bluetooth device filters and returns the matching devices.
+  ///
+  /// This method filters the given [devices] list based on the enabled
+  /// [BluetoothDevicesFilter] options.
   Iterable<T> bluetoothDevicesFilter<T extends BluetoothDevice>(Iterable<T> devices) {
     return devices
       .where((d) {
