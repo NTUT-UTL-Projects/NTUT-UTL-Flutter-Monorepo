@@ -1,5 +1,5 @@
-import 'package:example/bytes_example_view.dart';
-import 'package:example/hex_keyboard_example_view.dart';
+import 'package:example/src/bytes_example_view.dart';
+import 'package:example/src/hex_keyboard_example_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
