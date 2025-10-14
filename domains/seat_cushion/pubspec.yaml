@@ -15,12 +15,8 @@ dependencies:
   copy_with_extension_gen: any
   equatable: any
   json_annotation: any
-  provider: any
-  simple_3d: any
-  simple_3d_renderer: any
   stream_utils: any
   synchronized: any
-  util_simple_3d: any
 
   # Packages
   bluetooth_utils: any
