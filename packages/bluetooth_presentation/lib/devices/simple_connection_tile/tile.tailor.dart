@@ -9,8 +9,8 @@ part of 'tile.dart';
 // TailorAnnotationsGenerator
 // **************************************************************************
 
-mixin _$BluetoothDeviceTileThemeTailorMixin
-    on ThemeExtension<BluetoothDeviceTileTheme> {
+mixin _$BluetoothDeviceSimpleConnectionTileThemeTailorMixin
+    on ThemeExtension<BluetoothDeviceSimpleConnectionTileTheme> {
   Color get connectedColor;
   IconData get connectedIcon;
   Color get disconnectedColor;
@@ -20,7 +20,7 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   Color get selectedColor;
 
   @override
-  BluetoothDeviceTileTheme copyWith({
+  BluetoothDeviceSimpleConnectionTileTheme copyWith({
     Color? connectedColor,
     IconData? connectedIcon,
     Color? disconnectedColor,
@@ -29,7 +29,7 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
     IconData? nullRssiIcon,
     Color? selectedColor,
   }) {
-    return BluetoothDeviceTileTheme(
+    return BluetoothDeviceSimpleConnectionTileTheme(
       connectedColor: connectedColor ?? this.connectedColor,
       connectedIcon: connectedIcon ?? this.connectedIcon,
       disconnectedColor: disconnectedColor ?? this.disconnectedColor,
@@ -41,13 +41,13 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   }
 
   @override
-  BluetoothDeviceTileTheme lerp(
-    covariant ThemeExtension<BluetoothDeviceTileTheme>? other,
+  BluetoothDeviceSimpleConnectionTileTheme lerp(
+    covariant ThemeExtension<BluetoothDeviceSimpleConnectionTileTheme>? other,
     double t,
   ) {
-    if (other is! BluetoothDeviceTileTheme)
-      return this as BluetoothDeviceTileTheme;
-    return BluetoothDeviceTileTheme(
+    if (other is! BluetoothDeviceSimpleConnectionTileTheme)
+      return this as BluetoothDeviceSimpleConnectionTileTheme;
+    return BluetoothDeviceSimpleConnectionTileTheme(
       connectedColor: Color.lerp(connectedColor, other.connectedColor, t)!,
       connectedIcon: t < 0.5 ? connectedIcon : other.connectedIcon,
       disconnectedColor: Color.lerp(
@@ -66,7 +66,7 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is BluetoothDeviceTileTheme &&
+            other is BluetoothDeviceSimpleConnectionTileTheme &&
             const DeepCollectionEquality().equals(
               connectedColor,
               other.connectedColor,
@@ -112,14 +112,23 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   }
 }
 
-extension BluetoothDeviceTileThemeBuildContextProps on BuildContext {
-  BluetoothDeviceTileTheme get bluetoothDeviceTileTheme =>
-      Theme.of(this).extension<BluetoothDeviceTileTheme>()!;
-  Color get connectedColor => bluetoothDeviceTileTheme.connectedColor;
-  IconData get connectedIcon => bluetoothDeviceTileTheme.connectedIcon;
-  Color get disconnectedColor => bluetoothDeviceTileTheme.disconnectedColor;
-  IconData get disconnectedIcon => bluetoothDeviceTileTheme.disconnectedIcon;
-  Color get highlightColor => bluetoothDeviceTileTheme.highlightColor;
-  IconData get nullRssiIcon => bluetoothDeviceTileTheme.nullRssiIcon;
-  Color get selectedColor => bluetoothDeviceTileTheme.selectedColor;
+extension BluetoothDeviceSimpleConnectionTileThemeBuildContextProps
+    on BuildContext {
+  BluetoothDeviceSimpleConnectionTileTheme
+  get bluetoothDeviceSimpleConnectionTileTheme =>
+      Theme.of(this).extension<BluetoothDeviceSimpleConnectionTileTheme>()!;
+  Color get connectedColor =>
+      bluetoothDeviceSimpleConnectionTileTheme.connectedColor;
+  IconData get connectedIcon =>
+      bluetoothDeviceSimpleConnectionTileTheme.connectedIcon;
+  Color get disconnectedColor =>
+      bluetoothDeviceSimpleConnectionTileTheme.disconnectedColor;
+  IconData get disconnectedIcon =>
+      bluetoothDeviceSimpleConnectionTileTheme.disconnectedIcon;
+  Color get highlightColor =>
+      bluetoothDeviceSimpleConnectionTileTheme.highlightColor;
+  IconData get nullRssiIcon =>
+      bluetoothDeviceSimpleConnectionTileTheme.nullRssiIcon;
+  Color get selectedColor =>
+      bluetoothDeviceSimpleConnectionTileTheme.selectedColor;
 }

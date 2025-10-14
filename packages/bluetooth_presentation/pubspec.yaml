@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  copy_with_extension: any
+  copy_with_extension_gen: any
   flutter_blue_plus: any
   flutter_blue_plus_platform_interface: any
   permission_handler: any
@@ -22,7 +24,6 @@ dependencies:
   bluetooth_utils: any
 
 dev_dependencies:
-  copy_with_extension_gen: any
   flutter_test:
     sdk: flutter
   flutter_lints: any

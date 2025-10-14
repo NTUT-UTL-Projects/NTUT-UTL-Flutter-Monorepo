@@ -9,8 +9,8 @@ part of 'tile.dart';
 // TailorAnnotationsGenerator
 // **************************************************************************
 
-mixin _$BluetoothDeviceTileThemeTailorMixin
-    on ThemeExtension<BluetoothDeviceTileTheme> {
+mixin _$BluetoothDeviceDetailsTileThemeTailorMixin
+    on ThemeExtension<BluetoothDeviceDetailsTileTheme> {
   IconData get classicIcon;
   Color get connectedColor;
   IconData get connectedIcon;
@@ -27,7 +27,7 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   IconData get unpairedIcon;
 
   @override
-  BluetoothDeviceTileTheme copyWith({
+  BluetoothDeviceDetailsTileTheme copyWith({
     IconData? classicIcon,
     Color? connectedColor,
     IconData? connectedIcon,
@@ -43,7 +43,7 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
     Color? typeIconColor,
     IconData? unpairedIcon,
   }) {
-    return BluetoothDeviceTileTheme(
+    return BluetoothDeviceDetailsTileTheme(
       classicIcon: classicIcon ?? this.classicIcon,
       connectedColor: connectedColor ?? this.connectedColor,
       connectedIcon: connectedIcon ?? this.connectedIcon,
@@ -62,13 +62,13 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   }
 
   @override
-  BluetoothDeviceTileTheme lerp(
-    covariant ThemeExtension<BluetoothDeviceTileTheme>? other,
+  BluetoothDeviceDetailsTileTheme lerp(
+    covariant ThemeExtension<BluetoothDeviceDetailsTileTheme>? other,
     double t,
   ) {
-    if (other is! BluetoothDeviceTileTheme)
-      return this as BluetoothDeviceTileTheme;
-    return BluetoothDeviceTileTheme(
+    if (other is! BluetoothDeviceDetailsTileTheme)
+      return this as BluetoothDeviceDetailsTileTheme;
+    return BluetoothDeviceDetailsTileTheme(
       classicIcon: t < 0.5 ? classicIcon : other.classicIcon,
       connectedColor: Color.lerp(connectedColor, other.connectedColor, t)!,
       connectedIcon: t < 0.5 ? connectedIcon : other.connectedIcon,
@@ -94,7 +94,7 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is BluetoothDeviceTileTheme &&
+            other is BluetoothDeviceDetailsTileTheme &&
             const DeepCollectionEquality().equals(
               classicIcon,
               other.classicIcon,
@@ -175,21 +175,23 @@ mixin _$BluetoothDeviceTileThemeTailorMixin
   }
 }
 
-extension BluetoothDeviceTileThemeBuildContextProps on BuildContext {
-  BluetoothDeviceTileTheme get bluetoothDeviceTileTheme =>
-      Theme.of(this).extension<BluetoothDeviceTileTheme>()!;
-  IconData get classicIcon => bluetoothDeviceTileTheme.classicIcon;
-  Color get connectedColor => bluetoothDeviceTileTheme.connectedColor;
-  IconData get connectedIcon => bluetoothDeviceTileTheme.connectedIcon;
-  Color get disconnectedColor => bluetoothDeviceTileTheme.disconnectedColor;
-  IconData get disconnectedIcon => bluetoothDeviceTileTheme.disconnectedIcon;
-  Color get highlightColor => bluetoothDeviceTileTheme.highlightColor;
-  IconData get highSpeedIcon => bluetoothDeviceTileTheme.highSpeedIcon;
-  IconData get inSystemIcon => bluetoothDeviceTileTheme.inSystemIcon;
-  IconData get lowPowerIcon => bluetoothDeviceTileTheme.lowPowerIcon;
-  IconData get nullRssiIcon => bluetoothDeviceTileTheme.nullRssiIcon;
-  IconData get pairedIcon => bluetoothDeviceTileTheme.pairedIcon;
-  Color get selectedColor => bluetoothDeviceTileTheme.selectedColor;
-  Color get typeIconColor => bluetoothDeviceTileTheme.typeIconColor;
-  IconData get unpairedIcon => bluetoothDeviceTileTheme.unpairedIcon;
+extension BluetoothDeviceDetailsTileThemeBuildContextProps on BuildContext {
+  BluetoothDeviceDetailsTileTheme get bluetoothDeviceDetailsTileTheme =>
+      Theme.of(this).extension<BluetoothDeviceDetailsTileTheme>()!;
+  IconData get classicIcon => bluetoothDeviceDetailsTileTheme.classicIcon;
+  Color get connectedColor => bluetoothDeviceDetailsTileTheme.connectedColor;
+  IconData get connectedIcon => bluetoothDeviceDetailsTileTheme.connectedIcon;
+  Color get disconnectedColor =>
+      bluetoothDeviceDetailsTileTheme.disconnectedColor;
+  IconData get disconnectedIcon =>
+      bluetoothDeviceDetailsTileTheme.disconnectedIcon;
+  Color get highlightColor => bluetoothDeviceDetailsTileTheme.highlightColor;
+  IconData get highSpeedIcon => bluetoothDeviceDetailsTileTheme.highSpeedIcon;
+  IconData get inSystemIcon => bluetoothDeviceDetailsTileTheme.inSystemIcon;
+  IconData get lowPowerIcon => bluetoothDeviceDetailsTileTheme.lowPowerIcon;
+  IconData get nullRssiIcon => bluetoothDeviceDetailsTileTheme.nullRssiIcon;
+  IconData get pairedIcon => bluetoothDeviceDetailsTileTheme.pairedIcon;
+  Color get selectedColor => bluetoothDeviceDetailsTileTheme.selectedColor;
+  Color get typeIconColor => bluetoothDeviceDetailsTileTheme.typeIconColor;
+  IconData get unpairedIcon => bluetoothDeviceDetailsTileTheme.unpairedIcon;
 }

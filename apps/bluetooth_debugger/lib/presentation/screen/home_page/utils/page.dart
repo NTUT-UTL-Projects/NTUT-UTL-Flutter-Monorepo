@@ -1,5 +1,9 @@
 part of '../home_page.dart';
 
+class BluetoothDeviceTileTheme extends BluetoothDeviceDetailsTileTheme {
+  BluetoothDeviceTileTheme({required super.classicIcon, required super.connectedColor, required super.connectedIcon, required super.disconnectedColor, required super.disconnectedIcon, required super.highlightColor, required super.highSpeedIcon, required super.inSystemIcon, required super.lowPowerIcon, required super.nullRssiIcon, required super.pairedIcon, required super.selectedColor, required super.typeIconColor, required super.unpairedIcon});
+}
+
 /// **References**
 /// 
 /// **Requirements:**
@@ -9,10 +13,11 @@ part of '../home_page.dart';
 /// 
 /// **Theme**
 /// - [HomePageTheme]
+/// - [BluetoothDeviceTileTheme]
 /// - [ServiceTileTheme]
 /// - [CharacteristicTileTheme]
 /// - [DescriptorTileTheme]
-/// - [BytesViewTheme]
+/// - [BytesTheme]
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -177,7 +182,7 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ProxyProvider<List<BluetoothDevice>, BluetoothDevice>(
                         update: (_, devices, _) => devices.elementAt(index),
-                        child: BluetoothDeviceTile(),
+                        child: BluetoothDeviceDetailsTile(),
                       );
                     },
                   );

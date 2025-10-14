@@ -174,6 +174,7 @@ class _RepeatableButtonState extends State<_RepeatableButton> {
     );
   }
 
+  @mustCallSuper
   @override
   void dispose() {
     _stopRepeat();

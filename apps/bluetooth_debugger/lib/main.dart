@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:bluetooth_presentation/devices/details_tile/tile.dart';
-import 'package:bluetooth_presentation/flutter_blue_plus/device_view.dart';
-import 'package:bluetooth_presentation/status/bluetooth_status_view.dart';
+import 'package:bluetooth_presentation/bluetooth_presentation.dart';
 import 'package:bluetooth_utils/permisssion/bluetooth_permissions.dart';
 import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
 import 'package:data_presentation/bytes/bytes_view.dart';

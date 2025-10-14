@@ -55,6 +55,7 @@ dependency_overrides:
     sdk: flutter
   analyzer: ^8.0.0
   build_runner: ^2.5.1
+  copy_with_extension: ^10.0.1
   copy_with_extension_gen: ^10.0.1
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

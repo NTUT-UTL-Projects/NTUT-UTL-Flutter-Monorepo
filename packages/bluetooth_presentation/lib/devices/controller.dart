@@ -21,6 +21,7 @@ mixin BluetoothDevicesController on ChangeNotifier {
     ...ScanResultFlutterBluePlus.lastScannedDevices,
   };
 
+  @mustCallSuper
   @protected
   void init({
     required bool fbpIsSupported,
@@ -194,6 +195,7 @@ mixin BluetoothDevicesController on ChangeNotifier {
     );
   }
 
+  @mustCallSuper
   void cancelDevicesController() {
     for(final s in _sub) {
       s.cancel();

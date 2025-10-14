@@ -9,7 +9,7 @@ part 'tile.tailor.dart';
 
 @immutable
 @TailorMixin()
-class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> with _$BluetoothDeviceTileThemeTailorMixin {
+class BluetoothDeviceDetailsTileTheme extends ThemeExtension<BluetoothDeviceDetailsTileTheme> with _$BluetoothDeviceDetailsTileThemeTailorMixin {
   @override
   final IconData classicIcon;
   @override
@@ -39,7 +39,7 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
   @override
   final IconData unpairedIcon;
 
-  BluetoothDeviceTileTheme({required this.classicIcon, required this.connectedColor, required this.connectedIcon, required this.disconnectedColor, required this.disconnectedIcon, required this.highlightColor, required this.highSpeedIcon, required this.inSystemIcon, required this.lowPowerIcon, required this.nullRssiIcon, required this.pairedIcon, required this.selectedColor, required this.typeIconColor, required this.unpairedIcon});
+  BluetoothDeviceDetailsTileTheme({required this.classicIcon, required this.connectedColor, required this.connectedIcon, required this.disconnectedColor, required this.disconnectedIcon, required this.highlightColor, required this.highSpeedIcon, required this.inSystemIcon, required this.lowPowerIcon, required this.nullRssiIcon, required this.pairedIcon, required this.selectedColor, required this.typeIconColor, required this.unpairedIcon});
 
   Gradient brandGradient({
     required bool isSelected,
@@ -63,10 +63,10 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
 /// - [BluetoothDevice]
 /// 
 /// **Themes:**
-/// - [BluetoothDeviceTileTheme]
-class BluetoothDeviceTile extends StatelessWidget {
+/// - [BluetoothDeviceDetailsTileTheme]
+class BluetoothDeviceDetailsTile extends StatelessWidget {
 
-  const BluetoothDeviceTile({
+  const BluetoothDeviceDetailsTile({
     super.key,
   });
   
@@ -75,7 +75,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     final rssiText = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceDetailsTileTheme>();
 
         final rssi = context.select<BluetoothDevice, int>(
           (device) => device.rssi,
@@ -128,7 +128,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     final togglePairingButton = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceDetailsTileTheme>();
         final highlightColor = themeExtension?.highlightColor;
         final isPaired = context.select<BluetoothDevice, bool>((device) => device.isPaired);
         final togglePairing = context.select<BluetoothDevice, VoidCallback?>((device) => device.togglePairing);
@@ -151,7 +151,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     final toggleConnectionButton = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceDetailsTileTheme>();
         final highlightColor = themeExtension?.highlightColor;
         final isConnected = context.select<BluetoothDevice, bool>((device) => device.isConnected);
         final toggleConnection = context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleConnection);
@@ -176,7 +176,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     final typeIconList = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceDetailsTileTheme>();
         final vaildIcons = <IconData?, bool>{};
         final inSystem = context.select<BluetoothDevice, bool>((device) => device.inSystem);
         vaildIcons[themeExtension?.inSystemIcon] = inSystem;
@@ -247,7 +247,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     return Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceDetailsTileTheme>();
 
         final isConnected = context.select<BluetoothDevice, bool>((device) => device.isConnected);
         final isSelected = context.select<BluetoothDevice, bool>((device) => device.isSelected);

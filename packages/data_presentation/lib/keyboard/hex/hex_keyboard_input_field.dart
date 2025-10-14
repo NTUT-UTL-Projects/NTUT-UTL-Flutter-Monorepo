@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../formatter/hex_formatter.dart';
+import '../../formatter/hex_formatter.dart';
 
 class HexKeyboardInputField extends StatelessWidget {
   @protected
@@ -28,9 +28,6 @@ class HexKeyboardInputField extends StatelessWidget {
       inputFormatters: [
         HexFormatter(),
       ],
-      // onTap: () {
-      //   manager.setActive(controller);
-      // },
       contextMenuBuilder: (context, editableTextState) {
         return AdaptiveTextSelectionToolbar.buttonItems(
           anchors: editableTextState.contextMenuAnchors,

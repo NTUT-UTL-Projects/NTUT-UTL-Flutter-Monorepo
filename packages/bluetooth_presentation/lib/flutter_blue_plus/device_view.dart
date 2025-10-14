@@ -25,6 +25,8 @@ class _CancelConnectionController extends ValueNotifier<bool> {
       }),
     ]);
   }
+
+  @mustCallSuper
   @override
   void dispose() {
     for(final s in _sub) {
@@ -50,6 +52,8 @@ class _LoadingDiscoveringController extends ValueNotifier<bool> {
         }),
     ]);
   }
+  
+  @mustCallSuper
   @override
   void dispose() {
     for(final s in _sub) {

@@ -9,7 +9,7 @@ part 'tile.tailor.dart';
 
 @immutable
 @TailorMixin()
-class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> with _$BluetoothDeviceTileThemeTailorMixin {
+class BluetoothDeviceSimpleConnectionTileTheme extends ThemeExtension<BluetoothDeviceSimpleConnectionTileTheme> with _$BluetoothDeviceSimpleConnectionTileThemeTailorMixin {
   @override
   final Color connectedColor;
   @override
@@ -25,7 +25,7 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
   @override
   final Color selectedColor;
 
-  BluetoothDeviceTileTheme({required this.connectedColor, required this.disconnectedColor, required this.highlightColor, required this.selectedColor, required this.connectedIcon, required this.disconnectedIcon, required this.nullRssiIcon});
+  BluetoothDeviceSimpleConnectionTileTheme({required this.connectedColor, required this.disconnectedColor, required this.highlightColor, required this.selectedColor, required this.connectedIcon, required this.disconnectedIcon, required this.nullRssiIcon});
   
   Gradient brandGradient({
     required bool isSelected,
@@ -47,10 +47,10 @@ class BluetoothDeviceTileTheme extends ThemeExtension<BluetoothDeviceTileTheme> 
 /// - [BluetoothDevice]
 /// 
 /// **Themes:**
-/// - [BluetoothDeviceTileTheme]
-class BluetoothDeviceTile extends StatelessWidget {
+/// - [BluetoothDeviceSimpleConnectionTileTheme]
+class BluetoothDeviceSimpleConnectionTile extends StatelessWidget {
 
-  const BluetoothDeviceTile({
+  const BluetoothDeviceSimpleConnectionTile({
     super.key,
   });
   
@@ -59,7 +59,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     final rssiText = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceSimpleConnectionTileTheme>();
 
         final rssi = context.select<BluetoothDevice, int>(
           (device) => device.rssi,
@@ -112,7 +112,7 @@ class BluetoothDeviceTile extends StatelessWidget {
     final toggleConnectionButton = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final themeExtension = themeData.extension<BluetoothDeviceTileTheme>();
+        final themeExtension = themeData.extension<BluetoothDeviceSimpleConnectionTileTheme>();
         final highlightColor = themeExtension?.highlightColor;
         final isConnected = context.select<BluetoothDevice, bool>((device) => device.isConnected);
         final toggleConnection = context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleConnection);
@@ -156,7 +156,7 @@ class BluetoothDeviceTile extends StatelessWidget {
         final isConnected = context.select<BluetoothDevice, bool>((device) => device.isConnected);
         final isSelected = context.select<BluetoothDevice, bool>((device) => device.isSelected);
         final onToggleSelection = context.select<BluetoothDevice, VoidCallback?>((device) => device.toggleSelection);
-        final brandGradient = themeData.extension<BluetoothDeviceTileTheme>()!.brandGradient(
+        final brandGradient = themeData.extension<BluetoothDeviceSimpleConnectionTileTheme>()!.brandGradient(
           isSelected: isSelected,
           isConnected: isConnected,
         );

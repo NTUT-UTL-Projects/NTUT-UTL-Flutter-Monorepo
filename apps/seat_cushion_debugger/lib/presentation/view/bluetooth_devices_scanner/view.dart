@@ -1,8 +1,12 @@
 part of 'bluetooth_devices_scanner.dart';
 
+class BluetoothDeviceTileTheme extends BluetoothDeviceSimpleConnectionTileTheme {
+  BluetoothDeviceTileTheme({required super.connectedColor, required super.disconnectedColor, required super.highlightColor, required super.selectedColor, required super.connectedIcon, required super.disconnectedIcon, required super.nullRssiIcon});
+}
+
 /// **Requirements:**
 /// - [BluetoothDevicesScannerController]
-/// - [BluetoothDeviceTile]
+/// - [BluetoothDeviceTileTheme]
 class BluetoothDevicesScanner extends StatelessWidget {
   const BluetoothDevicesScanner({super.key});
 
@@ -21,7 +25,7 @@ class BluetoothDevicesScanner extends StatelessWidget {
             itemBuilder: (context, index) {
               return ProxyProvider<BluetoothDevicesScannerController, BluetoothDevice>(
                 update: (_, value, _) => value.devices.elementAt(index),
-                child: BluetoothDeviceTile(),
+                child: BluetoothDeviceSimpleConnectionTile(),
               );
             },
           );
