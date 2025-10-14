@@ -3,5 +3,5 @@ library;
 import 'dart:math';
 import 'dart:typed_data';
 
-part 'utils/bytes.dart';
-part 'utils/double.dart';
+part 'src/bytes.dart';
+part 'src/double.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
+import 'package:bluetooth_utils/src/flutter_blue_plus_utils/flutter_blue_plus_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_utils/stream_util.dart';
 

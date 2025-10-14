@@ -2,4 +2,4 @@ library;
 
 import 'dart:async';
 
-part 'utils/merge_stream.dart';
+part 'src/merge_stream.dart';

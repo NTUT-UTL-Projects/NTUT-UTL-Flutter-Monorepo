@@ -1,6 +1,6 @@
 library;
 
-export 'bytes/bytes_view.dart';
-export 'formatter/hex_formatter.dart';
-export 'keyboard/hex/hex_keyboard.dart';
-export 'keyboard/hex/hex_keyboard_input_field.dart';
+export 'src/bytes/bytes_view.dart';
+export 'src/formatter/hex_formatter.dart';
+export 'src/keyboard/hex/hex_keyboard.dart';
+export 'src/keyboard/hex/hex_keyboard_input_field.dart';

@@ -1,5 +1,5 @@
 import 'package:bluetooth_presentation/bluetooth_presentation.dart';
-import 'package:bluetooth_utils/utils/flutter_blue_plus_utils.dart';
+import 'package:bluetooth_utils/src/flutter_blue_plus_utils/flutter_blue_plus_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:fluttertoast/fluttertoast.dart';
