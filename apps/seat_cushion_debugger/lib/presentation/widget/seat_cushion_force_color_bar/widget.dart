@@ -1,11 +1,22 @@
 part of 'seat_cushion_force_color_bar.dart';
 
+@immutable
+@TailorMixin()
+class SeatCushionForceColorBarTheme
+    extends ThemeExtension<SeatCushionForceColorBarTheme>
+    with _$SeatCushionForceColorBarThemeTailorMixin {
+  @override
+  final ForceToColorConverter forceToColor;
+
+  const SeatCushionForceColorBarTheme({required this.forceToColor});
+}
+
 class SeatCushionForceColorBar extends StatelessWidget {
   const SeatCushionForceColorBar({super.key});
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final forceToColor = context.select<SeatCushionForceColorBarController, ForceToColorConverter>((c) => c.forceToColor);
+    final themeExtension = themeData.extension<SeatCushionForceColorBarTheme>();
     final layer = 64;
     return Column(
       children: [
@@ -15,9 +26,13 @@ class SeatCushionForceColorBar extends StatelessWidget {
             gradient: LinearGradient(
               colors: List.generate(
                 layer,
-                (index) => forceToColor(
-                  themeData,
-                  (((SeatCushion.forceMax - SeatCushion.forceMin) * index) / layer) + SeatCushion.forceMin),
+                (index) =>
+                    themeExtension?.forceToColor(
+                      (((SeatCushion.forceMax - SeatCushion.forceMin) * index) /
+                              layer) +
+                          SeatCushion.forceMin,
+                    ) ??
+                    Colors.black,
               ),
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
@@ -30,7 +45,7 @@ class SeatCushionForceColorBar extends StatelessWidget {
             Spacer(),
             Text((SeatCushion.forceMax / 1000.0).toString()),
           ],
-        )
+        ),
       ],
     );
   }

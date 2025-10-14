@@ -1,4 +1,4 @@
-import 'package:data_presentation/src/formatter/hex_formatter.dart';
+import 'package:data_presentation/data_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -16,7 +16,11 @@ class Initializer {
   late final List<fbp.BluetoothDevice> fbpSystemDevices;
   late final Timer updateRssi;
 
-  Initializer({required this.fbpIsSupported, required this.repository, required this.sensor});
+  Initializer({
+    required this.fbpIsSupported,
+    required this.repository,
+    required this.sensor,
+  });
 
   Future call() async {
     await SystemChrome.setPreferredOrientations([
@@ -24,7 +28,7 @@ class Initializer {
       DeviceOrientation.portraitDown,
     ]);
     // Flutter Blue Plus
-    if(fbpIsSupported) {
+    if (fbpIsSupported) {
       await fbp.FlutterBluePlus.setLogLevel(fbp.LogLevel.none, color: true);
       await BondFlutterBluePlus.init();
       CharacteristicFlutterBluePlus.init();
@@ -32,39 +36,41 @@ class Initializer {
       RssiFlutterBluePlus.init();
       ScanResultFlutterBluePlus.init();
       fbpSystemDevices = await fbp.FlutterBluePlus.systemDevices([]);
-      updateRssi = Timer.periodic(
-        const Duration(milliseconds: 100),
-        (_) async {
-          for(final d in fbp.FlutterBluePlus.connectedDevices) {
-            try {
-              await d.readRssi();
-            } catch(e) {}
-          }
+      updateRssi = Timer.periodic(const Duration(milliseconds: 100), (_) async {
+        for (final d in fbp.FlutterBluePlus.connectedDevices) {
+          try {
+            await d.readRssi();
+          } catch (e) {}
         }
-      );
+      });
       // Auto setNotifyValue while a new [fbp.BluetoothDevice] get connected.
-      _sub.add(ConnectionStateFlutterBluePlus.onConnectionStateChanged.listen((device) async {
-        final services = await device.discoverServices();
-        for(final s in services) {
-          for(final c in s.characteristics) {
-            final properties = c.properties;
-            if(
-              properties.indicate
-              || properties.indicateEncryptionRequired
-              || properties.notify
-              || properties.notifyEncryptionRequired
-            ) {
-              try {
-                c.setNotifyValue(true);
-              } catch(e) {}
+      _sub.add(
+        ConnectionStateFlutterBluePlus.onConnectionStateChanged.listen((
+          device,
+        ) async {
+          final services = await device.discoverServices();
+          for (final s in services) {
+            for (final c in s.characteristics) {
+              final properties = c.properties;
+              if (properties.indicate ||
+                  properties.indicateEncryptionRequired ||
+                  properties.notify ||
+                  properties.notifyEncryptionRequired) {
+                try {
+                  c.setNotifyValue(true);
+                } catch (e) {}
+              }
             }
           }
-        }
-      }));
+        }),
+      );
     } else {
       fbpSystemDevices = [];
     }
-    sensorRecoderController = SeatCushionSensorRecorderController(sensor: sensor, repository: repository);
+    sensorRecoderController = SeatCushionSensorRecorderController(
+      sensor: sensor,
+      repository: repository,
+    );
     return;
   }
 }

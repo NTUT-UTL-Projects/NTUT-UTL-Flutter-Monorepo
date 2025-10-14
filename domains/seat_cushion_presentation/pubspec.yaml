@@ -18,12 +18,16 @@ dependencies:
   provider: any
   simple_3d: any
   simple_3d_renderer: any
-  stream_utils: any
   synchronized: any
   util_simple_3d: any
+  theme_tailor: any
+  theme_tailor_annotation: any
 
   # Domains
   seat_cushion: any
+
+  # Packages
+  stream_utils: any
 
 dev_dependencies:
   flutter_test:

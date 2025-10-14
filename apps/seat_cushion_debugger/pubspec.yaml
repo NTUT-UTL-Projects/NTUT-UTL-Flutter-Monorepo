@@ -23,8 +23,8 @@ dependencies:
   synchronized: any
 
   # Domains
-  seat_cushion_presentation: any
   seat_cushion: any
+  seat_cushion_presentation: any
 
   # Packages
   bluetooth_presentation: any
@@ -35,6 +35,8 @@ dependencies:
   path_provider_utils: any
   stream_utils: any
   text_editing_controller_utils: any
+  theme_tailor: any
+  theme_tailor_annotation: any
 
 dev_dependencies:
   flutter_test:

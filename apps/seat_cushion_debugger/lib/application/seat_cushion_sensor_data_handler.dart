@@ -14,13 +14,14 @@ class SeatCushionSensorRecorderController {
 
   final _lock = Lock();
 
-  final StreamController<bool> _isRecordingController = StreamController.broadcast();
+  final StreamController<bool> _isRecordingController =
+      StreamController.broadcast();
   Stream<bool> get isRecordingStream => _isRecordingController.stream;
   bool _isRecording = false;
   bool get isRecording => _isRecording;
   set isRecording(bool isRecording) {
     _lock.synchronized(() {
-      if(_isRecording == isRecording) return;
+      if (_isRecording == isRecording) return;
       _isRecording = isRecording;
       _isRecordingController.add(_isRecording);
     });
@@ -33,7 +34,7 @@ class SeatCushionSensorRecorderController {
     _sub.addAll([
       sensor.stream.listen((seatCushion) {
         _lock.synchronized(() {
-          if(!_isRecording) return;
+          if (!_isRecording) return;
           repository.add(seatCushion: seatCushion);
         });
       }),
@@ -41,7 +42,7 @@ class SeatCushionSensorRecorderController {
   }
 
   void cancel() {
-    for(final s in _sub) {
+    for (final s in _sub) {
       s.cancel();
     }
   }

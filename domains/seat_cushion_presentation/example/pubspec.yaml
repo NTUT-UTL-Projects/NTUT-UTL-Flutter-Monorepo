@@ -1,0 +1,32 @@
+name: example
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.5+1
+  seat_cushion: any
+  seat_cushion_presentation:
+    path: ..
+  stream_utils: any
+
+dependency_overrides:
+  seat_cushion:
+    path: ../../seat_cushion
+  stream_utils:
+    path: ../../../packages/stream_utils
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

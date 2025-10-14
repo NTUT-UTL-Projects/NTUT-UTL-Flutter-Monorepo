@@ -21,13 +21,8 @@ Future<void> main() async {
     sensor: DecoderMockSeatCushionSensor(decoder: decoder),
   );
   await initializer();
-  timer = Timer.periodic(
-    const Duration(milliseconds: 10),
-    (_) {
-      decoder.addValues(
-        decoder.generateMokeValues(),
-      );
-    },
-  );
+  timer = Timer.periodic(const Duration(milliseconds: 10), (_) {
+    decoder.addValues(decoder.generateMokeValues());
+  });
   runApp(MyApp());
 }

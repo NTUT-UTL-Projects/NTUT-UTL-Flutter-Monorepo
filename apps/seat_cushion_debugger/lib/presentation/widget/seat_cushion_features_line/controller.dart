@@ -1,6 +1,7 @@
 part of 'seat_cushion_features_line.dart';
 
-typedef TriggerDownloadFile = Future<void> Function(AppLocalizations appLocalizations);
+typedef TriggerDownloadFile =
+    Future<void> Function(AppLocalizations appLocalizations);
 
 typedef TriggerClear = Future<void> Function(AppLocalizations appLocalizations);
 
@@ -55,7 +56,7 @@ class SeatCushionFeaturesLineController extends ChangeNotifier {
 
   @override
   void dispose() {
-    for(final s in _sub) {
+    for (final s in _sub) {
       s.cancel();
     }
     super.dispose();

@@ -1,43 +1,23 @@
-part of '../../seat_cushion_set_view.dart';
+part of '../../all_seat_cushion_view.dart';
 
+@immutable
+@TailorMixin()
 class SeatCushionForceWidgetTheme
-    extends ThemeExtension<SeatCushionForceWidgetTheme> {
-  Color borderColor;
+    extends ThemeExtension<SeatCushionForceWidgetTheme>
+    with _$SeatCushionForceWidgetThemeTailorMixin {
+  @override
+  final Color borderColor;
+  @override
+  final ForceToColorConverter forceToColor;
 
-  SeatCushionForceWidgetTheme({
+  const SeatCushionForceWidgetTheme({
     required this.borderColor,
-  });
-
-  @override
-  SeatCushionForceWidgetTheme copyWith({
-    Color? borderColor,
-    Color Function(double force)? forceToColor,
-  }) =>
-      SeatCushionForceWidgetTheme(
-        borderColor: borderColor ?? this.borderColor,
-      );
-
-  @override
-  SeatCushionForceWidgetTheme lerp(
-      SeatCushionForceWidgetTheme? other, double t) {
-    if (other is! SeatCushionForceWidgetTheme) return this;
-    return SeatCushionForceWidgetTheme(
-      borderColor: Color.lerp(borderColor, other.borderColor, t) ?? borderColor,
-    );
-  }
-}
-
-class SeatCushionForceWidgetUI {
-  ForceToColorConverter forceToColor;
-
-  SeatCushionForceWidgetUI({
     required this.forceToColor,
   });
 }
 
-/// **Requirements:**
-/// - [SeatCushionForceWidgetTheme]: must be provided in the widget tree.
-/// - [SeatCushionForceWidgetUI]: must be provided in the widget tree.
+/// **Themes:**
+/// - [SeatCushionForceWidgetTheme]
 class SeatCushionForceWidget extends StatelessWidget {
   final double force;
 
@@ -55,16 +35,14 @@ class SeatCushionForceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final themeExtension =
-        themeData.extension<SeatCushionForceWidgetTheme>()!;
-    final ui = context.watch<SeatCushionForceWidgetUI>();
+    final themeExtension = themeData.extension<SeatCushionForceWidgetTheme>()!;
 
     final borderWidth = min(width, height) * 1.0 / 15.0;
     final borderRadius = borderWidth;
 
     return Container(
       decoration: BoxDecoration(
-        color: ui.forceToColor(themeData, force),
+        color: themeExtension.forceToColor(force),
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           color: themeExtension.borderColor,

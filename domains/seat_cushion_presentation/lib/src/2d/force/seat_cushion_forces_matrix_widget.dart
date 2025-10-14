@@ -1,11 +1,10 @@
-part of '../seat_cushion_set_view.dart';
+part of '../all_seat_cushion_view.dart';
 
 /// **Requirements:**
 /// - Refer to [SeatCushionForceWidget].
-class SeatCushionForcesMatrixWidget<T extends SeatCushion> extends StatelessWidget {
-  const SeatCushionForcesMatrixWidget({
-    super.key,
-  });
+class SeatCushionForcesMatrixWidget<T extends SeatCushion>
+    extends StatelessWidget {
+  const SeatCushionForcesMatrixWidget({super.key});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -19,7 +18,9 @@ class SeatCushionForcesMatrixWidget<T extends SeatCushion> extends StatelessWidg
               children: List.generate(SeatCushion.unitsMaxColumn, (column) {
                 return Builder(
                   builder: (context) {
-                    final force = context.select<T?, double>((s) => s?.forces[row][column] ?? SeatCushion.forceMin);
+                    final force = context.select<T?, double>(
+                      (s) => s?.forces[row][column] ?? SeatCushion.forceMin,
+                    );
                     return SeatCushionForceWidget(
                       force: force,
                       height: height,

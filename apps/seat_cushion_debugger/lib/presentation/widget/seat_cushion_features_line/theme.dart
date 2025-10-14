@@ -5,11 +5,16 @@ class SeatCushionFeaturesLineIcons {
   final IconData download;
   final IconData record;
 
-  SeatCushionFeaturesLineIcons({required this.clear, required this.download, required this.record});
+  SeatCushionFeaturesLineIcons({
+    required this.clear,
+    required this.download,
+    required this.record,
+  });
 }
 
 @immutable
-class SeatCushionFeaturesLineTheme extends ThemeExtension<SeatCushionFeaturesLineTheme> {
+class SeatCushionFeaturesLineTheme
+    extends ThemeExtension<SeatCushionFeaturesLineTheme> {
   const SeatCushionFeaturesLineTheme({
     required this.clearIconColor,
     required this.downloadIconColor,
@@ -26,33 +31,39 @@ class SeatCushionFeaturesLineTheme extends ThemeExtension<SeatCushionFeaturesLin
     Color? downloadIconColor,
     Color? recordIconColor,
   }) => SeatCushionFeaturesLineTheme(
-        clearIconColor: clearIconColor ?? this.clearIconColor,
-        downloadIconColor: downloadIconColor ?? this.downloadIconColor,
-        recordIconColor: recordIconColor ?? this.recordIconColor,
-      );
+    clearIconColor: clearIconColor ?? this.clearIconColor,
+    downloadIconColor: downloadIconColor ?? this.downloadIconColor,
+    recordIconColor: recordIconColor ?? this.recordIconColor,
+  );
 
   @override
-  SeatCushionFeaturesLineTheme lerp(ThemeExtension<SeatCushionFeaturesLineTheme>? other, double t) {
+  SeatCushionFeaturesLineTheme lerp(
+    ThemeExtension<SeatCushionFeaturesLineTheme>? other,
+    double t,
+  ) {
     if (other is! SeatCushionFeaturesLineTheme) return this;
     return SeatCushionFeaturesLineTheme(
-      clearIconColor: Color.lerp(
-          clearIconColor as Color?,
-          other.clearIconColor as Color?,
-          t,
-        ) ??
-        clearIconColor,
-      downloadIconColor: Color.lerp(
-          downloadIconColor as Color?,
-          other.downloadIconColor as Color?,
-          t,
-        ) ??
-        downloadIconColor,
-      recordIconColor: Color.lerp(
-          recordIconColor as Color?,
-          other.recordIconColor as Color?,
-          t,
-        ) ??
-        recordIconColor,
+      clearIconColor:
+          Color.lerp(
+            clearIconColor as Color?,
+            other.clearIconColor as Color?,
+            t,
+          ) ??
+          clearIconColor,
+      downloadIconColor:
+          Color.lerp(
+            downloadIconColor as Color?,
+            other.downloadIconColor as Color?,
+            t,
+          ) ??
+          downloadIconColor,
+      recordIconColor:
+          Color.lerp(
+            recordIconColor as Color?,
+            other.recordIconColor as Color?,
+            t,
+          ) ??
+          recordIconColor,
     );
   }
 }

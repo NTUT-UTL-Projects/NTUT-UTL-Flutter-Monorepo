@@ -1,42 +1,19 @@
-part of '../seat_cushion_set_view.dart';
+part of '../all_seat_cushion_view.dart';
 
-class SeatCushionIschiumPointWidgetTheme extends ThemeExtension<SeatCushionIschiumPointWidgetTheme> {
-  Color borderColor;
-  Color ischiumColor;
+@immutable
+@TailorMixin()
+class SeatCushionIschiumPointWidgetTheme
+    extends ThemeExtension<SeatCushionIschiumPointWidgetTheme>
+    with _$SeatCushionIschiumPointWidgetThemeTailorMixin {
+  @override
+  final Color borderColor;
+  @override
+  final Color ischiumColor;
 
-  SeatCushionIschiumPointWidgetTheme({
+  const SeatCushionIschiumPointWidgetTheme({
     required this.borderColor,
     required this.ischiumColor,
   });
-
-  @override
-  SeatCushionIschiumPointWidgetTheme copyWith({
-    Color? borderColor,
-    Color? ischiumColor,
-  }) => SeatCushionIschiumPointWidgetTheme(
-    borderColor: borderColor ?? this.borderColor,
-    ischiumColor: ischiumColor ?? this.ischiumColor,
-  );
-
-  @override
-  SeatCushionIschiumPointWidgetTheme lerp(SeatCushionIschiumPointWidgetTheme? other, double t) {
-    if (other is! SeatCushionIschiumPointWidgetTheme) return this;
-    return SeatCushionIschiumPointWidgetTheme(
-      borderColor: Color.lerp(
-          borderColor,
-          other.borderColor,
-          t,
-        ) ??
-        borderColor,
-      ischiumColor: Color.lerp(
-          ischiumColor,
-          other.ischiumColor,
-          t,
-        ) ??
-        ischiumColor,
-    );
-  }
-
 }
 
 class _IschiumPoint extends CustomPainter {
@@ -47,9 +24,12 @@ class _IschiumPoint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final themeData = Theme.of(context);
-    final themeExtension = themeData.extension<SeatCushionIschiumPointWidgetTheme>()!;
+    final themeExtension = themeData
+        .extension<SeatCushionIschiumPointWidgetTheme>()!;
     final point = Offset(x, y);
-    final innerDiameter = size.width * ((SeatCushionUnit.sensorWidth * 2.0 / 3.0) / SeatCushion.deviceWidth);
+    final innerDiameter =
+        size.width *
+        ((SeatCushionUnit.sensorWidth * 2.0 / 3.0) / SeatCushion.deviceWidth);
     final outerDiameter = innerDiameter * 3.0 / 2.0;
     final innerPaint = Paint()
       ..color = themeExtension.ischiumColor
@@ -62,36 +42,40 @@ class _IschiumPoint extends CustomPainter {
     canvas.drawPoints(PointMode.points, [point], outerPaint);
     canvas.drawPoints(PointMode.points, [point], innerPaint);
   }
+
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
-/// **Requirements:**
-/// - [SeatCushionIschiumPointWidget]: must be provided in the widget tree.
-class SeatCushionIschiumPointWidget<T extends SeatCushion> extends StatelessWidget {
-  const SeatCushionIschiumPointWidget({
-    super.key,
-  });
+/// **Themes:**
+/// - [SeatCushionIschiumPointWidgetTheme]
+class SeatCushionIschiumPointWidget<T extends SeatCushion>
+    extends StatelessWidget {
+  const SeatCushionIschiumPointWidget({super.key});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final ischiumPosition = context.select<T?, Point<double>?>((n) => n?.ischiumPosition());
+        final ischiumPosition = context.select<T?, Point<double>?>(
+          (n) => n?.ischiumPosition(),
+        );
         final width = constraints.maxWidth;
         final height = width / SeatCushion.deviceAspectRatio;
         return SizedBox(
           width: width,
           height: height,
           child: (ischiumPosition != null)
-            ? CustomPaint(
-              painter: _IschiumPoint(
-                context,
-                ((ischiumPosition.x / SeatCushion.deviceWidth) + 0.5) * width,
-                ((ischiumPosition.y / SeatCushion.deviceHeight) + 0.5) * height,
-              ),
-              child: Container(),
-            )
-            : null,
+              ? CustomPaint(
+                  painter: _IschiumPoint(
+                    context,
+                    ((ischiumPosition.x / SeatCushion.deviceWidth) + 0.5) *
+                        width,
+                    ((ischiumPosition.y / SeatCushion.deviceHeight) + 0.5) *
+                        height,
+                  ),
+                  child: Container(),
+                )
+              : null,
         );
       },
     );

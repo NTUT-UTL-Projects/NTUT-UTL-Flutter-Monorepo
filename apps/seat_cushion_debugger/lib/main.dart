@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:seat_cushion/infrastructure/repository/in_memory.dart';
 import 'package:seat_cushion/infrastructure/sensor/bluetooth_sensor.dart';
 import 'package:seat_cushion/infrastructure/sensor_decoder/wei_zhe_decoder.dart';
-import 'package:seat_cushion/seat_cushion.dart';
 import 'package:seat_cushion_presentation/seat_cushion_presentation.dart';
 
 import 'init/initializer.dart';
@@ -27,7 +26,7 @@ Future<void> main() async {
   bool fbpIsSupported;
   try {
     fbpIsSupported = await fbp.FlutterBluePlus.isSupported;
-  } catch(e) {
+  } catch (e) {
     fbpIsSupported = false;
   }
   initializer = Initializer(
@@ -50,9 +49,7 @@ class MyApp extends StatelessWidget {
     final bluetoothOffPage = BluetoothStatusView();
     return MaterialApp(
       title: "Main",
-      theme: ThemeData.light(
-        useMaterial3: true,
-      ).copyWith(
+      theme: ThemeData.light(useMaterial3: true).copyWith(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         extensions: [
           // Bluetooth
@@ -65,9 +62,7 @@ class MyApp extends StatelessWidget {
             nullRssiIcon: Icons.device_unknown,
             selectedColor: Colors.green,
           ),
-          BluetoothStatusTheme(
-            backGroundColor: Colors.blue,
-          ),
+          BluetoothStatusTheme(backGroundColor: Colors.blue),
           BluetoothCommandLineTheme(
             clearIconColor: Colors.red,
             initIconColor: Colors.blue,
@@ -76,13 +71,16 @@ class MyApp extends StatelessWidget {
           // Domain
           SeatCushionForceWidgetTheme(
             borderColor: Colors.black,
+            forceToColor: weiZheForceToColorConverter,
           ),
           SeatCushionIschiumPointWidgetTheme(
             borderColor: Colors.black,
             ischiumColor: Colors.pinkAccent,
           ),
-          SeatCushion3DMeshWidgetTheme(
+          home.AllSeatCushionForces3DMeshWidgetTheme(
             baseColor: Colors.black,
+            forceScale: 0.05,
+            forceToColor: weiZheForceToColorConverter,
             strokeColor: Colors.black,
           ),
           SeatCushionFeaturesLineTheme(
@@ -90,11 +88,12 @@ class MyApp extends StatelessWidget {
             downloadIconColor: Colors.green,
             recordIconColor: Colors.orange,
           ),
+          SeatCushionForceColorBarTheme(
+            forceToColor: weiZheForceToColorConverter,
+          ),
         ],
       ),
-      darkTheme: ThemeData.dark(
-        useMaterial3: true,
-      ).copyWith(
+      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
         extensions: [
           // Bluetooth
@@ -107,9 +106,7 @@ class MyApp extends StatelessWidget {
             nullRssiIcon: Icons.device_unknown,
             selectedColor: Colors.green[700]!,
           ),
-          BluetoothStatusTheme(
-            backGroundColor: Colors.indigoAccent,
-          ),
+          BluetoothStatusTheme(backGroundColor: Colors.indigoAccent),
           BluetoothCommandLineTheme(
             clearIconColor: Colors.red[700]!,
             initIconColor: Colors.indigoAccent,
@@ -118,19 +115,25 @@ class MyApp extends StatelessWidget {
           // Domain
           SeatCushionForceWidgetTheme(
             borderColor: Colors.white,
+            forceToColor: weiZheForceToColorConverter,
           ),
           SeatCushionIschiumPointWidgetTheme(
             borderColor: Colors.white,
             ischiumColor: Colors.pinkAccent[700]!,
           ),
-          SeatCushion3DMeshWidgetTheme(
+          home.AllSeatCushionForces3DMeshWidgetTheme(
             baseColor: Colors.white,
+            forceScale: 0.05,
+            forceToColor: weiZheForceToColorConverter,
             strokeColor: Colors.white,
           ),
           SeatCushionFeaturesLineTheme(
             clearIconColor: Colors.red[700]!,
             downloadIconColor: Colors.green[700]!,
             recordIconColor: Colors.orange[700]!,
+          ),
+          SeatCushionForceColorBarTheme(
+            forceToColor: weiZheForceToColorConverter,
           ),
         ],
       ),
@@ -140,58 +143,62 @@ class MyApp extends StatelessWidget {
           // Bluetooth
           StreamProvider(
             create: (_) => (initializer.fbpIsSupported)
-              ? fbp.FlutterBluePlus.adapterState
-              : null,
+                ? fbp.FlutterBluePlus.adapterState
+                : null,
             initialData: (initializer.fbpIsSupported)
-              ? fbp.FlutterBluePlus.adapterStateNow
-              : fbp.BluetoothAdapterState.on,
+                ? fbp.FlutterBluePlus.adapterStateNow
+                : fbp.BluetoothAdapterState.on,
           ),
-          Provider<BluetoothStatusController>(create: (_) => BluetoothStatusController(
-            onPressedButton: () => fbp.FlutterBluePlus.turnOn(),
-          )),
-          ChangeNotifierProvider<BluetoothDevicesScannerController>(create: (_) => BluetoothDevicesScannerController(
-            fbpIsSupported: initializer.fbpIsSupported,
-            fbpSystemDevices: initializer.fbpSystemDevices,
-          )),
-          Provider(create: (_) => BluetoothCommandLineIcons(
-            clear: Icons.delete,
-            init: Icons.start,
-            send: Icons.send,
-          )),
-          ChangeNotifierProvider(create: (_) => BluetoothCommandLineController(
-            sendPacket: (hexString) async {
-              for(final device in fbp.FlutterBluePlus.connectedDevices) {
-                for(final s in device.servicesList) {
-                  for(final c in s.characteristics.where((c) {
-                    final p = c.properties;
-                    return p.write || p.writeWithoutResponse;
-                  })) {
-                    try {
-                      await c.write(c.lastValue);
-                    } catch(e) {}
+          Provider<BluetoothStatusController>(
+            create: (_) => BluetoothStatusController(
+              onPressedButton: () => fbp.FlutterBluePlus.turnOn(),
+            ),
+          ),
+          ChangeNotifierProvider<BluetoothDevicesScannerController>(
+            create: (_) => BluetoothDevicesScannerController(
+              fbpIsSupported: initializer.fbpIsSupported,
+              fbpSystemDevices: initializer.fbpSystemDevices,
+            ),
+          ),
+          Provider(
+            create: (_) => BluetoothCommandLineIcons(
+              clear: Icons.delete,
+              init: Icons.start,
+              send: Icons.send,
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => BluetoothCommandLineController(
+              sendPacket: (hexString) async {
+                for (final device in fbp.FlutterBluePlus.connectedDevices) {
+                  for (final s in device.servicesList) {
+                    for (final c in s.characteristics.where((c) {
+                      final p = c.properties;
+                      return p.write || p.writeWithoutResponse;
+                    })) {
+                      try {
+                        await c.write(c.lastValue);
+                      } catch (e) {}
+                    }
                   }
                 }
-              }
-            },
-            triggerInit: () {},
-          )),
+              },
+              triggerInit: () {},
+            ),
+          ),
 
           // Domain
-          StreamProvider<SeatCushionSet?>(
-            create: (_) => initializer.sensor.setStream,
+          StreamProvider(
+            create: (_) => initializer.sensor.leftStream,
             initialData: null,
           ),
-          Provider(
-            create: (_) => SeatCushionForceWidgetUI(
-              forceToColor: weiZheForceToColorConverter,
-            ),
+          StreamProvider(
+            create: (_) => initializer.sensor.rightStream,
+            initialData: null,
           ),
-          Provider(
-            create: (_) => home.SeatCushionForces3DMeshWidgetUI(
-              cameraHight: 1200.0,
-              focusLength: 1500.0,
-              focusScale: 0.05,
-            ),
+          StreamProvider(
+            create: (_) => initializer.sensor.setStream,
+            initialData: null,
           ),
           Provider(
             create: (_) => home.HomePageIcons(
@@ -205,22 +212,27 @@ class MyApp extends StatelessWidget {
               downloadFile: (appLocalizations) async {
                 final file = await SeatCushionFile.createSeatCushionFile();
                 await file.writeHead();
-                await for (var entity in initializer.repository.fetchEntities()) {
+                await for (var entity
+                    in initializer.repository.fetchEntities()) {
                   await file.writeSeatCushionEntity(entity);
                 }
                 await file.writeTail();
                 await Fluttertoast.showToast(
-                  msg: appLocalizations.downloadFileFinishedNotification("json"),
+                  msg: appLocalizations.downloadFileFinishedNotification(
+                    "json",
+                  ),
                 );
               },
               isClearing: initializer.repository.isClearingAllEntities,
-              isClearingStream: initializer.repository.isClearingAllEntitiesStream,
+              isClearingStream:
+                  initializer.repository.isClearingAllEntitiesStream,
               isRecording: initializer.sensorRecoderController.isRecording,
-              isRecordingStream: initializer.sensorRecoderController.isRecordingStream,
+              isRecordingStream:
+                  initializer.sensorRecoderController.isRecordingStream,
               triggerClear: (appLocalizations) async {
                 await initializer.repository.clearAllEntities();
                 String message;
-                switch(appLocalizations.localeName) {
+                switch (appLocalizations.localeName) {
                   case "zh":
                     message = "清除旧数据。";
                   case "zh_TW":
@@ -228,11 +240,11 @@ class MyApp extends StatelessWidget {
                   default:
                     message = "Clear old data.";
                 }
-                await Fluttertoast.showToast(
-                  msg: message,
-                );
+                await Fluttertoast.showToast(msg: message);
               },
-              triggerRecord: () => initializer.sensorRecoderController.isRecording = !initializer.sensorRecoderController.isRecording,
+              triggerRecord: () =>
+                  initializer.sensorRecoderController.isRecording =
+                      !initializer.sensorRecoderController.isRecording,
             ),
           ),
           Provider(
@@ -249,16 +261,15 @@ class MyApp extends StatelessWidget {
           ),
         ],
         builder: (context, _) {
-          return (context.watch<fbp.BluetoothAdapterState>() == fbp.BluetoothAdapterState.on) 
-            ? homePage
-            : bluetoothOffPage;
+          return (context.watch<fbp.BluetoothAdapterState>() ==
+                  fbp.BluetoothAdapterState.on)
+              ? homePage
+              : bluetoothOffPage;
         },
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      navigatorObservers: [
-        BluetoothAdapterStateObserver(),
-      ],
+      navigatorObservers: [BluetoothAdapterStateObserver()],
     );
   }
 }

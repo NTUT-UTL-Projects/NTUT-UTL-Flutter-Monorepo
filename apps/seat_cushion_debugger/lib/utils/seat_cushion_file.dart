@@ -11,16 +11,17 @@ extension SeatCushionFile on File {
     final time = DateTime.now();
     final folder = (await getSystemDownloadDirectory())!;
     final appName = (await PackageInfo.fromPlatform()).appName;
-    final file = File("${folder.absolute.path}/${appName}_${time.toFileFormat()}.json");
+    final file = File(
+      "${folder.absolute.path}/${appName}_${time.toFileFormat()}.json",
+    );
     return file;
   }
+
   Future<bool> writeHead() async {
-    await writeAsString(
-      "[",
-      mode: FileMode.append,
-    );
+    await writeAsString("[", mode: FileMode.append);
     return true;
   }
+
   Future<bool> writeSeatCushionEntity(SeatCushionEntity entity) async {
     await writeAsString(
       "${jsonEncode(entity.toJson())},",
@@ -28,11 +29,9 @@ extension SeatCushionFile on File {
     );
     return true;
   }
+
   Future<bool> writeTail() async {
-    await writeAsString(
-      "]",
-      mode: FileMode.append,
-    );
+    await writeAsString("]", mode: FileMode.append);
     return true;
   }
 }

@@ -8,25 +8,30 @@ class BluetoothCommandLine extends StatelessWidget {
     final themeExtension = themeData.extension<BluetoothCommandLineTheme>()!;
     final icons = context.watch<BluetoothCommandLineIcons>();
 
-    final triggerClear = context.select<BluetoothCommandLineController, VoidCallback>((c) => c.triggerClear);
+    final triggerClear = context
+        .select<BluetoothCommandLineController, VoidCallback>(
+          (c) => c.triggerClear,
+        );
     final clearButton = IconButton(
       onPressed: triggerClear,
-      icon: Icon(
-        icons.clear,
-      ),
+      icon: Icon(icons.clear),
       color: themeExtension.clearIconColor,
     );
 
-    final triggerInit = context.select<BluetoothCommandLineController, VoidCallback>((c) => c.triggerInit);
+    final triggerInit = context
+        .select<BluetoothCommandLineController, VoidCallback>(
+          (c) => c.triggerInit,
+        );
     final initButton = IconButton(
       onPressed: triggerInit,
-      icon: Icon(
-        icons.init,
-      ),
+      icon: Icon(icons.init),
       color: themeExtension.initIconColor,
     );
 
-    final controller = context.select<BluetoothCommandLineController, TextEditingController>((c) => c.textEditingController);
+    final controller = context
+        .select<BluetoothCommandLineController, TextEditingController>(
+          (c) => c.textEditingController,
+        );
     return Row(
       children: [
         Expanded(
@@ -34,12 +39,8 @@ class BluetoothCommandLine extends StatelessWidget {
             controller: controller,
             keyboardType: TextInputType.text,
             showCursor: true,
-            inputFormatters: [
-              HexFormatter(),
-            ],
-            decoration: const InputDecoration(
-              hintText: 'Hex Input',
-            ),
+            inputFormatters: [HexFormatter()],
+            decoration: const InputDecoration(hintText: 'Hex Input'),
           ),
         ),
         initButton,

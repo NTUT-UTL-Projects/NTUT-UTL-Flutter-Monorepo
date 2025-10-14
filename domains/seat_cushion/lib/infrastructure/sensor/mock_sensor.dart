@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:stream_utils/stream_util.dart';
 
 import '../../seat_cushion.dart';
@@ -35,8 +34,6 @@ class MockSeatCushionSensor implements SeatCushionSensor {
     ]
   );
 
-  @visibleForTesting
-  @pragma('vm:notify-debugger-on-exception')
   void mockLeft(LeftSeatCushion left) {
     _leftBuffer = left;
     _leftController.add(left);
@@ -45,8 +42,6 @@ class MockSeatCushionSensor implements SeatCushionSensor {
     }
   }
 
-  @visibleForTesting
-  @pragma('vm:notify-debugger-on-exception')
   void mockRight(RightSeatCushion right) {
     _rightBuffer = right;
     _rightController.add(right);
@@ -55,8 +50,6 @@ class MockSeatCushionSensor implements SeatCushionSensor {
     }
   }
 
-  @visibleForTesting
-  @pragma('vm:notify-debugger-on-exception')
   void mockSet(SeatCushionSet set) {
     _leftBuffer = set.left;
     _rightBuffer = set.right;
@@ -65,5 +58,11 @@ class MockSeatCushionSensor implements SeatCushionSensor {
     if(_leftBuffer != null && _rightBuffer != null) {
       _setController.add(SeatCushionSet(left: _leftBuffer!, right: _rightBuffer!));
     }
+  }
+
+  void close() {
+    _leftController.close();
+    _rightController.close();
+    _setController.close();
   }
 }

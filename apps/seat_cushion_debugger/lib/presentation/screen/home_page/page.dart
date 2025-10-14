@@ -1,58 +1,39 @@
 part of 'home_page.dart';
 
-typedef ForceToColorConverter = Color Function(ThemeData, double);
-
-class SeatCushionForces3DMeshWidgetUI extends SeatCushion3DMeshWidgetUI {
-  @override
-  final double cameraHight;
-  
-  @override
-  final double focusLength;
-
-  final double focusScale;
-
-  SeatCushionForces3DMeshWidgetUI({
-    required this.cameraHight,
-    required this.focusLength,
-    required this.focusScale,
-  });
-  
-  @override
-  Color pointToColor(ThemeData themeData, SeatCushionUnitCornerPoint point) {
-    return weiZheForceToColorConverter(themeData, point.force);
-  }
-  
-  @override
-  double pointToHeight(ThemeData themeData, SeatCushionUnitCornerPoint point) {
-    return point.force * focusScale;
-  }
+class AllSeatCushionForces3DMeshWidgetTheme
+    extends AllSeatCushion3DMeshWidgetTheme {
+  AllSeatCushionForces3DMeshWidgetTheme({
+    required super.baseColor,
+    required double forceScale,
+    required Color Function(double force) forceToColor,
+    required super.strokeColor,
+  }) : super(
+         pointToColor: (point) => forceToColor(point.force),
+         pointToHeight: (point) => point.force * forceScale,
+       );
 }
 
-class SeatCushionForces3DMeshWidget extends SeatCushion3DMeshView<SeatCushionForces3DMeshWidgetUI> {
-  const SeatCushionForces3DMeshWidget({super.key});
+class AllSeatCushionForces3DMeshWidget
+    extends AllSeatCushion3DMeshView<AllSeatCushionForces3DMeshWidgetTheme> {
+  const AllSeatCushionForces3DMeshWidget({super.key});
 }
 
-/// **Requirements:**
+/// **References:**
+/// - [AllSeatCushion3DMeshView]
 /// - [BluetoothDevicesScanner]
 /// - [SeatCushionDashboard]
-/// - [SeatCushionForces3DMeshWidget]
 class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     final icons = context.watch<HomePageIcons>();
     final bluetoothScanner = BluetoothDevicesScanner();
     final seatCushionDashboard = SeatCushionDashboard();
-    final seatCushionforces3DMesh = SeatCushionForces3DMeshWidget();
+    final seatCushionforces3DMesh = AllSeatCushionForces3DMeshWidget();
     final tabViewMap = {
-      icons.bluetoothScanner:
-      bluetoothScanner,
-      icons.seatCushionDashboard:
-      seatCushionDashboard,
-      icons.seatCushion3DMesh:
-      seatCushionforces3DMesh,
+      icons.bluetoothScanner: bluetoothScanner,
+      icons.seatCushionDashboard: seatCushionDashboard,
+      icons.seatCushion3DMesh: seatCushionforces3DMesh,
     };
     return DefaultTabController(
       length: tabViewMap.length,
@@ -62,9 +43,7 @@ class HomePage extends StatelessWidget {
           appBar: TabBar(
             isScrollable: false,
             tabs: tabViewMap.keys.map((icon) {
-              return Tab(
-                icon: Icon(icon),
-              );
+              return Tab(icon: Icon(icon));
             }).toList(),
           ),
           body: TabBarView(

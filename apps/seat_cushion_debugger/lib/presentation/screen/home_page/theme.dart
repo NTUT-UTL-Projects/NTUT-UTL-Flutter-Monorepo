@@ -5,5 +5,9 @@ class HomePageIcons {
   final IconData seatCushion3DMesh;
   final IconData seatCushionDashboard;
 
-  HomePageIcons({required this.bluetoothScanner, required this.seatCushion3DMesh, required this.seatCushionDashboard});
+  HomePageIcons({
+    required this.bluetoothScanner,
+    required this.seatCushion3DMesh,
+    required this.seatCushionDashboard,
+  });
 }
