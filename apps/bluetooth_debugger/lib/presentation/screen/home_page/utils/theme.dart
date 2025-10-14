@@ -2,7 +2,8 @@ part of '../home_page.dart';
 
 @immutable
 @TailorMixin()
-class HomePageTheme extends ThemeExtension<HomePageTheme> with _$HomePageThemeTailorMixin {
+class HomePageTheme extends ThemeExtension<HomePageTheme>
+    with _$HomePageThemeTailorMixin {
   @override
   final Color appBarBackgroundColor;
   @override

@@ -23,10 +23,10 @@ Future<void> init() async {
   // Flutter Blue Plus
   try {
     fbpIsSupported = await fbp.FlutterBluePlus.isSupported;
-  } catch(e) {
+  } catch (e) {
     fbpIsSupported = false;
   }
-  if(fbpIsSupported) {
+  if (fbpIsSupported) {
     await fbp.FlutterBluePlus.setLogLevel(fbp.LogLevel.none, color: true);
     await BondFlutterBluePlus.init();
     CharacteristicFlutterBluePlus.init();
@@ -34,16 +34,13 @@ Future<void> init() async {
     RssiFlutterBluePlus.init();
     ScanResultFlutterBluePlus.init();
     fbpSystemDevices = await fbp.FlutterBluePlus.systemDevices([]);
-    updateRssi = Timer.periodic(
-      const Duration(milliseconds: 100),
-      (_) async {
-        for(final d in fbp.FlutterBluePlus.connectedDevices) {
-          try {
-            await d.readRssi();
-          } catch(e) {}
-        }
+    updateRssi = Timer.periodic(const Duration(milliseconds: 100), (_) async {
+      for (final d in fbp.FlutterBluePlus.connectedDevices) {
+        try {
+          await d.readRssi();
+        } catch (e) {}
       }
-    );
+    });
   }
   writeBluetoothPacketFile = WriteBluetoothPacketFile(
     fbpIsSupported: fbpIsSupported,
@@ -72,11 +69,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final homePage = MultiProvider(
       providers: [
-        ChangeNotifierProvider<HomePageController>(create: (_) => HomePageController(
-          fbpIsSupported: fbpIsSupported,
-          fbpSystemDevices: fbpSystemDevices,
-        )),
-        Provider<WriteBluetoothPacketFile>(create: (_) => writeBluetoothPacketFile),
+        ChangeNotifierProvider<HomePageController>(
+          create: (_) => HomePageController(
+            fbpIsSupported: fbpIsSupported,
+            fbpSystemDevices: fbpSystemDevices,
+          ),
+        ),
+        Provider<WriteBluetoothPacketFile>(
+          create: (_) => writeBluetoothPacketFile,
+        ),
       ],
       child: HomePage(),
     );
@@ -84,14 +85,14 @@ class MyApp extends StatelessWidget {
     final bluetoothOffPage = Provider<BluetoothStatusController>(
       create: (_) => BluetoothStatusController(
         onPressedButton: () async {
-          for(final permission in bluetoothPermissions) {
-            if(!(await permission.request()).isGranted) {
+          for (final permission in bluetoothPermissions) {
+            if (!(await permission.request()).isGranted) {
               return;
             }
           }
           try {
             await fbp.FlutterBluePlus.turnOn();
-          } catch(e) {}
+          } catch (e) {}
         },
       ),
       child: BluetoothStatusView(),
@@ -148,7 +149,7 @@ class MyApp extends StatelessWidget {
           HomePageTheme(
             appBarBackgroundColor: Colors.white,
             filterToIcon: (filter) {
-              switch(filter) {
+              switch (filter) {
                 case BluetoothDevicesFilter.inSystem:
                   return asset.BluetoothIcons.system;
                 case BluetoothDevicesFilter.nameIsNotEmpty:
@@ -216,7 +217,7 @@ class MyApp extends StatelessWidget {
           HomePageTheme(
             appBarBackgroundColor: Colors.black,
             filterToIcon: (filter) {
-              switch(filter) {
+              switch (filter) {
                 case BluetoothDevicesFilter.inSystem:
                   return asset.BluetoothIcons.system;
                 case BluetoothDevicesFilter.nameIsNotEmpty:
@@ -242,12 +243,13 @@ class MyApp extends StatelessWidget {
           ? fbp.FlutterBluePlus.adapterState
           : null,
         initialData: (fbpIsSupported)
-          ? fbp.FlutterBluePlus.adapterStateNow
-          : BluetoothAdapterState.on,
+            ? fbp.FlutterBluePlus.adapterStateNow
+            : BluetoothAdapterState.on,
         builder: (context, _) {
-          return (context.watch<fbp.BluetoothAdapterState>() == fbp.BluetoothAdapterState.on) 
-            ? homePage
-            : bluetoothOffPage;
+          return (context.watch<fbp.BluetoothAdapterState>() ==
+                  fbp.BluetoothAdapterState.on)
+              ? homePage
+              : bluetoothOffPage;
         },
       ),
       navigatorObservers: [

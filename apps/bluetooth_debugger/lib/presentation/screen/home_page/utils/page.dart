@@ -1,16 +1,31 @@
 part of '../home_page.dart';
 
 class BluetoothDeviceTileTheme extends BluetoothDeviceDetailsTileTheme {
-  BluetoothDeviceTileTheme({required super.classicIcon, required super.connectedColor, required super.connectedIcon, required super.disconnectedColor, required super.disconnectedIcon, required super.highlightColor, required super.highSpeedIcon, required super.inSystemIcon, required super.lowPowerIcon, required super.nullRssiIcon, required super.pairedIcon, required super.selectedColor, required super.typeIconColor, required super.unpairedIcon});
+  BluetoothDeviceTileTheme({
+    required super.classicIcon,
+    required super.connectedColor,
+    required super.connectedIcon,
+    required super.disconnectedColor,
+    required super.disconnectedIcon,
+    required super.highlightColor,
+    required super.highSpeedIcon,
+    required super.inSystemIcon,
+    required super.lowPowerIcon,
+    required super.nullRssiIcon,
+    required super.pairedIcon,
+    required super.selectedColor,
+    required super.typeIconColor,
+    required super.unpairedIcon,
+  });
 }
 
 /// **References**
-/// 
+///
 /// **Requirements:**
 /// - [BluetoothDevicesFilterController]
 /// - [HomePageController]
 /// - [WriteBluetoothPacketFile]
-/// 
+///
 /// **Theme**
 /// - [HomePageTheme]
 /// - [BluetoothDeviceTileTheme]
@@ -23,7 +38,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final toggleWriteFileButton = Builder(
       builder: (context) {
         final app = context.read<WriteBluetoothPacketFile>();
@@ -38,8 +52,8 @@ class HomePage extends StatelessWidget {
               ? Icon(Icons.stop)
               : Icon(Icons.save);
             final color = (isRunning)
-              ? themeExtension?.stopTaskColor
-              : themeExtension?.startTaskColor;
+                ? themeExtension?.stopTaskColor
+                : themeExtension?.startTaskColor;
             return IconButton(
               onPressed: onPressed,
               icon: icon,
@@ -59,7 +73,9 @@ class HomePage extends StatelessWidget {
     final filterList = BluetoothDevicesFilter.values.map((filter) {
       return Builder(
         builder: (context) {
-          final check = context.select<HomePageController, bool>((n) => n.chekcBluetoothDevicesFilter(filter));
+          final check = context.select<HomePageController, bool>(
+            (n) => n.chekcBluetoothDevicesFilter(filter),
+          );
           final themeData = Theme.of(context);
           final themeExtension = themeData.extension<HomePageTheme>();
           final iconData = themeExtension?.filterToIcon(filter);
@@ -67,7 +83,9 @@ class HomePage extends StatelessWidget {
             ? themeExtension?.toggleFilterColor
             : null;
           return IconButton(
-            onPressed: () => context.read<HomePageController>().toggleBluetoothDevicesFilter(filter),
+            onPressed: () => context
+                .read<HomePageController>()
+                .toggleBluetoothDevicesFilter(filter),
             icon: Icon(
               iconData,
             ),
@@ -81,7 +99,7 @@ class HomePage extends StatelessWidget {
     final bytesView = Builder(
       builder: (BuildContext context) {
         final bytes = context.watch<List<int>?>();
-        if(bytes == null) return Column();
+        if (bytes == null) return Column();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -92,16 +110,17 @@ class HomePage extends StatelessWidget {
                 final themeExtension = themeData.extension<HomePageTheme>();
                 return Text(
                   DateTime.now().toString(),
-                  style: TextStyle(fontSize: 13, color: themeExtension?.timestampColor),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: themeExtension?.timestampColor,
+                  ),
                 );
-              }
+              },
             ),
-            BytesView(
-              bytes: bytes,
-            ),
+            BytesView(bytes: bytes),
           ],
         );
-      }
+      },
     );
 
     final writeField = Builder(
@@ -116,12 +135,15 @@ class HomePage extends StatelessWidget {
         );
       },
     );
-    
+
     final deviceDetailView = Builder(
       builder: (context) {
         // Flutter Blue Plus
-        final bluetoothDevice = context.select<HomePageController, BluetoothDevice?>((c) => c.selectedDevice);
-        if(bluetoothDevice != null) {
+        final bluetoothDevice = context
+            .select<HomePageController, BluetoothDevice?>(
+              (c) => c.selectedDevice,
+            );
+        if (bluetoothDevice != null) {
           return MultiProvider(
             providers: [
               ProxyProvider(
@@ -135,19 +157,22 @@ class HomePage extends StatelessWidget {
               builder: (context) {
                 final controller = context.watch<_ValueEditingController>();
                 return ProxyProvider<HomePageController, fbp.BluetoothDevice?>(
-                  update: (context, controller, prev) => controller.fbpSelectedDevice,
+                  update: (context, controller, prev) =>
+                      controller.fbpSelectedDevice,
                   child: Builder(
                     builder: (context) {
                       final device = context.watch<fbp.BluetoothDevice?>();
-                      if(device == null) return Text("No device be selected.");
+                      if (device == null) return Text("No device be selected.");
                       return DeviceView(
                         serviceTile: ServiceTile(
                           characteristicTile: CharacteristicTile(
                             descriptorTile: DescriptorTile(
-                              writeValueGetter: () => controller.text.hexToBytes(),
+                              writeValueGetter: () =>
+                                  controller.text.hexToBytes(),
                               valueTile: bytesView,
                             ),
-                            writeValueGetter: () => controller.text.hexToBytes(),
+                            writeValueGetter: () =>
+                                controller.text.hexToBytes(),
                             valueTile: bytesView,
                           ),
                         ),
@@ -176,11 +201,16 @@ class HomePage extends StatelessWidget {
               return ProxyProvider<HomePageController, List<BluetoothDevice>>(
                 update: (_, value, _) => value.devices,
                 builder: (context, _) {
-                  final length = context.select<List<BluetoothDevice>, int>((devices) => devices.length);
+                  final length = context.select<List<BluetoothDevice>, int>(
+                    (devices) => devices.length,
+                  );
                   return ListView.builder(
                     itemCount: length,
                     itemBuilder: (context, index) {
-                      return ProxyProvider<List<BluetoothDevice>, BluetoothDevice>(
+                      return ProxyProvider<
+                        List<BluetoothDevice>,
+                        BluetoothDevice
+                      >(
                         update: (_, devices, _) => devices.elementAt(index),
                         child: BluetoothDeviceDetailsTile(),
                       );

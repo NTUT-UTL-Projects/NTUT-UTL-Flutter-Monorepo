@@ -13,14 +13,16 @@ enum _Rw {
   write,
 }
 
-extension BluetoothPacketFile on File  {
+extension BluetoothPacketFile on File {
   static Future<File?> create() async {
     final path = await getSystemDownloadDirectory();
-    if(path == null) return null;
+    if (path == null) return null;
     final packageInfo = await PackageInfo.fromPlatform();
     final appName = packageInfo.appName;
     final fileFormat = "csv";
-    final file = File("${path.absolute.path}/${appName}_${(DateTime.now().toFileFormat())}.$fileFormat");
+    final file = File(
+      "${path.absolute.path}/${appName}_${(DateTime.now().toFileFormat())}.$fileFormat",
+    );
     await file.writeAsCsvRow(
       data: [
         "Device id",
@@ -36,6 +38,7 @@ extension BluetoothPacketFile on File  {
     );
     return file;
   }
+
   Future<void> _writeCharacteristic({
     required BluetoothCharacteristic charaacteristic,
     required _Rw rw,
@@ -54,6 +57,7 @@ extension BluetoothPacketFile on File  {
       ],
     );
   }
+
   Future<void> _writeDescriptor({
     required BluetoothDescriptor descriptor,
     required _Rw rw,
@@ -78,7 +82,7 @@ class WriteBluetoothPacketFile {
   final _lock = Lock();
 
   File? _file;
-  final String Function(DateTime time)fileNameCreator;
+  final String Function(DateTime time) fileNameCreator;
 
   bool _isRunning = false;
   bool get isRunning => _isRunning;
@@ -94,42 +98,50 @@ class WriteBluetoothPacketFile {
     required this.fbpIsSupported,
     required this.fileNameCreator,
   }) {
-    if(!fbpIsSupported) return;
+    if (!fbpIsSupported) return;
     _sub.addAll([
-      CharacteristicFlutterBluePlus.onCharacteristicReceived.listen((c) => _lock.synchronized(() async {
-        await _file?._writeCharacteristic(
-          charaacteristic: c,
-          rw: _Rw.read,
-          value: c.lastReceivedValue,
-        );
-      })),
-      CharacteristicFlutterBluePlus.onCharacteristicWritten.listen((c) => _lock.synchronized(() async {
-        await _file?._writeCharacteristic(
-          charaacteristic: c,
-          rw: _Rw.write,
-          value: c.lastWrittenValue,
-        );
-      })),
-      DescriptorFlutterBluePlus.onDescriptorReceived.listen((c) => _lock.synchronized(() async {
-        await _file?._writeDescriptor(
-          descriptor: c,
-          rw: _Rw.read,
-          value: c.lastReceivedValue,
-        );
-      })),
-      DescriptorFlutterBluePlus.onDescriptorWritten.listen((c) => _lock.synchronized(() async {
-        await _file?._writeDescriptor(
-          descriptor: c,
-          rw: _Rw.write,
-          value: c.lastWrittenValue,
-        );
-      })),
+      CharacteristicFlutterBluePlus.onCharacteristicReceived.listen(
+        (c) => _lock.synchronized(() async {
+          await _file?._writeCharacteristic(
+            charaacteristic: c,
+            rw: _Rw.read,
+            value: c.lastReceivedValue,
+          );
+        }),
+      ),
+      CharacteristicFlutterBluePlus.onCharacteristicWritten.listen(
+        (c) => _lock.synchronized(() async {
+          await _file?._writeCharacteristic(
+            charaacteristic: c,
+            rw: _Rw.write,
+            value: c.lastWrittenValue,
+          );
+        }),
+      ),
+      DescriptorFlutterBluePlus.onDescriptorReceived.listen(
+        (c) => _lock.synchronized(() async {
+          await _file?._writeDescriptor(
+            descriptor: c,
+            rw: _Rw.read,
+            value: c.lastReceivedValue,
+          );
+        }),
+      ),
+      DescriptorFlutterBluePlus.onDescriptorWritten.listen(
+        (c) => _lock.synchronized(() async {
+          await _file?._writeDescriptor(
+            descriptor: c,
+            rw: _Rw.write,
+            value: c.lastWrittenValue,
+          );
+        }),
+      ),
     ]);
   }
 
   void start() {
     _lock.synchronized(() async {
-      if(_isRunning) return;
+      if (_isRunning) return;
       _isRunning = true;
       _file = await BluetoothPacketFile.create();
       _controller.add(_isRunning);
@@ -138,7 +150,7 @@ class WriteBluetoothPacketFile {
 
   void stop() {
     _lock.synchronized(() async {
-      if(!_isRunning) return;
+      if (!_isRunning) return;
       _isRunning = false;
       _file = null;
       _controller.add(_isRunning);
@@ -146,13 +158,11 @@ class WriteBluetoothPacketFile {
   }
 
   void toggle() {
-    return (_isRunning)
-      ? stop()
-      : start();
+    return (_isRunning) ? stop() : start();
   }
 
   void dispose() {
-    for(final s in _sub) {
+    for (final s in _sub) {
       s.cancel();
     }
   }
