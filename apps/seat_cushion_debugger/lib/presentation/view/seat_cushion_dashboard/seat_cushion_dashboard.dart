@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seat_cushion/seat_cushion.dart';
-import 'package:seat_cushion/seat_cushion_presentation.dart';
 import 'package:seat_cushion_debugger/presentation/widget/bluetooth_command_line/bluetooth_command_line.dart';
 import 'package:seat_cushion_debugger/presentation/widget/seat_cushion_features_line/seat_cushion_features_line.dart';
 import 'package:seat_cushion_debugger/presentation/widget/seat_cushion_force_color_bar/seat_cushion_force_color_bar.dart';
+import 'package:seat_cushion_presentation/seat_cushion_presentation.dart';
 
 import '../../../l10n/gen_l10n/app_localizations.dart';
 

@@ -2,11 +2,10 @@ library;
 
 import 'dart:async';
 
+import 'package:bluetooth_utils/bluetooth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_tailor_annotation/theme_tailor_annotation.dart';
-
-import 'package:bluetooth_utils/src/flutter_blue_plus_utils/flutter_blue_plus_utils.dart';
 
 part 'device_view.tailor.dart';
 part 'tile/characteristic_tile.dart';

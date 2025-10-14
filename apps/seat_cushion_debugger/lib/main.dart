@@ -1,15 +1,14 @@
 import 'package:bluetooth_presentation/bluetooth_presentation.dart';
-import 'package:bluetooth_utils/src/flutter_blue_plus_utils/flutter_blue_plus_utils.dart';
+import 'package:bluetooth_utils/bluetooth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:seat_cushion/infrastructure/color/wei_zhe_color.dart';
 import 'package:seat_cushion/infrastructure/repository/in_memory.dart';
 import 'package:seat_cushion/infrastructure/sensor/bluetooth_sensor.dart';
 import 'package:seat_cushion/infrastructure/sensor_decoder/wei_zhe_decoder.dart';
 import 'package:seat_cushion/seat_cushion.dart';
-import 'package:seat_cushion/seat_cushion_presentation.dart';
+import 'package:seat_cushion_presentation/seat_cushion_presentation.dart';
 
 import 'init/initializer.dart';
 import 'l10n/gen_l10n/app_localizations.dart';

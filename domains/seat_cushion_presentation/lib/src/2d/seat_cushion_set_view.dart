@@ -1,4 +1,16 @@
-part of '../../seat_cushion_presentation.dart';
+import 'dart:math';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:seat_cushion/seat_cushion.dart';
+
+import '../color/color.dart';
+
+part 'force/seat_cushion_forces_matrix_widget.dart';
+part 'force/widget/seat_cushion_force_widget.dart';
+part 'ischium/seat_cushion_ischium_point_widget.dart';
 
 /// --------------------------------------------
 /// [SeatCushionSetView]

@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bluetooth_utils/src/flutter_blue_plus_utils/flutter_blue_plus_utils.dart';
+import 'package:bluetooth_utils/bluetooth_utils.dart';
 import 'package:data_utils/data_utils.dart';
 import 'package:file_utils/file_utils.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider_utils/path_provider_utils.dart';
 import 'package:synchronized/synchronized.dart';

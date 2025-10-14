@@ -1,4 +1,4 @@
-import 'package:bluetooth_presentation/src/devices/bluetooth_device_tile.dart';
+import 'package:bluetooth_presentation/bluetooth_presentation.dart';
 import 'package:flutter/material.dart';
 
 /// Filter options for Bluetooth devices.

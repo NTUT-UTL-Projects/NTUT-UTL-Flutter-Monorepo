@@ -5,6 +5,7 @@ workspace:
   - apps/bluetooth_debugger
   - apps/seat_cushion_debugger
   - domains/seat_cushion
+  - domains/seat_cushion_presentation
   - packages/bluetooth_presentation
   - packages/bluetooth_utils
   - packages/data_presentation

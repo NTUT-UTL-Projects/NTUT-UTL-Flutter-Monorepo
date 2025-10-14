@@ -1,4 +1,4 @@
-part of '../../../seat_cushion_presentation.dart';
+part of '../seat_cushion_set_view.dart';
 
 /// **Requirements:**
 /// - Refer to [SeatCushionForceWidget].

@@ -23,11 +23,13 @@ dependencies:
   synchronized: any
 
   # Domains
+  seat_cushion_presentation: any
   seat_cushion: any
 
   # Packages
   bluetooth_presentation: any
   bluetooth_utils: any
+  data_presentation: any
   data_utils: any
   file_utils: any
   path_provider_utils: any

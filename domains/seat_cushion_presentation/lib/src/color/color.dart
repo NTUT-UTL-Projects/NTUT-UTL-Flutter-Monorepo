@@ -1,4 +1,4 @@
-part of '../../seat_cushion_presentation.dart';
+import 'package:flutter/material.dart';
 
 /// Convert [SeatCushion.forces] to corresponding color.
 /// This method is used for `presentation`.

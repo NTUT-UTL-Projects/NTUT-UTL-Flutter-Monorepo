@@ -1,5 +1,5 @@
-name: seat_cushion
-description: "Seat Cushion."
+name: seat_cushion_presentation
+description: "Seat Cushion Presentation."
 publish_to: 'none'
 version: 0.0.1
 homepage:
@@ -21,6 +21,9 @@ dependencies:
   stream_utils: any
   synchronized: any
   util_simple_3d: any
+
+  # Domains
+  seat_cushion: any
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:seat_cushion/seat_cushion.dart';
 
-import '../../seat_cushion_presentation.dart';
+import '../color.dart';
 
 ForceToColorConverter weiZheForceToColorConverter = (_, force) {
   final hueMax = 255;

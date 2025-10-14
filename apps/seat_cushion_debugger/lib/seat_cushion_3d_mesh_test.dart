@@ -3,9 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:seat_cushion/infrastructure/color/wei_zhe_color.dart';
 import 'package:seat_cushion/seat_cushion.dart';
-import 'package:seat_cushion/seat_cushion_presentation.dart';
+import 'package:seat_cushion_presentation/seat_cushion_presentation.dart';
 
 final seatCushionSensor = StreamController<SeatCushionSet>.broadcast();
 late Timer timer;

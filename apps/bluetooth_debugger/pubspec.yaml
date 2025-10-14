@@ -24,7 +24,6 @@ dependencies:
   theme_tailor: any
   theme_tailor_annotation: any
 
-  # --------------------------------------------------
   # Packages
   bluetooth_presentation: any
   bluetooth_utils: any
