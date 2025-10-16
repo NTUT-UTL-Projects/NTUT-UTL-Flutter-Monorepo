@@ -35,7 +35,9 @@ extension HexStringToBytes on String {
         return int.parse(hexPair, radix: 16);
       });
     } catch (e) {
-      throw const FormatException("Invalid hex string: contains non-hexadecimal characters.");
+      throw const FormatException(
+        "Invalid hex string: contains non-hexadecimal characters.",
+      );
     }
   }
 }
