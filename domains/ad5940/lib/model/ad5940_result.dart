@@ -7,8 +7,12 @@ class AD5940Result with EquatableMixin {
   final List<double> hstias;
   final List<double> temperatures;
 
-  AD5940Result({required this.lptias, required this.hstias, required this.temperatures});
-  
+  AD5940Result({
+    required this.lptias,
+    required this.hstias,
+    required this.temperatures,
+  });
+
   @override
   List<Object?> get props => [
     lptias,

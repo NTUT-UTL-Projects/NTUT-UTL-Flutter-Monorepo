@@ -27,10 +27,13 @@ class AD5940Task with EquatableMixin {
 
 extension AD5940TaskList on List<AD5940Task> {
   Iterable<Map<String, dynamic>> ad5940TasksToJson() => map((r) => r.toJson());
-  String ad5940TasksJsonEncode() => "[${map((r) => jsonEncode(r.toJson())).join(",")}]";
+  String ad5940TasksJsonEncode() =>
+      "[${map((r) => jsonEncode(r.toJson())).join(",")}]";
 }
 
 extension AD5940TaskString on String {
-  Iterable<AD5940Task> ad5940TasksJsonDecode() => (jsonDecode(this) as Iterable<dynamic>)
-    .map((e) => AD5940Task.fromJson(e));
+  Iterable<AD5940Task> ad5940TasksJsonDecode() =>
+      (jsonDecode(this) as Iterable<dynamic>).map(
+        (e) => AD5940Task.fromJson(e),
+      );
 }
