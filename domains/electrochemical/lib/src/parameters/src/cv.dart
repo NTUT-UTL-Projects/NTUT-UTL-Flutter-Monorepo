@@ -2,7 +2,9 @@ part of '../parameters.dart';
 
 @CopyWith()
 @JsonSerializable()
-class CvElectrochemicalParameters with EquatableMixin implements ElectrochemicalParameters {
+class CvElectrochemicalParameters
+    with EquatableMixin
+    implements ElectrochemicalParameters {
   final double eBegin;
   final double eVertex1;
   final double eVertex2;
@@ -33,14 +35,14 @@ class CvElectrochemicalParameters with EquatableMixin implements Electrochemical
   int get dataLength => stepCount;
 
   int get stepCount {
-    if(!isValid) return 0;
-    return (((eVertex1 - eBegin).abs() / eStep).ceil())
-        + (((eVertex2 - eVertex1).abs() / eStep).ceil())
-        + (((eBegin - eVertex2).abs() / eStep).ceil());
+    if (!isValid) return 0;
+    return (((eVertex1 - eBegin).abs() / eStep).ceil()) +
+        (((eVertex2 - eVertex1).abs() / eStep).ceil()) +
+        (((eBegin - eVertex2).abs() / eStep).ceil());
   }
 
   Iterable<double> get voltages sync* {
-    if(!isValid) return;
+    if (!isValid) return;
     for (int scan = 0; scan < numberOfScans; scan++) {
       // eBegin → eVertex1
       if (eVertex1 > eBegin) {
@@ -88,7 +90,8 @@ class CvElectrochemicalParameters with EquatableMixin implements Electrochemical
   ];
 
   @override
-  factory CvElectrochemicalParameters.fromJson(Map<String, dynamic> json) => _$CvElectrochemicalParametersFromJson(json);
+  factory CvElectrochemicalParameters.fromJson(Map<String, dynamic> json) =>
+      _$CvElectrochemicalParametersFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$CvElectrochemicalParametersToJson(this);

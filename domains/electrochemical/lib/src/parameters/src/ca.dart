@@ -2,7 +2,9 @@ part of '../parameters.dart';
 
 @CopyWith()
 @JsonSerializable()
-class CaElectrochemicalParameters with EquatableMixin implements ElectrochemicalParameters {
+class CaElectrochemicalParameters
+    with EquatableMixin
+    implements ElectrochemicalParameters {
   final double eDc;
   final double tInterval;
   final double tRun;
@@ -25,7 +27,7 @@ class CaElectrochemicalParameters with EquatableMixin implements Electrochemical
   int get dataLength => ((tRun / tInterval).floor()) + 1;
 
   Iterable<double> get times {
-    if(!isValid) return Iterable.empty();
+    if (!isValid) return Iterable.empty();
     return Iterable.generate(dataLength, (n) => tInterval * n);
   }
 
@@ -37,7 +39,8 @@ class CaElectrochemicalParameters with EquatableMixin implements Electrochemical
   ];
 
   @override
-  factory CaElectrochemicalParameters.fromJson(Map<String, dynamic> json) => _$CaElectrochemicalParametersFromJson(json);
+  factory CaElectrochemicalParameters.fromJson(Map<String, dynamic> json) =>
+      _$CaElectrochemicalParametersFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$CaElectrochemicalParametersToJson(this);

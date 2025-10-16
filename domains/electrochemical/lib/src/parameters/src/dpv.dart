@@ -9,7 +9,9 @@ enum DpvElectrochemicalParametersInversionOption {
 
 @CopyWith()
 @JsonSerializable()
-class DpvElectrochemicalParameters with EquatableMixin implements ElectrochemicalParameters {
+class DpvElectrochemicalParameters
+    with EquatableMixin
+    implements ElectrochemicalParameters {
   final double eBegin;
   final double eEnd;
   final double eStep;
@@ -41,12 +43,12 @@ class DpvElectrochemicalParameters with EquatableMixin implements Electrochemica
       && scanRate > 0.0;
 
   int get stepCount {
-    if(!isValid) return 0;
+    if (!isValid) return 0;
     return ((eEnd - eBegin).abs() / eStep).floor() + 1;
   }
 
   Iterable<double> get baseVoltages sync* {
-    if(!isValid) return;
+    if (!isValid) return;
     if (eEnd >= eBegin) {
       for (double v = eBegin; v <= eEnd; v += eStep) {
         yield double.parse(v.toStringAsFixed(6));
@@ -59,12 +61,12 @@ class DpvElectrochemicalParameters with EquatableMixin implements Electrochemica
   }
 
   Iterable<double> get pulseVoltages {
-    if(!isValid) return Iterable.empty();
+    if (!isValid) return Iterable.empty();
     return baseVoltages.map((v) => v + ePulseDirectional);
   }
 
   Iterable<double> get appliedVoltages sync* {
-    if(!isValid) return;
+    if (!isValid) return;
     final stepList = baseVoltages.toList(growable: false);
     final pulseList = pulseVoltages.toList(growable: false);
     for (int i = 0; i < stepCount; i++) {
@@ -74,8 +76,8 @@ class DpvElectrochemicalParameters with EquatableMixin implements Electrochemica
   }
 
   double get ePulseDirectional {
-    if(!isValid) return 0.0;
-    switch(inversionOption) {
+    if (!isValid) return 0.0;
+    switch (inversionOption) {
       case DpvElectrochemicalParametersInversionOption.none:
         return ((eEnd > eBegin) ? eStep : -eStep);
       case DpvElectrochemicalParametersInversionOption.both:
@@ -104,7 +106,8 @@ class DpvElectrochemicalParameters with EquatableMixin implements Electrochemica
   ];
 
   @override
-  factory DpvElectrochemicalParameters.fromJson(Map<String, dynamic> json) => _$DpvElectrochemicalParametersFromJson(json);
+  factory DpvElectrochemicalParameters.fromJson(Map<String, dynamic> json) =>
+      _$DpvElectrochemicalParametersFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$DpvElectrochemicalParametersToJson(this);
