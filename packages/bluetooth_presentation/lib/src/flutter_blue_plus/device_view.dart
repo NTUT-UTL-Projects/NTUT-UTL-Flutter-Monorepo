@@ -17,18 +17,18 @@ class _CancelConnectionController extends ValueNotifier<bool> {
   _CancelConnectionController(BluetoothDevice device) : super(false) {
     _sub.addAll([
       ConnectionStateFlutterBluePlus.onConnectionStateChanged
-        .where((d) => d == device)
-        .where((d) => d.isConnected)
-        .listen((d) {
-          value = false;
-      }),
+          .where((d) => d == device)
+          .where((d) => d.isConnected)
+          .listen((d) {
+            value = false;
+          }),
     ]);
   }
 
   @mustCallSuper
   @override
   void dispose() {
-    for(final s in _sub) {
+    for (final s in _sub) {
       s.cancel();
     }
     super.dispose();
@@ -40,22 +40,22 @@ class _LoadingDiscoveringController extends ValueNotifier<bool> {
   _LoadingDiscoveringController(BluetoothDevice device) : super(false) {
     _sub.addAll([
       ConnectionStateFlutterBluePlus.onConnectionStateChanged
-        .where((d) => d == device)
-        .listen((d) {
-          value = false;
-        }),
+          .where((d) => d == device)
+          .listen((d) {
+            value = false;
+          }),
       BluetoothServicesFlutterBluePlus.onServicesChanged
-        .where((d) => d == device)
-        .listen((d) {
-          value = false;
-        }),
+          .where((d) => d == device)
+          .listen((d) {
+            value = false;
+          }),
     ]);
   }
-  
+
   @mustCallSuper
   @override
   void dispose() {
-    for(final s in _sub) {
+    for (final s in _sub) {
       s.cancel();
     }
     super.dispose();
@@ -64,7 +64,7 @@ class _LoadingDiscoveringController extends ValueNotifier<bool> {
 
 /// **Requirements:**
 /// - [BluetoothDevice]
-/// 
+///
 /// **Themes:**
 /// - [TextTheme]
 class DeviceView extends StatelessWidget {
@@ -78,11 +78,14 @@ class DeviceView extends StatelessWidget {
     this.serviceTile,
     this.writeField,
   });
+
   @override
   Widget build(BuildContext context) {
     final nameText = Builder(
       builder: (context) {
-        final name = context.select<BluetoothDevice, String>((d) => d.platformName);
+        final name = context.select<BluetoothDevice, String>(
+          (d) => d.platformName,
+        );
         return Text(
           name, 
           style: Theme.of(context).textTheme.titleLarge,
@@ -97,8 +100,8 @@ class DeviceView extends StatelessWidget {
             StreamProvider(
               create: (_) => device.connectionState,
               initialData: device.isConnected
-                ? BluetoothConnectionState.connected
-                : BluetoothConnectionState.disconnected,
+                  ? BluetoothConnectionState.connected
+                  : BluetoothConnectionState.disconnected,
             ),
             ChangeNotifierProvider(
               create: (_) => _CancelConnectionController(device),
@@ -106,21 +109,20 @@ class DeviceView extends StatelessWidget {
           ],
           builder: (context, _) {
             final state = context.watch<BluetoothConnectionState>();
-            final cancelController = context.watch<_CancelConnectionController>();
+            final cancelController = context
+                .watch<_CancelConnectionController>();
             final isConnected = state == BluetoothConnectionState.connected;
-            if(isConnected) {
+            if (isConnected) {
               return TextButton(
                 onPressed: () async {
                   try {
                     await device.disconnect(queue: true);
-                  } catch(e) {}
+                  } catch (e) {}
                 },
-                child: Text(
-                  "DISCONNECT",
-                ),
+                child: Text("DISCONNECT"),
               );
             } else {
-              if(cancelController.value) {
+              if (cancelController.value) {
                 final spinner = Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: AspectRatio(
@@ -136,7 +138,7 @@ class DeviceView extends StatelessWidget {
                     cancelController.value = false;
                     try {
                       await device.disconnect(queue: false);
-                    } catch(e) {}
+                    } catch (e) {}
                   },
                   child: Text(
                     "CANCEL",
@@ -158,7 +160,7 @@ class DeviceView extends StatelessWidget {
                         autoConnect: true,
                         mtu: null,
                       );
-                    } catch(e) {}
+                    } catch (e) {}
                   },
                   child: Text(
                     "CONNECT",
@@ -172,7 +174,9 @@ class DeviceView extends StatelessWidget {
     );
     final idTile = Builder(
       builder: (context) {
-        final remoteId = context.select<BluetoothDevice, String>((d) => d.remoteId.str);
+        final remoteId = context.select<BluetoothDevice, String>(
+          (d) => d.remoteId.str,
+        );
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(remoteId),
@@ -187,12 +191,14 @@ class DeviceView extends StatelessWidget {
             return StreamProvider(
               create: (_) => device.connectionState,
               initialData: device.isConnected
-                ? BluetoothConnectionState.connected
-                : BluetoothConnectionState.disconnected,
+                  ? BluetoothConnectionState.connected
+                  : BluetoothConnectionState.disconnected,
               builder: (context, _) {
                 final state = context.watch<BluetoothConnectionState>();
                 final isConnected = state == BluetoothConnectionState.connected;
-                final iconData = (isConnected) ? Icons.bluetooth_connected : Icons.bluetooth_disabled;
+                final iconData = (isConnected)
+                    ? Icons.bluetooth_connected
+                    : Icons.bluetooth_disabled;
                 return Icon(
                   iconData,
                   color: Theme.of(context).textTheme.bodyMedium?.color,
@@ -221,8 +227,8 @@ class DeviceView extends StatelessWidget {
             return StreamProvider(
               create: (_) => device.connectionState,
               initialData: device.isConnected
-                ? BluetoothConnectionState.connected
-                : BluetoothConnectionState.disconnected,
+                  ? BluetoothConnectionState.connected
+                  : BluetoothConnectionState.disconnected,
               builder: (context, _) {
                 final state = context.watch<BluetoothConnectionState>();
                 return Text(
@@ -240,8 +246,8 @@ class DeviceView extends StatelessWidget {
                 StreamProvider(
                   create: (_) => device.connectionState,
                   initialData: device.isConnected
-                    ? BluetoothConnectionState.connected
-                    : BluetoothConnectionState.disconnected,
+                      ? BluetoothConnectionState.connected
+                      : BluetoothConnectionState.disconnected,
                 ),
                 StreamProvider(
                   create: (_) => device.onServicesChanged,
@@ -252,14 +258,17 @@ class DeviceView extends StatelessWidget {
                 ),
               ],
               builder: (context, _) {
-                final loadingController = context.watch<_LoadingDiscoveringController>();
-                final isConnected = context.watch<BluetoothConnectionState>() == BluetoothConnectionState.connected;
+                final loadingController = context
+                    .watch<_LoadingDiscoveringController>();
+                final isConnected =
+                    context.watch<BluetoothConnectionState>() ==
+                    BluetoothConnectionState.connected;
 
                 /// Listens to [BluetoothService] changes to refresh the button state.
                 context.watch<List<BluetoothService>>();
-                
+
                 final device = context.watch<BluetoothDevice>();
-                if(loadingController.value) {
+                if (loadingController.value) {
                   return const IconButton(
                     icon: SizedBox(
                       width: 18.0,
@@ -270,17 +279,16 @@ class DeviceView extends StatelessWidget {
                     ),
                     onPressed: null,
                   );
-                }
-                else {
+                } else {
                   return TextButton(
                     onPressed: isConnected
-                      ? () async {
-                        loadingController.value = true;
-                        try {
-                          await device.discoverServices();
-                        } catch(e) {}
-                      }
-                      : null,
+                        ? () async {
+                            loadingController.value = true;
+                            try {
+                              await device.discoverServices();
+                            } catch (e) {}
+                          }
+                        : null,
                     child: const Text("Get Services"),
                   );
                 }
@@ -339,11 +347,11 @@ class DeviceView extends StatelessWidget {
                 onChanged: (s) => mtuText = s,
                 onSubmitted: (_) async {
                   final mtu = int.tryParse(mtuText);
-                  if(mtu == null) return;
+                  if (mtu == null) return;
                   try {
                     await device.requestMtu(mtu);
-                  } catch(e) {}
-                }
+                  } catch (e) {}
+                },
               );
             },
           ),
@@ -353,10 +361,10 @@ class DeviceView extends StatelessWidget {
                 icon: const Icon(Icons.edit),
                 onPressed: () async {
                   final mtu = int.tryParse(mtuText);
-                  if(mtu == null) return;
+                  if (mtu == null) return;
                   try {
                     await device.requestMtu(mtu);
-                  } catch(e) {}
+                  } catch (e) {}
                 },
               );
             },
@@ -366,7 +374,7 @@ class DeviceView extends StatelessWidget {
     );
     final writeTile = Builder(
       builder: (context) {
-        if(writeField == null) return Column();
+        if (writeField == null) return Column();
         return ListTile(
           title: writeField,
         );
@@ -380,17 +388,21 @@ class DeviceView extends StatelessWidget {
           initialData: device.servicesList,
           child: Builder(
             builder: (context) {
-              final length = context.select<List<BluetoothService>, int>((services) => services.length);
+              final length = context.select<List<BluetoothService>, int>(
+                (services) => services.length,
+              );
               return Column(
                 children: List.generate(
-                  length, 
+                  length,
                   (index) {
-                    return ProxyProvider<List<BluetoothService>, BluetoothService>(
+                    return ProxyProvider<
+                      List<BluetoothService>,
+                      BluetoothService
+                    >(
                       update: (_, services, __) => services.elementAt(index),
                       child: serviceTile,
                     );
-                  },
-                ),
+                  }),
               );
             },
           ),

@@ -24,6 +24,19 @@ class BluetoothDevice {
   final VoidCallback? togglePairing;
   final VoidCallback? toggleSelection;
 
-  const BluetoothDevice({required this.id, required this.inSystem, required this.isConnectable, required this.isConnected, required this.isPaired, required this.isScanned, required this.isSelected, required this.name, required this.rssi, required this.tech, this.toggleConnection, this.togglePairing, this.toggleSelection});
-
+  const BluetoothDevice({
+    required this.id,
+    required this.inSystem,
+    required this.isConnectable,
+    required this.isConnected,
+    required this.isPaired,
+    required this.isScanned,
+    required this.isSelected,
+    required this.name,
+    required this.rssi,
+    required this.tech,
+    this.toggleConnection,
+    this.togglePairing,
+    this.toggleSelection,
+  });
 }

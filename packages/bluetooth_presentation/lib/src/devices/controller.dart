@@ -2,7 +2,7 @@ part of 'bluetooth_device_tile.dart';
 
 /// Provides logic for scanning and managing Bluetooth devices.
 /// Intended to be mixed into classes that extend [ChangeNotifier].
-/// 
+///
 /// **References**
 /// - [BluetoothDevice]
 /// - [fbp.BluetoothDevice]
@@ -34,7 +34,7 @@ mixin BluetoothDevicesController on ChangeNotifier {
     this.fbpIsSelected = fbpIsSelected;
     this.fbpSystemDevices = fbpSystemDevices.toSet();
     this.fbpToggleSelection = fbpToggleSelection;
-    if(fbpIsSupported) {
+    if (fbpIsSupported) {
       _sub.addAll([
         fbp.FlutterBluePlus.isScanning.listen((_) {
           notifyListeners();
@@ -56,36 +56,38 @@ mixin BluetoothDevicesController on ChangeNotifier {
   }
 
   Future<void> setScanning(bool isOn) async {
-    for(final permission in bluetoothPermissions) {
-      if(!(await permission.request()).isGranted) {
+    for (final permission in bluetoothPermissions) {
+      if (!(await permission.request()).isGranted) {
         return;
       }
     }
-    if(isOn) {
+    if (isOn) {
       // Flutter Blue Plus
-      if(fbpIsSupported) {
+      if (fbpIsSupported) {
         try {
-          fbpSystemDevices = (await fbp.FlutterBluePlus.systemDevices([])).toSet();
+          fbpSystemDevices = (await fbp.FlutterBluePlus.systemDevices(
+            [],
+          )).toSet();
           await BondFlutterBluePlus.updateBondedDevices();
           await fbp.FlutterBluePlus.startScan(
             timeout: const Duration(seconds: 15),
           );
-        } catch(e) {}
+        } catch (e) {}
       }
     } else {
       // Flutter Blue Plus
-      if(fbpIsSupported) {
+      if (fbpIsSupported) {
         try {
           await fbp.FlutterBluePlus.stopScan();
-        } catch(e) {}
+        } catch (e) {}
       }
     }
     notifyListeners();
   }
 
   Future<void> toggleScanning() async {
-    for(final permission in bluetoothPermissions) {
-      if(!(await permission.request()).isGranted) {
+    for (final permission in bluetoothPermissions) {
+      if (!(await permission.request()).isGranted) {
         return;
       }
     }
@@ -96,7 +98,7 @@ mixin BluetoothDevicesController on ChangeNotifier {
 
   bool get isScanning {
     // Flutter Blue Plus
-    if(!fbpIsSupported) return false;
+    if (!fbpIsSupported) return false;
     return fbp.FlutterBluePlus.isScanningNow;
   }
 
@@ -125,37 +127,39 @@ mixin BluetoothDevicesController on ChangeNotifier {
   // Flutter Blue Plus
   @protected
   BluetoothDevice fbpDeviceToDevice(fbp.BluetoothDevice device) {
-    final isConnectable = ScanResultFlutterBluePlus.lastScanResults
-      .where((r) => r.device == device)
-      .firstOrNull
-      ?.advertisementData.connectable
-      ?? false;
+    final isConnectable =
+        ScanResultFlutterBluePlus.lastScanResults
+            .where((r) => r.device == device)
+            .firstOrNull
+            ?.advertisementData
+            .connectable ??
+        false;
     VoidCallback? togglePairing;
-    if(device.isBondable && !device.isBonded) {
+    if (device.isBondable && !device.isBonded) {
       togglePairing = () async {
-        for(final permission in bluetoothPermissions) {
-          if(!(await permission.request()).isGranted) {
+        for (final permission in bluetoothPermissions) {
+          if (!(await permission.request()).isGranted) {
             return;
           }
         }
         try {
           await device.createBond();
-        } catch(e) {}
+        } catch (e) {}
       };
     }
-    if(device.isUnBondable && device.isBonded) {
+    if (device.isUnBondable && device.isBonded) {
       togglePairing = () async {
-        for(final permission in bluetoothPermissions) {
-          if(!(await permission.request()).isGranted) {
+        for (final permission in bluetoothPermissions) {
+          if (!(await permission.request()).isGranted) {
             return;
           }
         }
         try {
           await device.removeBond();
-        } catch(e) {}
+        } catch (e) {}
       };
     }
-    return  BluetoothDevice(
+    return BluetoothDevice(
       id: device.remoteId.str,
       inSystem: fbpSystemDevices.contains(device),
       isPaired: BondFlutterBluePlus.bondedDevices.contains(device),
@@ -167,37 +171,37 @@ mixin BluetoothDevicesController on ChangeNotifier {
       rssi: device.rssi ?? 0,
       tech: BluetoothTech.lowEnergy,
       toggleConnection: (isConnectable)
-        ? () async {
-          for(final permission in bluetoothPermissions) {
-            if(!(await permission.request()).isGranted) {
-              return;
+          ? () async {
+              for (final permission in bluetoothPermissions) {
+                if (!(await permission.request()).isGranted) {
+                  return;
+                }
+              }
+              if (device.isConnected) {
+                try {
+                  await device.disconnect(queue: true);
+                } catch (e) {}
+              } else {
+                try {
+                  await device.connect(
+                    license: License.free,
+                    autoConnect: true,
+                    mtu: null,
+                  );
+                } catch (e) {}
+              }
             }
-          }
-          if(device.isConnected) {
-            try {
-              await device.disconnect(queue: true);
-            } catch(e) {}
-          } else {
-            try {
-              await device.connect(
-                license: License.free,
-                autoConnect: true,
-                mtu: null,
-              );
-            } catch(e) {}
-          }
-        }
-        : null,
+          : null,
       togglePairing: togglePairing,
       toggleSelection: (fbpToggleSelection != null)
-        ? () => fbpToggleSelection!(device)
-        : null,
+          ? () => fbpToggleSelection!(device)
+          : null,
     );
   }
 
   @mustCallSuper
   void cancelDevicesController() {
-    for(final s in _sub) {
+    for (final s in _sub) {
       s.cancel();
     }
   }

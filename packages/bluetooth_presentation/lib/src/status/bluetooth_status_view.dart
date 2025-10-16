@@ -8,7 +8,8 @@ part 'bluetooth_status_view.tailor.dart';
 
 @immutable
 @TailorMixin()
-class BluetoothStatusTheme extends ThemeExtension<BluetoothStatusTheme> with _$BluetoothStatusThemeTailorMixin {
+class BluetoothStatusTheme extends ThemeExtension<BluetoothStatusTheme>
+    with _$BluetoothStatusThemeTailorMixin {
   @override
   final Color backGroundColor;
   @override
@@ -33,19 +34,17 @@ class BluetoothStatusController {
   BluetoothStatusController({
     this.buttonText = "TURN ON",
     this.iconData = Icons.bluetooth_disabled,
-    this.message = "Bluetooth Adapter is not available.", 
-    required this.onPressedButton, 
+    this.message = "Bluetooth Adapter is not available.",
+    required this.onPressedButton,
   });
-
 }
 
 /// Typically used when Bluetooth is not enabled or not available.
-/// 
+///
 /// **Requirements:**
 /// - [BluetoothStatusController]
 /// - [BluetoothStatusTheme]
 class BluetoothStatusView extends StatelessWidget {
-
   /// Constructor with default values but allows customization.
   const BluetoothStatusView({
     super.key,
@@ -57,13 +56,13 @@ class BluetoothStatusView extends StatelessWidget {
     final icon = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final iconData = context.select<BluetoothStatusController, IconData>((s) => s.iconData);
-        final iconColor = themeData.extension<BluetoothStatusTheme>()?.iconColor;
-        return Icon(
-          iconData,
-          size: 200.0,
-          color: iconColor,
+        final iconData = context.select<BluetoothStatusController, IconData>(
+          (s) => s.iconData,
         );
+        final iconColor = themeData
+            .extension<BluetoothStatusTheme>()
+            ?.iconColor;
+        return Icon(iconData, size: 200.0, color: iconColor);
       },
     );
 
@@ -71,14 +70,15 @@ class BluetoothStatusView extends StatelessWidget {
     final message = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final message = context.select<BluetoothStatusController, String>((s) => s.message);
-        final messageColor = themeData.extension<BluetoothStatusTheme>()?.messageColor;
+        final message = context.select<BluetoothStatusController, String>(
+          (s) => s.message,
+        );
+        final messageColor = themeData
+            .extension<BluetoothStatusTheme>()
+            ?.messageColor;
         return Text(
           message,
-          style: themeData
-              .primaryTextTheme
-              .titleSmall
-              ?.copyWith(
+          style: themeData.primaryTextTheme.titleSmall?.copyWith(
             color: messageColor, // Apply custom text color
           ),
         );
@@ -88,8 +88,13 @@ class BluetoothStatusView extends StatelessWidget {
     // Button widget to trigger the onPressed callback
     final button = Builder(
       builder: (context) {
-        final buttonText = context.select<BluetoothStatusController, String>((s) => s.buttonText);
-        final onPressedButton = context.select<BluetoothStatusController, VoidCallback?>((s) => s.onPressedButton);
+        final buttonText = context.select<BluetoothStatusController, String>(
+          (s) => s.buttonText,
+        );
+        final onPressedButton = context
+            .select<BluetoothStatusController, VoidCallback?>(
+              (s) => s.onPressedButton,
+            );
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: ElevatedButton(
@@ -99,12 +104,14 @@ class BluetoothStatusView extends StatelessWidget {
         );
       },
     );
-    
+
     // The overall layout using Scaffold
     return Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final backGroundColor = themeData.extension<BluetoothStatusTheme>()?.backGroundColor;
+        final backGroundColor = themeData
+            .extension<BluetoothStatusTheme>()
+            ?.backGroundColor;
         return ScaffoldMessenger(
           child: Scaffold(
             backgroundColor: backGroundColor, // Set background color

@@ -2,7 +2,8 @@ part of '../device_view.dart';
 
 @immutable
 @TailorMixin()
-class CharacteristicTileTheme extends ThemeExtension<CharacteristicTileTheme> with _$CharacteristicTileThemeTailorMixin {
+class CharacteristicTileTheme extends ThemeExtension<CharacteristicTileTheme>
+    with _$CharacteristicTileThemeTailorMixin {
   @override
   final Color titleColor;
   
@@ -13,7 +14,7 @@ class CharacteristicTileTheme extends ThemeExtension<CharacteristicTileTheme> wi
 
 /// **Requirements:**
 /// - [BluetoothCharacteristic]
-/// 
+///
 /// **Themes:**
 /// - [CharacteristicTileTheme]
 /// - [TextTheme]
@@ -35,7 +36,6 @@ class CharacteristicTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final titleText = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
@@ -52,10 +52,14 @@ class CharacteristicTile extends StatelessWidget {
     final uuidText = Builder(
       builder: (context) {
         final themeData = Theme.of(context);
-        final uuid = context.select<BluetoothCharacteristic, Guid>((c) => c.uuid);
-        final instanceId = context.select<BluetoothCharacteristic, int>((c) => c.instanceId);
+        final uuid = context.select<BluetoothCharacteristic, Guid>(
+          (c) => c.uuid,
+        );
+        final instanceId = context.select<BluetoothCharacteristic, int>(
+          (c) => c.instanceId,
+        );
         return Text(
-          "${uuid.str.toUpperCase()} ($instanceId)", 
+          "${uuid.str.toUpperCase()} ($instanceId)",
           style: themeData.textTheme.bodySmall,
         );
       },
@@ -63,7 +67,10 @@ class CharacteristicTile extends StatelessWidget {
 
     final valueField = Builder(
       builder: (context) {
-        final lastValueStream = context.select<BluetoothCharacteristic, Stream<List<int>>>((c) => c.lastValueStream);
+        final lastValueStream = context
+            .select<BluetoothCharacteristic, Stream<List<int>>>(
+              (c) => c.lastValueStream,
+            );
         return StreamProvider(
           create: (_) => lastValueStream,
           initialData: null,
@@ -74,47 +81,56 @@ class CharacteristicTile extends StatelessWidget {
 
     final readButton = Builder(
       builder: (context) {
-        final canRead = context.select<BluetoothCharacteristic, bool>((c) => c.properties.read);
+        final canRead = context.select<BluetoothCharacteristic, bool>(
+          (c) => c.properties.read,
+        );
         final characteristic = context.watch<BluetoothCharacteristic>();
         return (canRead)
-          ? TextButton(
-              onPressed: () async {
-                try {
-                  await characteristic.read();
-                } catch(e) {}
-              },
-              child: const Text("Read"),
-            )
-          : Column();
+            ? TextButton(
+                onPressed: () async {
+                  try {
+                    await characteristic.read();
+                  } catch (e) {}
+                },
+                child: const Text("Read"),
+              )
+            : Column();
       },
     );
 
     final writeButton = Builder(
       builder: (context) {
-        final write = context.select<BluetoothCharacteristic, bool>((c) => c.properties.write);
-        final writeWithoutResponse = context.select<BluetoothCharacteristic, bool>((c) => c.properties.writeWithoutResponse);
+        final write = context.select<BluetoothCharacteristic, bool>(
+          (c) => c.properties.write,
+        );
+        final writeWithoutResponse = context
+            .select<BluetoothCharacteristic, bool>(
+              (c) => c.properties.writeWithoutResponse,
+            );
         final characteristic = context.watch<BluetoothCharacteristic>();
         return (write || writeWithoutResponse)
-          ? TextButton(
-              onPressed: () async {
-                try {
-                  await characteristic.write(writeValueGetter?.call() ?? []);
-                } catch(e) {}
-              },
-              child: Text(
-                writeWithoutResponse
-                ? "WriteNoResp"
-                : "Write",
-              ),
-            )
-          : Column();
+            ? TextButton(
+                onPressed: () async {
+                  try {
+                    await characteristic.write(writeValueGetter?.call() ?? []);
+                  } catch(e) {}
+                },
+                child: Text(
+                  writeWithoutResponse
+                  ? "WriteNoResp"
+                  : "Write",
+                ),
+              )
+            : Column();
       },
     );
 
     final notifyButton = Builder(
       builder: (context) {
-        final canNotify = context.select<BluetoothCharacteristic, bool>((c) => c.properties.notify || c.properties.indicate);
-        if(canNotify) {
+        final canNotify = context.select<BluetoothCharacteristic, bool>(
+          (c) => c.properties.notify || c.properties.indicate,
+        );
+        if (canNotify) {
           final characteristic = context.watch<BluetoothCharacteristic>();
           return StreamProvider<bool>(
             create: (_) => characteristic.onNotifyValueChanged,
@@ -126,7 +142,7 @@ class CharacteristicTile extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await characteristic.setNotifyValue(!isNotifying);
-                    } catch(e) {}
+                    } catch (e) {}
                   },
                   child: Text(
                     isNotifying
@@ -145,7 +161,9 @@ class CharacteristicTile extends StatelessWidget {
 
     return Builder(
       builder: (context) {
-        final length = context.select<BluetoothCharacteristic, int>((c) => c.descriptors.length);
+        final length = context.select<BluetoothCharacteristic, int>(
+          (c) => c.descriptors.length,
+        );
         return ExpansionTile(
           title: ListTile(
             contentPadding: EdgeInsets.zero,
