@@ -1,0 +1,37 @@
+name: ad5940
+description: "AD5940."
+publish_to: 'none'
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  copy_with_extension: any
+  copy_with_extension_gen: any
+  equatable: any
+  ffi: any
+  json_annotation: any
+  synchronized: any
+
+  # Domains
+  electrochemical: any
+
+  # Packages
+  bluetooth_utils: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+  json_serializable: any
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+resolution: workspace

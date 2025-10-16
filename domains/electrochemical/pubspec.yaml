@@ -1,0 +1,33 @@
+name: electrochemical
+description: "Electrochemical."
+publish_to: 'none'
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  copy_with_extension: any
+  copy_with_extension_gen: any
+  equatable: any
+  json_annotation: any
+  synchronized: any
+
+  # Packages
+  bluetooth_utils: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+  json_serializable: any
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+resolution: workspace

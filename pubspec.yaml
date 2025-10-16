@@ -4,6 +4,8 @@ environment:
 workspace: 
   - apps/bluetooth_debugger
   - apps/seat_cushion_debugger
+  - domains/ad5940
+  - domains/electrochemical
   - domains/seat_cushion
   - domains/seat_cushion_presentation
   - packages/bluetooth_presentation
@@ -26,6 +28,7 @@ dependency_overrides:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   equatable: ^2.0.7
+  ffi: ^2.1.4
   file_picker: ^10.2.0
   flutter_blue_plus: ^2.0.0
   flutter_blue_plus_platform_interface: ^8.0.0
