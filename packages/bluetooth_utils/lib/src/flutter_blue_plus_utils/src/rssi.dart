@@ -25,7 +25,7 @@ class RssiFlutterBluePlus {
     // keep track of scan response
     try {
       FlutterBluePlusPlatform.instance.onScanResponse.listen((r) {
-        for(final adv in r.advertisements) {
+        for (final adv in r.advertisements) {
           _rssis[adv.remoteId] = adv.rssi;
         }
       });
@@ -34,38 +34,45 @@ class RssiFlutterBluePlus {
     }
   }
 
-  static Stream<BluetoothDevice> get onReadRssi => FlutterBluePlusPlatform.instance.onReadRssi
-    .map((p) => BluetoothDevice.fromId(p.remoteId.str));
+  static Stream<BluetoothDevice> get onReadRssi => FlutterBluePlusPlatform
+      .instance
+      .onReadRssi
+      .map((p) => BluetoothDevice.fromId(p.remoteId.str));
 
-  static Stream<Set<BluetoothDevice>> get onScanRssi => FlutterBluePlusPlatform.instance.onScanResponse
-      .map((r) => r.advertisements.map((p) => BluetoothDevice.fromId(p.remoteId.str)).toSet());
+  static Stream<Set<BluetoothDevice>> get onScanRssi =>
+      FlutterBluePlusPlatform.instance.onScanResponse.map(
+        (r) => r.advertisements
+            .map((p) => BluetoothDevice.fromId(p.remoteId.str))
+            .toSet(),
+      );
 
   static Stream<Set<BluetoothDevice>> get onAllRssi => _mergeStreams([
-    FlutterBluePlusPlatform.instance.onScanResponse
-      .map((r) => r.advertisements.map((p) => BluetoothDevice.fromId(p.remoteId.str)).toSet()),
-    FlutterBluePlusPlatform.instance.onReadRssi
-      .map((p) => {
-        BluetoothDevice.fromId(p.remoteId.str),
-      }),
+    FlutterBluePlusPlatform.instance.onScanResponse.map(
+      (r) => r.advertisements
+          .map((p) => BluetoothDevice.fromId(p.remoteId.str))
+          .toSet(),
+    ),
+    FlutterBluePlusPlatform.instance.onReadRssi.map(
+      (p) => {BluetoothDevice.fromId(p.remoteId.str)},
+    ),
   ]);
-
 }
 
 extension RssiTracker on BluetoothDevice {
   Stream<int> get onReadRssi => FlutterBluePlusPlatform.instance.onReadRssi
-    .where((p) => p.remoteId == remoteId)
-    .map((p) => p.rssi);
+      .where((p) => p.remoteId == remoteId)
+      .map((p) => p.rssi);
 
   Stream<int> get onScanRssi => FlutterBluePlusPlatform.instance.onScanResponse
-    .map((p) => p.advertisements.where((d) => d.remoteId == remoteId).firstOrNull)
-    .where((p) => p != null)
-    .map((p) => p!.rssi);
+      .map(
+        (p) =>
+            p.advertisements.where((d) => d.remoteId == remoteId).firstOrNull,
+      )
+      .where((p) => p != null)
+      .map((p) => p!.rssi);
 
-  Stream<int> get onAllRssi => _mergeStreams([
-    onReadRssi,
-    onScanRssi,
-  ]);
-    
+  Stream<int> get onAllRssi => _mergeStreams([onReadRssi, onScanRssi]);
+
   int? get rssi {
     return RssiFlutterBluePlus._rssis[remoteId];
   }

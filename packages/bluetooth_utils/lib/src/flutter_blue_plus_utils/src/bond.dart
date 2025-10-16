@@ -24,8 +24,8 @@ class BondFlutterBluePlus {
   }
 
   static Future<void> updateBondedDevices() async {
-    for(final d in (await FlutterBluePlus.bondedDevices)) {
-      if(_bondStates.containsKey(d.remoteId)) continue;
+    for (final d in (await FlutterBluePlus.bondedDevices)) {
+      if (_bondStates.containsKey(d.remoteId)) continue;
       _bondStates[d.remoteId] = BmBondStateResponse(
         remoteId: d.remoteId,
         bondState: BmBondStateEnum.bonded,
@@ -34,15 +34,15 @@ class BondFlutterBluePlus {
     }
   }
 
-  static List<BluetoothDevice> get bondedDevices => _bondStates
-    .entries
-    .where((p) => p.value.bondState == BmBondStateEnum.bonded)
-    .map((p) => BluetoothDevice.fromId(p.key.str))
-    .toList();
+  static List<BluetoothDevice> get bondedDevices => _bondStates.entries
+      .where((p) => p.value.bondState == BmBondStateEnum.bonded)
+      .map((p) => BluetoothDevice.fromId(p.key.str))
+      .toList();
 
-  static Stream<BluetoothDevice> get onBondStateChanged => FlutterBluePlusPlatform.instance.onBondStateChanged
-    .map((p) => BluetoothDevice.fromId(p.remoteId.str));
-  
+  static Stream<BluetoothDevice> get onBondStateChanged =>
+      FlutterBluePlusPlatform.instance.onBondStateChanged.map(
+        (p) => BluetoothDevice.fromId(p.remoteId.str),
+      );
 }
 
 extension BondBluetoothDevice on BluetoothDevice {
@@ -56,9 +56,9 @@ extension BondBluetoothDevice on BluetoothDevice {
     return b != null ? _bmToBondState(b) : null;
   }
 
-  Stream<BluetoothBondState> get onBondStateChanged => FlutterBluePlusPlatform.instance.onBondStateChanged
-    .where((p) => p.remoteId == remoteId)
-    .map((p) => _bmToBondState(p.bondState));
-  
+  Stream<BluetoothBondState> get onBondStateChanged => FlutterBluePlusPlatform
+      .instance
+      .onBondStateChanged
+      .where((p) => p.remoteId == remoteId)
+      .map((p) => _bmToBondState(p.bondState));
 }
-

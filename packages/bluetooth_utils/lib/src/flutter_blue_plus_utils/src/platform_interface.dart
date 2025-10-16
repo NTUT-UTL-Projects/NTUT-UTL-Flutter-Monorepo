@@ -25,7 +25,7 @@ extension _BmCharacteristicData on BmCharacteristicData {
 
 extension _BmDescriptorData on BmDescriptorData {
   BluetoothCharacteristic? get characteristic {
-    if(!success) return null;
+    if (!success) return null;
     return BluetoothCharacteristic(
       remoteId: remoteId,
       primaryServiceUuid: primaryServiceUuid,
@@ -34,8 +34,9 @@ extension _BmDescriptorData on BmDescriptorData {
       instanceId: instanceId,
     );
   }
+
   BluetoothDescriptor? get descriptor {
-    if(!success) return null;
+    if (!success) return null;
     return BluetoothDescriptor(
       remoteId: remoteId,
       primaryServiceUuid: primaryServiceUuid,

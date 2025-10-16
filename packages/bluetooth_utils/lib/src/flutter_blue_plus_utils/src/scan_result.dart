@@ -16,7 +16,7 @@ class ScanResultFlutterBluePlus {
     // keep track of scan response
     try {
       FlutterBluePlus.isScanning.listen((isScanning) {
-        if(!isScanning) return;
+        if (!isScanning) return;
         _scanResponse.clear();
       });
     } on UnimplementedError {
@@ -26,7 +26,7 @@ class ScanResultFlutterBluePlus {
     // keep track of scan response
     try {
       FlutterBluePlusPlatform.instance.onScanResponse.listen((r) {
-        for(final adv in r.advertisements) {
+        for (final adv in r.advertisements) {
           _scanResponse[adv.remoteId] = adv;
         }
       });
@@ -45,19 +45,24 @@ class ScanResultFlutterBluePlus {
     .map((p) => ScanResult.fromProto(p).device)
     .toList();
 
-  static Stream<Set<BluetoothDevice>> get onScanResponse => FlutterBluePlusPlatform.instance.onScanResponse
-    .map((r) => r.advertisements.map((p) => BluetoothDevice.fromId(p.remoteId.str)).toSet());
-
+  static Stream<Set<BluetoothDevice>> get onScanResponse =>
+      FlutterBluePlusPlatform.instance.onScanResponse.map(
+        (r) => r.advertisements
+            .map((p) => BluetoothDevice.fromId(p.remoteId.str))
+            .toSet(),
+      );
 }
 
 extension ScanResultBluetoothDevice on BluetoothDevice {
-  Stream<ScanResult> get onScanResponse => FlutterBluePlusPlatform.instance.onScanResponse
-    .map((p) => p.advertisements)
-    .where((advs) => advs.map((p) => p.remoteId).contains(remoteId))
-    .map((p) => p.firstOrNull)
-    .where((p) => p != null)
-    .map((p) => ScanResult.fromProto(p!));
-    
+  Stream<ScanResult> get onScanResponse => FlutterBluePlusPlatform
+      .instance
+      .onScanResponse
+      .map((p) => p.advertisements)
+      .where((advs) => advs.map((p) => p.remoteId).contains(remoteId))
+      .map((p) => p.firstOrNull)
+      .where((p) => p != null)
+      .map((p) => ScanResult.fromProto(p!));
+
   ScanResult? get scanResult {
     final p = ScanResultFlutterBluePlus._scanResponse[remoteId];
     if (p == null) {
@@ -67,4 +72,3 @@ extension ScanResultBluetoothDevice on BluetoothDevice {
     }
   }
 }
-
