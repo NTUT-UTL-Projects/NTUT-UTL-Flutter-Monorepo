@@ -187,7 +187,9 @@ class DpvLineChartController extends LineChartController {
   DpvLineChartController({required super.sensor});
 
   @override
-  List<Data> get dataList => sensor.dataList.map((d) => d.copyWith.data(d.data.mapDpv.toList())).toList();
+  List<Data> get dataList => sensor.dataList
+      .map((d) => d.copyWith.data(d.data.mapDpv.toList()))
+      .toList();
 }
 
 class LineChart<T extends LineChartController> extends StatelessWidget {
@@ -368,7 +370,10 @@ class MyApp extends StatelessWidget {
                       return p.write || p.writeWithoutResponse;
                     })) {
                       try {
-                        for(final bytes in controller.text.split("\n").map((t) => t.hexToBytes())) {
+                        for (final bytes
+                            in controller.text
+                                .split("\n")
+                                .map((t) => t.hexToBytes())) {
                           await c.write(bytes);
                         }
                       } catch (e) {}
