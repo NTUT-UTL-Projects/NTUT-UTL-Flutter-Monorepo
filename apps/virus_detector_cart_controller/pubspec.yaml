@@ -1,0 +1,50 @@
+name: virus_detector_cart_controller
+description: "Virus Detector Cart Controller."
+publish_to: 'none'
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  copy_with_extension: any
+  copy_with_extension_gen: any
+  equatable: any
+  flutter_blue_plus: any
+  flutter_blue_plus_platform_interface: any
+  fluttertoast: any
+  package_info_plus: any
+  provider: any
+  util_simple_3d: any
+  simple_3d: any
+  simple_3d_renderer: any
+  synchronized: any
+
+  # Packages
+  bluetooth_presentation: any
+  bluetooth_utils: any
+  data_presentation: any
+  data_utils: any
+  file_utils: any
+  path_provider_utils: any
+  stream_utils: any
+  syncfusion_flutter_charts: any
+  syncfusion_flutter_xlsio: any
+  text_editing_controller_utils: any
+  theme_tailor: any
+  theme_tailor_annotation: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+resolution: workspace
