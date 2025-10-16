@@ -3,7 +3,8 @@ part of 'seat_cushion_features_line.dart';
 @immutable
 @TailorMixin()
 class SeatCushionFeaturesLineTheme
-    extends ThemeExtension<SeatCushionFeaturesLineTheme> with _$SeatCushionFeaturesLineThemeTailorMixin {
+    extends ThemeExtension<SeatCushionFeaturesLineTheme>
+    with _$SeatCushionFeaturesLineThemeTailorMixin {
   @override
   final Color clearColor;
   @override
@@ -17,5 +18,12 @@ class SeatCushionFeaturesLineTheme
   @override
   final IconData recordIcon;
 
-  const SeatCushionFeaturesLineTheme({required this.clearColor, required this.clearIcon, required this.downloadColor, required this.downloadIcon, required this.recordColor, required this.recordIcon});
+  const SeatCushionFeaturesLineTheme({
+    required this.clearColor,
+    required this.clearIcon,
+    required this.downloadColor,
+    required this.downloadIcon,
+    required this.recordColor,
+    required this.recordIcon,
+  });
 }

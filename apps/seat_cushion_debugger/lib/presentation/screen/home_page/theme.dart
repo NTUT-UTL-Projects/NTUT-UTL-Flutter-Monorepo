@@ -22,7 +22,8 @@ class AllSeatCushionForces3DMeshWidget
 
 @immutable
 @TailorMixin()
-class HomePageTheme extends ThemeExtension<HomePageTheme> with _$HomePageThemeTailorMixin {
+class HomePageTheme extends ThemeExtension<HomePageTheme>
+    with _$HomePageThemeTailorMixin {
   @override
   final IconData bluetoothScannerIcon;
   @override
@@ -30,5 +31,9 @@ class HomePageTheme extends ThemeExtension<HomePageTheme> with _$HomePageThemeTa
   @override
   final IconData seatCushionDashboardIcon;
 
-  const HomePageTheme({required this.bluetoothScannerIcon, required this.seatCushion3DMeshIcon, required this.seatCushionDashboardIcon});
+  const HomePageTheme({
+    required this.bluetoothScannerIcon,
+    required this.seatCushion3DMeshIcon,
+    required this.seatCushionDashboardIcon,
+  });
 }

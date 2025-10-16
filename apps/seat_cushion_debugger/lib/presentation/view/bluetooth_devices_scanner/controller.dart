@@ -10,9 +10,8 @@ class BluetoothDevicesScannerController extends ChangeNotifier
   }
 
   @override
-  List<BluetoothDevice> get devices => super.devices
-    .where((d) => d.name.isNotEmpty)
-    .toList();
+  List<BluetoothDevice> get devices =>
+      super.devices.where((d) => d.name.isNotEmpty).toList();
 
   @override
   void dispose() {
