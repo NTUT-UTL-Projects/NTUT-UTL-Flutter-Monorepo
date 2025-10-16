@@ -15,7 +15,7 @@ import 'presentation/screen/home_page/home_page.dart';
 late final WriteBluetoothPacketFile writeBluetoothPacketFile;
 
 late final bool fbpIsSupported;
-List<fbp.BluetoothDevice> fbpSystemDevices = [];
+var fbpSystemDevices = <fbp.BluetoothDevice>[];
 late final Timer updateRssi;
 
 Future<void> init() async {

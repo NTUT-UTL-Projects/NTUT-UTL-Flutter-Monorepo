@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  copy_with_extension: any
+  copy_with_extension_gen: any
   equatable: any
   flutter_blue_plus: any
   flutter_blue_plus_platform_interface: any
@@ -34,6 +36,8 @@ dependencies:
   file_utils: any
   path_provider_utils: any
   stream_utils: any
+  syncfusion_flutter_charts: any
+  syncfusion_flutter_xlsio: any
   text_editing_controller_utils: any
   theme_tailor: any
   theme_tailor_annotation: any

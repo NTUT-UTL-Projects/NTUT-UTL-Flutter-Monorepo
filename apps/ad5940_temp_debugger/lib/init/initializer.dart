@@ -3,24 +3,14 @@ import 'dart:async';
 import 'package:bluetooth_utils/bluetooth_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
-import 'package:seat_cushion/seat_cushion.dart';
-
-import '../application/seat_cushion_sensor_data_handler.dart';
 
 class Initializer {
   final bool fbpIsSupported;
-  final SeatCushionRepository repository;
-  final SeatCushionSensor sensor;
-  final _sub = <StreamSubscription>[];
-  late final SeatCushionSensorRecorderController sensorRecoderController;
+  final List<StreamSubscription> _sub = [];
   late final List<fbp.BluetoothDevice> fbpSystemDevices;
   late final Timer updateRssi;
 
-  Initializer({
-    required this.fbpIsSupported,
-    required this.repository,
-    required this.sensor,
-  });
+  Initializer({required this.fbpIsSupported});
 
   Future call() async {
     await SystemChrome.setPreferredOrientations([
@@ -67,10 +57,6 @@ class Initializer {
     } else {
       fbpSystemDevices = [];
     }
-    sensorRecoderController = SeatCushionSensorRecorderController(
-      sensor: sensor,
-      repository: repository,
-    );
     return;
   }
 }

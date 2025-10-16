@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 class HexFormatter extends TextInputFormatter {
-  final RegExp _hexRegex = RegExp(r'[0-9a-fA-F]');
+  final RegExp _hexRegex = RegExp(r'[0-9a-fA-F\r\n]');
 
   @override
   TextEditingValue formatEditUpdate(

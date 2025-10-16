@@ -1,5 +1,6 @@
 import 'package:bluetooth_presentation/bluetooth_presentation.dart';
 import 'package:bluetooth_utils/bluetooth_utils.dart';
+import 'package:data_utils/data_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -186,7 +187,7 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => BluetoothCommandLineController(
-              sendPacket: (hexString) async {
+              sendPacket: (controller) async {
                 for (final device in fbp.FlutterBluePlus.connectedDevices) {
                   for (final s in device.servicesList) {
                     for (final c in s.characteristics.where((c) {
@@ -194,7 +195,7 @@ class MyApp extends StatelessWidget {
                       return p.write || p.writeWithoutResponse;
                     })) {
                       try {
-                        await c.write(c.lastValue);
+                        await c.write(controller.text.hexToBytes());
                       } catch (e) {}
                     }
                   }
