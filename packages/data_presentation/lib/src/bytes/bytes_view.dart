@@ -3,7 +3,10 @@ import 'package:theme_tailor_annotation/theme_tailor_annotation.dart';
 
 part 'bytes_view.tailor.dart';
 
-Iterable<String> _toByteStrings(List<int> bytes, {bool upperCase = true}) sync* {
+Iterable<String> _toByteStrings(
+  List<int> bytes, {
+  bool upperCase = true,
+}) sync* {
   for (final byte in bytes) {
     final hex = byte.toRadixString(16).padLeft(2, '0');
     yield upperCase ? hex.toUpperCase() : hex;
@@ -12,7 +15,8 @@ Iterable<String> _toByteStrings(List<int> bytes, {bool upperCase = true}) sync* 
 
 @immutable
 @TailorMixin()
-class BytesTheme extends ThemeExtension<BytesTheme> with _$BytesThemeTailorMixin {
+class BytesTheme extends ThemeExtension<BytesTheme>
+    with _$BytesThemeTailorMixin {
   @override
   final List<Color> colorCycle;
   @override
@@ -49,15 +53,19 @@ class BytesView extends StatelessWidget {
         ...lines.indexed.map((line) {
           return Row(
             children: [
-              if(showIndex)
+              if (showIndex)
                 Text(
                   "${line.$1.toString().padLeft(2, '0')}. ",
-                  style: TextStyle(fontSize: 13, color: themeExtension?.indexColor),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: themeExtension?.indexColor,
+                  ),
                 ),
               ...line.$2.indexed.map((b) {
                 Color? color = (themeExtension?.colorCycle.isNotEmpty ?? false)
-                  ? themeExtension?.colorCycle[b.$1 % themeExtension.colorCycle.length]
-                  : null;
+                    ? themeExtension?.colorCycle[b.$1 %
+                          themeExtension.colorCycle.length]
+                    : null;
                 return Text(
                   b.$2,
                   style: TextStyle(
