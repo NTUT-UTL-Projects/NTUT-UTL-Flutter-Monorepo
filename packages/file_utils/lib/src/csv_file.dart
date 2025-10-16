@@ -11,6 +11,7 @@ extension CsvFile on File {
       flush: flush,
     );
   }
+
   Future<File> writeAsCsvRow<T>({
     required Iterable<T> data,
     String delimiterColumn = ",",
@@ -29,6 +30,7 @@ extension CsvFile on File {
       flush: flush,
     );
   }
+
   Future<Iterable<Iterable<String>>> readAsCsv({
     String delimiterColumn = ",",
     String delimiterRow = "\n",
