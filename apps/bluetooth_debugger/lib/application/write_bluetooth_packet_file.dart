@@ -78,11 +78,13 @@ extension BluetoothPacketFile on File {
   }
 }
 
+typedef FileNameCreator = String Function(DateTime time);
+
 class WriteBluetoothPacketFile {
   final _lock = Lock();
 
   File? _file;
-  final String Function(DateTime time) fileNameCreator;
+  final FileNameCreator fileNameCreator;
 
   bool _isRunning = false;
   bool get isRunning => _isRunning;

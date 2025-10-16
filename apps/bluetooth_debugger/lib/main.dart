@@ -44,7 +44,7 @@ Future<void> init() async {
   }
   writeBluetoothPacketFile = WriteBluetoothPacketFile(
     fbpIsSupported: fbpIsSupported,
-    fileNameCreator: (DateTime time) {
+    fileNameCreator: (time) {
       return "Bluetooth_Debugger_${time
         .toString()
         .replaceAll(" ", "_")
