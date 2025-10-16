@@ -32,7 +32,8 @@ class HomePageController extends ChangeNotifier
   }
 
   @override
-  List<BluetoothDevice> get devices => bluetoothDevicesFilter(super.devices).toList();
+  List<BluetoothDevice> get devices =>
+      bluetoothDevicesFilter(super.devices).toList();
 
   @override
   void dispose() {
