@@ -35,5 +35,4 @@ mixin TextEditingControllerUtils on TextEditingController {
       selection: TextSelection.collapsed(offset: newOffset),
     );
   }
-  
 }
