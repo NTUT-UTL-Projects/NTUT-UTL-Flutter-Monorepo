@@ -24,7 +24,11 @@ Stream<T> mergeStreams<T>(List<Stream<T>> streams) {
   }
 
   void subscribeToStream(Stream<T> stream) {
-    final s = stream.listen(handleData, onError: handleError, onDone: handleDone);
+    final s = stream.listen(
+      handleData,
+      onError: handleError,
+      onDone: handleDone,
+    );
     subscriptions.add(s);
   }
 
