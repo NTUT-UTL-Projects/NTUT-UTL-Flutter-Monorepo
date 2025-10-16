@@ -1,58 +1,21 @@
 part of 'bluetooth_command_line.dart';
 
-class BluetoothCommandLineIcons {
-  final IconData clear;
-  final IconData init;
-  final IconData send;
-
-  BluetoothCommandLineIcons({
-    required this.clear,
-    required this.init,
-    required this.send,
-  });
-}
-
 @immutable
+@TailorMixin()
 class BluetoothCommandLineTheme
-    extends ThemeExtension<BluetoothCommandLineTheme> {
-  const BluetoothCommandLineTheme({
-    required this.clearIconColor,
-    required this.initIconColor,
-  });
-
-  final Color clearIconColor;
-  final Color initIconColor;
-
+    extends ThemeExtension<BluetoothCommandLineTheme> with _$BluetoothCommandLineThemeTailorMixin {
   @override
-  BluetoothCommandLineTheme copyWith({
-    Color? clearIconColor,
-    Color? initIconColor,
-  }) => BluetoothCommandLineTheme(
-    clearIconColor: clearIconColor ?? this.clearIconColor,
-    initIconColor: initIconColor ?? this.initIconColor,
-  );
-
+  final Color clearColor;
   @override
-  BluetoothCommandLineTheme lerp(
-    ThemeExtension<BluetoothCommandLineTheme>? other,
-    double t,
-  ) {
-    if (other is! BluetoothCommandLineTheme) return this;
-    return BluetoothCommandLineTheme(
-      clearIconColor:
-          Color.lerp(
-            clearIconColor as Color?,
-            other.clearIconColor as Color?,
-            t,
-          ) ??
-          clearIconColor,
-      initIconColor:
-          Color.lerp(
-            initIconColor as Color?,
-            other.initIconColor as Color?,
-            t,
-          ) ??
-          initIconColor,
-    );
-  }
+  final IconData clearIcon;
+  @override
+  final Color initColor;
+  @override
+  final IconData initIcon;
+  @override
+  final Color sendColor;
+  @override
+  final IconData sendIcon;
+
+  const BluetoothCommandLineTheme({required this.clearColor, required this.clearIcon, required this.initColor, required this.initIcon, required this.sendColor, required this.sendIcon});
 }

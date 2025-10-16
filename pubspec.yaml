@@ -2,6 +2,7 @@ name: ntut_utl_flutter_monorepo
 environment:
   sdk: ">=3.9.2 <4.0.0"
 workspace: 
+  - apps/ad5940_temp_debugger
   - apps/bluetooth_debugger
   - apps/seat_cushion_debugger
   - domains/ad5940

@@ -1,0 +1,50 @@
+name: ad5940_temp_debugger
+description: "AD5940 Temporary Debugger."
+publish_to: 'none'
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: any
+  flutter_blue_plus: any
+  flutter_blue_plus_platform_interface: any
+  fluttertoast: any
+  package_info_plus: any
+  provider: any
+  util_simple_3d: any
+  simple_3d: any
+  simple_3d_renderer: any
+  synchronized: any
+
+  # Domains
+  ad5940: any
+  electrochemical: any
+
+  # Packages
+  bluetooth_presentation: any
+  bluetooth_utils: any
+  data_presentation: any
+  data_utils: any
+  file_utils: any
+  path_provider_utils: any
+  stream_utils: any
+  text_editing_controller_utils: any
+  theme_tailor: any
+  theme_tailor_annotation: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+resolution: workspace

@@ -39,7 +39,7 @@ class BluetoothDeviceDetailsTileTheme extends ThemeExtension<BluetoothDeviceDeta
   @override
   final IconData unpairedIcon;
 
-  BluetoothDeviceDetailsTileTheme({required this.classicIcon, required this.connectedColor, required this.connectedIcon, required this.disconnectedColor, required this.disconnectedIcon, required this.highlightColor, required this.highSpeedIcon, required this.inSystemIcon, required this.lowPowerIcon, required this.nullRssiIcon, required this.pairedIcon, required this.selectedColor, required this.typeIconColor, required this.unpairedIcon});
+  const BluetoothDeviceDetailsTileTheme({required this.classicIcon, required this.connectedColor, required this.connectedIcon, required this.disconnectedColor, required this.disconnectedIcon, required this.highlightColor, required this.highSpeedIcon, required this.inSystemIcon, required this.lowPowerIcon, required this.nullRssiIcon, required this.pairedIcon, required this.selectedColor, required this.typeIconColor, required this.unpairedIcon});
 
   Gradient brandGradient({
     required bool isSelected,

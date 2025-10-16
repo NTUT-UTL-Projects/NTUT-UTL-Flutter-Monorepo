@@ -5,8 +5,7 @@ class SeatCushionFeaturesLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final themeExtension = themeData.extension<SeatCushionFeaturesLineTheme>()!;
-    final icons = context.watch<SeatCushionFeaturesLineIcons>();
+    final themeExtension = themeData.extension<SeatCushionFeaturesLineTheme>();
     final appLocalizations = AppLocalizations.of(context)!;
 
     final isClearing = context.select<SeatCushionFeaturesLineController, bool>(
@@ -18,8 +17,8 @@ class SeatCushionFeaturesLine extends StatelessWidget {
         );
     final clearButton = IconButton(
       onPressed: (isClearing) ? null : () => triggerClear(appLocalizations),
-      icon: Icon(icons.clear),
-      color: themeExtension.clearIconColor,
+      icon: Icon(themeExtension?.clearIcon),
+      color: themeExtension?.clearColor,
     );
 
     final isDownloadingFile = context
@@ -34,8 +33,8 @@ class SeatCushionFeaturesLine extends StatelessWidget {
       onPressed: (isDownloadingFile)
           ? null
           : () => triggerDownloadFile(appLocalizations),
-      icon: Icon(icons.download),
-      color: themeExtension.downloadIconColor,
+      icon: Icon(themeExtension?.downloadIcon),
+      color: themeExtension?.downloadColor,
     );
 
     final isRecording = context.select<SeatCushionFeaturesLineController, bool>(
@@ -47,8 +46,8 @@ class SeatCushionFeaturesLine extends StatelessWidget {
         );
     final recordButton = IconButton(
       onPressed: triggerRecord,
-      icon: Icon(icons.record),
-      color: (isRecording) ? themeExtension.recordIconColor : null,
+      icon: Icon(themeExtension?.recordIcon),
+      color: (isRecording) ? themeExtension?.recordColor : null,
     );
 
     return Row(children: [clearButton, Spacer(), recordButton, downloadButton]);

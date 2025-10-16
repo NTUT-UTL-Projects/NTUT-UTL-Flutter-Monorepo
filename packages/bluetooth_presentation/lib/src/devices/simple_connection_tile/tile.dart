@@ -25,7 +25,7 @@ class BluetoothDeviceSimpleConnectionTileTheme extends ThemeExtension<BluetoothD
   @override
   final Color selectedColor;
 
-  BluetoothDeviceSimpleConnectionTileTheme({required this.connectedColor, required this.disconnectedColor, required this.highlightColor, required this.selectedColor, required this.connectedIcon, required this.disconnectedIcon, required this.nullRssiIcon});
+  const BluetoothDeviceSimpleConnectionTileTheme({required this.connectedColor, required this.disconnectedColor, required this.highlightColor, required this.selectedColor, required this.connectedIcon, required this.disconnectedIcon, required this.nullRssiIcon});
   
   Gradient brandGradient({
     required bool isSelected,

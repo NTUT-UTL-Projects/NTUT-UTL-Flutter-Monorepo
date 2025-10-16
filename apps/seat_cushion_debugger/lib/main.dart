@@ -64,8 +64,12 @@ class MyApp extends StatelessWidget {
           ),
           BluetoothStatusTheme(backGroundColor: Colors.blue),
           BluetoothCommandLineTheme(
-            clearIconColor: Colors.red,
-            initIconColor: Colors.blue,
+            clearColor: Colors.red, 
+            clearIcon: Icons.delete, 
+            initColor: Colors.blue, 
+            initIcon: Icons.start, 
+            sendColor: Colors.orange, 
+            sendIcon: Icons.send,
           ),
 
           // Domain
@@ -84,12 +88,20 @@ class MyApp extends StatelessWidget {
             strokeColor: Colors.black,
           ),
           SeatCushionFeaturesLineTheme(
-            clearIconColor: Colors.red,
-            downloadIconColor: Colors.green,
-            recordIconColor: Colors.orange,
+            clearColor: Colors.red, 
+            clearIcon: Icons.delete, 
+            downloadColor: Colors.green, 
+            downloadIcon: Icons.file_download, 
+            recordColor: Colors.orange, 
+            recordIcon: Icons.save,
           ),
           SeatCushionForceColorBarTheme(
             forceToColor: weiZheForceToColorConverter,
+          ),
+          home.HomePageTheme(
+            bluetoothScannerIcon: Icons.bluetooth_searching_rounded,
+            seatCushion3DMeshIcon: Icons.curtains_sharp,
+            seatCushionDashboardIcon: Icons.map,
           ),
         ],
       ),
@@ -108,8 +120,12 @@ class MyApp extends StatelessWidget {
           ),
           BluetoothStatusTheme(backGroundColor: Colors.indigoAccent),
           BluetoothCommandLineTheme(
-            clearIconColor: Colors.red[700]!,
-            initIconColor: Colors.indigoAccent,
+            clearColor: Colors.red[700]!, 
+            clearIcon: Icons.delete, 
+            initColor: Colors.indigoAccent, 
+            initIcon: Icons.start, 
+            sendColor: Colors.orange[700]!, 
+            sendIcon: Icons.send,
           ),
 
           // Domain
@@ -128,12 +144,20 @@ class MyApp extends StatelessWidget {
             strokeColor: Colors.white,
           ),
           SeatCushionFeaturesLineTheme(
-            clearIconColor: Colors.red[700]!,
-            downloadIconColor: Colors.green[700]!,
-            recordIconColor: Colors.orange[700]!,
+            clearColor: Colors.red[700]!, 
+            clearIcon: Icons.delete, 
+            downloadColor: Colors.green[700]!, 
+            downloadIcon: Icons.file_download, 
+            recordColor: Colors.orange[700]!, 
+            recordIcon: Icons.save,
           ),
           SeatCushionForceColorBarTheme(
             forceToColor: weiZheForceToColorConverter,
+          ),
+          home.HomePageTheme(
+            bluetoothScannerIcon: Icons.bluetooth_searching_rounded,
+            seatCushion3DMeshIcon: Icons.curtains_sharp,
+            seatCushionDashboardIcon: Icons.map,
           ),
         ],
       ),
@@ -158,13 +182,6 @@ class MyApp extends StatelessWidget {
             create: (_) => BluetoothDevicesScannerController(
               fbpIsSupported: initializer.fbpIsSupported,
               fbpSystemDevices: initializer.fbpSystemDevices,
-            ),
-          ),
-          Provider(
-            create: (_) => BluetoothCommandLineIcons(
-              clear: Icons.delete,
-              init: Icons.start,
-              send: Icons.send,
             ),
           ),
           ChangeNotifierProvider(
@@ -199,13 +216,6 @@ class MyApp extends StatelessWidget {
           StreamProvider(
             create: (_) => initializer.sensor.setStream,
             initialData: null,
-          ),
-          Provider(
-            create: (_) => home.HomePageIcons(
-              bluetoothScanner: Icons.bluetooth_searching_rounded,
-              seatCushion3DMesh: Icons.curtains_sharp,
-              seatCushionDashboard: Icons.map,
-            ),
           ),
           ChangeNotifierProvider(
             create: (_) => SeatCushionFeaturesLineController(
@@ -245,18 +255,6 @@ class MyApp extends StatelessWidget {
               triggerRecord: () =>
                   initializer.sensorRecoderController.isRecording =
                       !initializer.sensorRecoderController.isRecording,
-            ),
-          ),
-          Provider(
-            create: (_) => SeatCushionFeaturesLineIcons(
-              clear: Icons.delete,
-              download: Icons.file_download,
-              record: Icons.save,
-            ),
-          ),
-          Provider(
-            create: (_) => SeatCushionForceColorBarController(
-              forceToColor: weiZheForceToColorConverter,
             ),
           ),
         ],
