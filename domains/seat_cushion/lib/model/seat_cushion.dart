@@ -16,7 +16,7 @@ enum SeatCushionType {
 /// Core data model representing a single seat cushion’s pressure grid.
 ///
 /// Each [SeatCushion] is a matrix of pressure values, where each element
-/// in [forces] corresponds to a sensor unit’s measured force.  
+/// in [forces] corresponds to a sensor unit’s measured force.
 /// The model provides computed properties for analyzing posture distribution,
 /// including total applied force, center of pressure, and the ischium position.
 ///
@@ -45,8 +45,7 @@ class SeatCushion extends Equatable {
       SeatCushion.deviceWidth / SeatCushion.deviceHeight;
 
   /// Physical height of the cushion grid in millimeters.
-  static const double deviceHeight =
-      SeatCushionUnit.sensorHeight * unitsMaxRow;
+  static const double deviceHeight = SeatCushionUnit.sensorHeight * unitsMaxRow;
 
   /// Physical width of the cushion grid in millimeters.
   static const double deviceWidth =
@@ -79,7 +78,10 @@ class SeatCushion extends Equatable {
     if (forces.length != unitsMaxRow) {
       throw Exception("forces.length must be $unitsMaxRow.");
     }
-    if (forces.fold(false, (prev, list) => prev || (list.length != unitsMaxColumn))) {
+    if (forces.fold(
+      false,
+      (prev, list) => prev || (list.length != unitsMaxColumn),
+    )) {
       throw Exception("forces[row].length must be $unitsMaxColumn.");
     }
   }
@@ -106,10 +108,12 @@ class SeatCushion extends Equatable {
 
   /// Calculates the **center of pressure** (weighted average of all active forces).
   Point<double> centerOfForces() {
-    return units.expand((e) => e).fold(
-          Point(0.0, 0.0),
-          (sum, u) => sum + (u.mmPoint.position * u.mmPoint.force),
-        ) *
+    return units
+            .expand((e) => e)
+            .fold(
+              Point(0.0, 0.0),
+              (sum, u) => sum + (u.mmPoint.position * u.mmPoint.force),
+            ) *
         (1 / totalForce());
   }
 
@@ -119,8 +123,8 @@ class SeatCushion extends Equatable {
   /// until a saturation threshold is reached.
   Point<double> ischiumPosition() {
     final units = this.units
-        .expand((e) => e)
-        .toList(growable: false)
+      .expand((e) => e)
+      .toList(growable: false)
       ..sort((a, b) => b.mmPoint.force.compareTo(a.mmPoint.force));
 
     var leverage = Point<double>(0, 0);
@@ -129,7 +133,9 @@ class SeatCushion extends Equatable {
     for (var item in units.indexed) {
       final index = item.$1;
       final unit = item.$2;
-      final force = unit.mmPoint.force < forceMax ? unit.mmPoint.force : forceMax;
+      final force = unit.mmPoint.force < forceMax
+          ? unit.mmPoint.force
+          : forceMax;
       leverage += unit.mmPoint.position * unit.mmPoint.force;
       total += unit.mmPoint.force;
       if (force == forceMax && index >= 9) break;

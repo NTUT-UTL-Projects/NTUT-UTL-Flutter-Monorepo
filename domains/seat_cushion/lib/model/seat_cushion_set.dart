@@ -16,10 +16,11 @@ class SeatCushionSet extends Equatable {
   static double deviceAspectRatio = deviceWidth / deviceHeight;
 
   /// The total horizontal dimension of the dual-cushion system.
-  /// 
+  ///
   /// Computed from both individual [SeatCushion.deviceWidth] values and
   /// the positional offset between [LeftSeatCushion] and [RightSeatCushion].
-  static double deviceWidth = (SeatCushion.deviceWidth) +
+  static double deviceWidth =
+      (SeatCushion.deviceWidth) +
       (LeftSeatCushion.basePosition.x - RightSeatCushion.basePosition.x).abs();
 
   /// The vertical dimension of the device (identical for both sides).

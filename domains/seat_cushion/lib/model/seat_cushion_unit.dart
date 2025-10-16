@@ -44,30 +44,36 @@ class SeatCushionUnit extends Equatable {
   });
 
   /// Bottom-left corner point of this sensor unit.
-  SeatCushionUnitCornerPoint get blPoint =>
-      SeatCushionUnitCornerPoint._(type: SeatCushionUnitCornerPointType.bottomLeft, unit: this);
+  SeatCushionUnitCornerPoint get blPoint => SeatCushionUnitCornerPoint._(
+    type: SeatCushionUnitCornerPointType.bottomLeft,
+    unit: this,
+  );
 
   /// Bottom-right corner point of this sensor unit.
-  SeatCushionUnitCornerPoint get brPoint =>
-      SeatCushionUnitCornerPoint._(type: SeatCushionUnitCornerPointType.bottomRight, unit: this);
+  SeatCushionUnitCornerPoint get brPoint => SeatCushionUnitCornerPoint._(
+    type: SeatCushionUnitCornerPointType.bottomRight,
+    unit: this,
+  );
 
   /// Center point of this sensor unit.
-  SeatCushionUnitCornerPoint get mmPoint =>
-      SeatCushionUnitCornerPoint._(type: SeatCushionUnitCornerPointType.center, unit: this);
+  SeatCushionUnitCornerPoint get mmPoint => SeatCushionUnitCornerPoint._(
+    type: SeatCushionUnitCornerPointType.center,
+    unit: this,
+  );
 
   /// Top-left corner point of this sensor unit.
-  SeatCushionUnitCornerPoint get tlPoint =>
-      SeatCushionUnitCornerPoint._(type: SeatCushionUnitCornerPointType.topLeft, unit: this);
+  SeatCushionUnitCornerPoint get tlPoint => SeatCushionUnitCornerPoint._(
+    type: SeatCushionUnitCornerPointType.topLeft,
+    unit: this,
+  );
 
   /// Top-right corner point of this sensor unit.
-  SeatCushionUnitCornerPoint get trPoint =>
-      SeatCushionUnitCornerPoint._(type: SeatCushionUnitCornerPointType.topRight, unit: this);
+  SeatCushionUnitCornerPoint get trPoint => SeatCushionUnitCornerPoint._(
+    type: SeatCushionUnitCornerPointType.topRight,
+    unit: this,
+  );
 
   /// Used by [Equatable] for value equality.
   @override
-  List<Object?> get props => [
-    row,
-    column,
-    seatCushion,
-  ];
+  List<Object?> get props => [row, column, seatCushion];
 }

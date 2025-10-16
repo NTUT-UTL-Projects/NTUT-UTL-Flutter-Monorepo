@@ -22,5 +22,4 @@ abstract class SeatCushionSensorDecoder {
   /// Add the values to the buffer​ ​and then send the seat
   /// cushion data via stream when the conditions are met.
   Future<void> addValues(List<int> values);
-  
 }

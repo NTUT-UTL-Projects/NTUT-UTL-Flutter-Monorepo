@@ -72,18 +72,21 @@ class BluetoothSeatCushionSensor implements SeatCushionSensor {
     _sub.addAll([
       /// Bind [FlutterBluePlus] notifications to the decoder if supported.
       if (fbpIsSupported)
-        CharacteristicFlutterBluePlus.onCharacteristicReceived
-            .listen((c) => decoder.addValues(c.lastReceivedValue)),
+        CharacteristicFlutterBluePlus.onCharacteristicReceived.listen(
+          (c) => decoder.addValues(c.lastReceivedValue),
+        ),
       if (fbpIsSupported)
-        DescriptorFlutterBluePlus.onDescriptorReceived
-            .listen((d) => decoder.addValues(d.lastReceivedValue)),
+        DescriptorFlutterBluePlus.onDescriptorReceived.listen(
+          (d) => decoder.addValues(d.lastReceivedValue),
+        ),
 
       /// Listen to decoded left cushion stream.
       decoder.leftStream.listen((b) {
         _leftBuffer = b;
         if (_leftBuffer != null && _rightBuffer != null) {
           _setController.add(
-              SeatCushionSet(left: _leftBuffer!, right: _rightBuffer!));
+            SeatCushionSet(left: _leftBuffer!, right: _rightBuffer!),
+          );
         }
       }),
 
@@ -92,7 +95,8 @@ class BluetoothSeatCushionSensor implements SeatCushionSensor {
         _rightBuffer = b;
         if (_leftBuffer != null && _rightBuffer != null) {
           _setController.add(
-              SeatCushionSet(left: _leftBuffer!, right: _rightBuffer!));
+            SeatCushionSet(left: _leftBuffer!, right: _rightBuffer!),
+          );
         }
       }),
     ]);
@@ -114,10 +118,7 @@ class BluetoothSeatCushionSensor implements SeatCushionSensor {
   /// Merged stream of all decoded [SeatCushion] data
   /// (both left and right cushions combined into a single flow).
   @override
-  Stream<SeatCushion> get stream => mergeStreams([
-        leftStream,
-        rightStream,
-      ]);
+  Stream<SeatCushion> get stream => mergeStreams([leftStream, rightStream]);
 
   /// Cancels all active subscriptions and closes the stream controller.
   ///

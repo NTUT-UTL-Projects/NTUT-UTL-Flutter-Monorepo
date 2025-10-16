@@ -26,10 +26,11 @@ enum WeiZheDecoderValuesStage {
 }
 
 class WeiZheDecoder implements SeatCushionSensorDecoder {
-  final Map<
-    SeatCushionType,
-    Map<WeiZheDecoderValuesStage, List<int>?>
-  > _buffer = { for (var v in SeatCushionType.values) v : { for (var v in WeiZheDecoderValuesStage.values) v : null } };
+  final Map<SeatCushionType, Map<WeiZheDecoderValuesStage, List<int>?>>
+  _buffer = {
+    for (var v in SeatCushionType.values)
+      v: {for (var v in WeiZheDecoderValuesStage.values) v: null},
+  };
 
   final _leftController = StreamController<LeftSeatCushion>.broadcast();
 
@@ -46,24 +47,24 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
   @visibleForTesting
   @pragma('vm:notify-debugger-on-exception')
   SeatCushionType? valuesToSeatCushionType(List<int> values) {
-    if(values.first & 0xF0 == 0x10) return SeatCushionType.right;
-    if(values.first & 0xF0 == 0x20) return SeatCushionType.left;
+    if (values.first & 0xF0 == 0x10) return SeatCushionType.right;
+    if (values.first & 0xF0 == 0x20) return SeatCushionType.left;
     return null;
   }
 
   @visibleForTesting
   @pragma('vm:notify-debugger-on-exception')
   WeiZheDecoderValuesStage? valuesToStage(List<int> values) {
-    if(values.first & 0x0F == 0x01) return WeiZheDecoderValuesStage.first;
-    if(values.first & 0x0F == 0x02) return WeiZheDecoderValuesStage.second;
-    if(values.first & 0x0F == 0x03) return WeiZheDecoderValuesStage.third;
+    if (values.first & 0x0F == 0x01) return WeiZheDecoderValuesStage.first;
+    if (values.first & 0x0F == 0x02) return WeiZheDecoderValuesStage.second;
+    if (values.first & 0x0F == 0x03) return WeiZheDecoderValuesStage.third;
     return null;
   }
 
   @visibleForTesting
   @pragma('vm:notify-debugger-on-exception')
   int stageToLength(WeiZheDecoderValuesStage stage) {
-    switch(stage) {
+    switch (stage) {
       case WeiZheDecoderValuesStage.first:
         return 243;
       case WeiZheDecoderValuesStage.second:
@@ -79,7 +80,7 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     final byteData = ByteData.sublistView(Uint8List.fromList(values));
     return [
       for (var i = 0; i < byteData.lengthInBytes; i += 2)
-        byteData.getInt16(i, Endian.little).toDouble()
+        byteData.getInt16(i, Endian.little).toDouble(),
     ];
   }
 
@@ -89,11 +90,12 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     required SeatCushionType type,
     required int index,
   }) {
-    switch(type) {
+    switch (type) {
       case SeatCushionType.left:
         return index ~/ SeatCushion.unitsMaxColumn;
       case SeatCushionType.right:
-        return (SeatCushion.unitsMaxRow - 1) - (index ~/ SeatCushion.unitsMaxColumn);
+        return (SeatCushion.unitsMaxRow - 1) -
+            (index ~/ SeatCushion.unitsMaxColumn);
     }
   }
 
@@ -103,9 +105,10 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     required SeatCushionType type,
     required int index,
   }) {
-    switch(type) {
+    switch (type) {
       case SeatCushionType.left:
-        return (SeatCushion.unitsMaxColumn - 1) - (index % SeatCushion.unitsMaxColumn);
+        return (SeatCushion.unitsMaxColumn - 1) -
+            (index % SeatCushion.unitsMaxColumn);
       case SeatCushionType.right:
         return index % SeatCushion.unitsMaxColumn;
     }
@@ -118,11 +121,14 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     required int row,
     required int column,
   }) {
-    switch(type) {
+    switch (type) {
       case SeatCushionType.left:
-        return (row * SeatCushion.unitsMaxColumn) + ((SeatCushion.unitsMaxColumn - 1) - column);
+        return (row * SeatCushion.unitsMaxColumn) +
+            ((SeatCushion.unitsMaxColumn - 1) - column);
       case SeatCushionType.right:
-        return (((SeatCushion.unitsMaxRow - 1) - row) * SeatCushion.unitsMaxColumn) + column;
+        return (((SeatCushion.unitsMaxRow - 1) - row) *
+                SeatCushion.unitsMaxColumn) +
+            column;
     }
   }
 
@@ -133,54 +139,47 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     return await _lock.synchronized(() {
       /// Check the type is valid.
       final type = valuesToSeatCushionType(values);
-      if(type == null) return;
+      if (type == null) return;
 
       /// Check the stage is valid.
       final stage = valuesToStage(values);
-      if(stage == null) return;
+      if (stage == null) return;
 
       /// Check the length is valid.
       final length = stageToLength(stage);
-      if(length != values.length) return;
+      if (length != values.length) return;
 
       /// Update the buffer.
-      _buffer[type]!.update(
-        stage,
-        (_) => values,
-      );
+      _buffer[type]!.update(stage, (_) => values);
 
       /// Checks whether each stage values of the buffer of this type is ready.
-      final allStageValuesIsNotEmpty = !_buffer[type]!
-        .values
-        .fold(false, (result, values) => result || (values == null));
-      
-      if(allStageValuesIsNotEmpty) {
+      final allStageValuesIsNotEmpty = !_buffer[type]!.values.fold(
+        false,
+        (result, values) => result || (values == null),
+      );
+
+      if (allStageValuesIsNotEmpty) {
         /// Get the force list.
         final rawForces = valuesToForces(
-          _buffer[type]!
-            .values
-            .expand((e) => e!.skip(1))
-            .toList()
+          _buffer[type]!.values.expand((e) => e!.skip(1)).toList(),
         );
 
         /// Map the force list to 2D-list.
-        final forces = List.generate(
-          SeatCushion.unitsMaxRow,
-          (row) {
-            return List.generate(
-              SeatCushion.unitsMaxColumn,
-              (column) {
-                return rawForces[rowColumnToIndex(type: type, row: row, column: column)];
-              },
-            );
-          },
-        );
+        final forces = List.generate(SeatCushion.unitsMaxRow, (row) {
+          return List.generate(SeatCushion.unitsMaxColumn, (column) {
+            return rawForces[rowColumnToIndex(
+              type: type,
+              row: row,
+              column: column,
+            )];
+          });
+        });
 
         /// Get current time.
         final time = DateTime.now();
 
         /// Add the seat cushion data to the corresponding stream.
-        switch(type) {
+        switch (type) {
           case SeatCushionType.left:
             _leftController.add(LeftSeatCushion(forces: forces, time: time));
           case SeatCushionType.right:
@@ -188,11 +187,8 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
         }
 
         /// Clear the buffer of this type.
-        for(final stage in WeiZheDecoderValuesStage.values) {
-          _buffer[type]!.update(
-            stage,
-            (_) => null,
-          );
+        for (final stage in WeiZheDecoderValuesStage.values) {
+          _buffer[type]!.update(stage, (_) => null);
         }
       }
     });
@@ -226,5 +222,4 @@ class WeiZheDecoder implements SeatCushionSensorDecoder {
     _leftController.close();
     _rightController.close();
   }
-  
 }

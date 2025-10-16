@@ -48,8 +48,10 @@ class InMemorySeatCushionRepository implements SeatCushionRepository {
   /// Emits the newly added entity to [lastEntityStream].
   @override
   Future<bool> add({required SeatCushion seatCushion}) async {
-    final entity =
-        SeatCushionEntity(id: createNewId(), seatCushion: seatCushion);
+    final entity = SeatCushionEntity(
+      id: createNewId(),
+      seatCushion: seatCushion,
+    );
     return _lock.synchronized(() {
       _entities.add(entity);
       _lastEntityController.add(entity);

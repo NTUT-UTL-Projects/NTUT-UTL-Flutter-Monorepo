@@ -5,14 +5,14 @@ part of '../seat_cushion.dart';
 /// ------------------------------
 ///
 /// Represents a **data model** used by [SeatCushionRepository].
-/// 
+///
 /// While [SeatCushion] represent the *domain object*,
 /// [SeatCushionEntity] serves as the **storage or transfer layer** version of that object.
 /// It defines how a [SeatCushion] is **serialized, deserialized, and persisted**.
-/// 
+///
 /// In short:
 /// - [id]: the unique identifier for each [SeatCushionEntity].
-/// - [SeatCushion]: business logic / in-memory model  
+/// - [SeatCushion]: business logic / in-memory model
 /// - [SeatCushionEntity]: repository-level data model for persistence or streaming
 ///
 /// This design separates **domain logic** from **data storage**, following a clean architecture pattern.
@@ -21,7 +21,7 @@ part of '../seat_cushion.dart';
 class SeatCushionEntity {
   /// Unique identifier for each seat cushion entity.
   final int id;
-  
+
   @JsonKey(toJson: SeatCushion._toJson)
   final SeatCushion seatCushion;
 
