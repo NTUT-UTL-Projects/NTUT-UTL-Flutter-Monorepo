@@ -7,6 +7,7 @@ on:
   pull_request:
     tags:
       - 'apps/virus_detector_cart_controller/v*'
+  workflow_dispatch:
 
 permissions:
   contents: write   # allow creating/updating Releases & uploading assets
