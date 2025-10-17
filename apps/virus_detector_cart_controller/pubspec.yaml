@@ -16,6 +16,7 @@ dependencies:
   equatable: any
   flutter_blue_plus: any
   flutter_blue_plus_platform_interface: any
+  flutter_joystick: any
   fluttertoast: any
   package_info_plus: any
   provider: any

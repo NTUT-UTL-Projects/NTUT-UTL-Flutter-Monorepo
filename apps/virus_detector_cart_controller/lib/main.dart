@@ -5,7 +5,8 @@ import 'package:bluetooth_utils/bluetooth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:provider/provider.dart';
-import 'package:virus_detector_cart_controller/presentation/view/joystick/joystick.dart';
+import 'package:virus_detector_cart_controller/presentation/view/move_controller_view/move_controller_view.dart';
+import 'package:virus_detector_cart_controller/presentation/view/valve_controller_view/valve_controller_view.dart';
 
 import 'init/initializer.dart';
 import 'presentation/screen/home_page.dart';
@@ -93,7 +94,7 @@ class MyApp extends StatelessWidget {
 
           // Domains
           ChangeNotifierProvider(
-            create: (_) => JoystickController(
+            create: (_) => MoveController(
               trigger: (point) async {
                 for (final device in fbp.FlutterBluePlus.connectedDevices) {
                   for (final s in device.servicesList) {
@@ -104,6 +105,26 @@ class MyApp extends StatelessWidget {
                       try {
                         // TODO
                         // point to bytes.
+                        await c.write([]);
+                      } catch (e) {}
+                    }
+                  }
+                }
+              },
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => ValveController(
+              trigger: (valve) async {
+                for (final device in fbp.FlutterBluePlus.connectedDevices) {
+                  for (final s in device.servicesList) {
+                    for (final c in s.characteristics.where((c) {
+                      final p = c.properties;
+                      return p.write || p.writeWithoutResponse;
+                    })) {
+                      try {
+                        // TODO
+                        // valve to bytes.
                         await c.write([]);
                       } catch (e) {}
                     }
