@@ -10,9 +10,11 @@ workspace:
   - domains/electrochemical
   - domains/seat_cushion
   - domains/seat_cushion_presentation
+  - domains/seat_cushion_presentation/example
   - packages/bluetooth_presentation
   - packages/bluetooth_utils
   - packages/data_presentation
+  - packages/data_presentation/example
   - packages/data_utils
   - packages/file_utils
   - packages/path_provider_utils

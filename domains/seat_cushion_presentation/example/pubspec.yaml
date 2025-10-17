@@ -1,32 +1,33 @@
-name: example
-description: "A new Flutter project."
+name: seat_cushion_presentation_example
+description: "Seat Cushion Presentation Example."
 publish_to: 'none'
-
-version: 1.0.0+1
+version: 0.0.1
+homepage:
 
 environment:
   sdk: ^3.9.2
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  provider: ^6.1.5+1
-  seat_cushion: any
-  seat_cushion_presentation:
-    path: ..
-  stream_utils: any
+  cupertino_icons: any
+  provider: any
 
-dependency_overrides:
-  seat_cushion:
-    path: ../../seat_cushion
-  stream_utils:
-    path: ../../../packages/stream_utils
+  # Domains
+  seat_cushion: any
+  seat_cushion_presentation: any
+  
+  # Packages
+  stream_utils: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: any
 
 flutter:
   uses-material-design: true
+  generate: true
+
+resolution: workspace
