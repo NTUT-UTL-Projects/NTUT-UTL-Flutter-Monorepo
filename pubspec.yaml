@@ -28,6 +28,7 @@ dependency_overrides:
   flutter_localizations:
     sdk: flutter
   awesome_dialog: ^3.1.0
+  collection: ^1.19.1
   copy_with_extension: ^10.0.1
   copy_with_extension_gen: ^10.0.1
   # The following adds the Cupertino Icons font to your application.

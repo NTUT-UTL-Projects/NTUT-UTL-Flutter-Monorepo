@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:bluetooth_presentation/bluetooth_presentation.dart';
 import 'package:bluetooth_utils/bluetooth_utils.dart';
+import 'package:collection/collection.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:data_utils/data_utils.dart';
 import 'package:electrochemical/electrochemical.dart';
@@ -37,35 +38,46 @@ class Data with EquatableMixin {
   List get props => [id, data];
 }
 
+enum ReceivedEvent { results }
+
+enum ResultType { lptia, hstia, temperature }
+
 class Sensor {
-  static const max = 3;
+  static const max = 30;
 
   final bool fbpIsSupported;
 
   Sensor({required this.fbpIsSupported}) {
     _sub.add(
       valueStream.listen((values) async {
-        final id = values.elementAt(0);
+        // final event = values.elementAt(0);
+        final id = Uint32List.view(
+          Uint8List.fromList(values.skip(1).take(4).toList()).buffer,
+        ).elementAt(0);
         var target = _dataList.where((d) => d.id == id).firstOrNull;
         if (target == null) {
           target = Data(id: id, data: []);
           _dataList.add(target);
         }
-        Uint8List uint8List = Uint8List.fromList(values.skip(1).toList());
-        ByteBuffer buffer = uint8List.buffer;
-        Float32List float32List = Float32List.view(buffer);
-        double newValue = float32List.elementAt(0);
 
-        final updatedList = _dataList.map((d) {
-          if (d.id == id) return d.addValue(newValue);
-          return d;
-        }).toList();
-
-        if (updatedList.length > max) {
-          updatedList.removeAt(0);
+        if (_dataList.length > max) {
+          _dataList.removeAt(0);
         }
 
-        _dataList = updatedList;
+        for (final v in values.skip(5).slices(5).toList()) {
+          // final type = ResultType.values[v.elementAt(0)];
+          double newValue = Float32List.view(
+            Uint8List.fromList(v.skip(1).take(4).toList()).buffer,
+          ).elementAt(0);
+
+          final updatedList = _dataList.map((d) {
+            if (d.id == id) return d.addValue(newValue);
+            return d;
+          }).toList();
+
+          _dataList = updatedList;
+        }
+        _lastDataController.add(target);
         _dataController.add(_dataList);
       }),
     );
@@ -75,11 +87,15 @@ class Sensor {
 
   final _dataController = StreamController<List<Data>>.broadcast();
 
+  final _lastDataController = StreamController<Data>.broadcast();
+
   final _mockController = StreamController<List<int>>.broadcast();
 
   final _sub = <StreamSubscription>[];
 
   Stream<List<Data>> get dataListStream => _dataController.stream;
+
+  Stream<Data> get lastDataListStream => _lastDataController.stream;
 
   List<Data> get dataList => [..._dataList];
 
@@ -97,6 +113,7 @@ class Sensor {
 
   void dispose() {
     _dataController.close();
+    _lastDataController.close();
     _mockController.close();
     for (final s in _sub) {
       s.cancel();
@@ -111,22 +128,20 @@ class AutoWrite {
 
   AutoWrite({required this.sensor}) {
     _sub.add(
-      sensor.valueStream.listen((value) async {
-        final id = value.elementAt(0);
-        if (!_files.containsKey(id)) {
+      sensor.lastDataListStream.listen((data) async {
+        if (!_files.containsKey(data.id)) {
           final path = (await getSystemDownloadDirectory())?.absolute.path;
           _files.addEntries(
             {
-              id: File("$path/ad5940_${DateTime.now().toFileFormat()}_$id.csv"),
+              data.id: File(
+                "$path/ad5940_${DateTime.now().toFileFormat()}_${data.id}.csv",
+              ),
             }.entries,
           );
         }
-        final file = _files[id]!;
-        Uint8List uint8List = Uint8List.fromList(value.skip(1).toList());
-        ByteBuffer buffer = uint8List.buffer;
-        Float32List float32List = Float32List.view(buffer);
+        final file = _files[data.id]!;
         await file.writeAsString(
-          "${float32List.elementAt(0).toString()}, ",
+          "${data.data.lastOrNull.toString()}, ",
           mode: FileMode.append,
         );
       }),

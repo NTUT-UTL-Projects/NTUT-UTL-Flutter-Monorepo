@@ -19,11 +19,21 @@ Future<void> main() async {
   autoWrite = AutoWrite(sensor: sensor);
   int counter = 0;
   timer = Timer.periodic(const Duration(milliseconds: 10), (_) {
-    final bytes = ByteData(4)
+    final event = Random.secure().nextInt(ReceivedEvent.values.length);
+
+    final id = ByteData(4)
+      ..setUint32(0, ((counter++) / 100.0).toInt(), Endian.little);
+
+    final type = Random.secure().nextInt(ResultType.values.length);
+
+    final value = ByteData(4)
       ..setFloat32(0, Random.secure().nextDouble() * 100, Endian.little);
+
     sensor.addMock([
-      ((counter++) / 100.0).toInt(),
-      ...bytes.buffer.asUint8List(),
+      event,
+      ...id.buffer.asUint8List(),
+      type,
+      ...value.buffer.asUint8List(),
     ]);
   });
   runApp(MyApp());
