@@ -54,7 +54,7 @@ class SeatCushion extends Equatable {
   /// Maximum measurable force of each unit sensor (mmHg).
   static const double forceMax = 1200;
 
-  /// Minimum measurable force of each unit sensor.
+  /// Minimum measurable force of each unit sensor (mmHg).
   static const double forceMin = 0;
 
   /// 2D matrix of pressure values for all sensors.
