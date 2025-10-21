@@ -51,8 +51,8 @@ class SeatCushion extends Equatable {
   static const double deviceWidth =
       SeatCushionUnit.sensorWidth * unitsMaxColumn;
 
-  /// Maximum measurable force of each unit sensor.
-  static const double forceMax = 2500;
+  /// Maximum measurable force of each unit sensor (mmHg).
+  static const double forceMax = 1200;
 
   /// Minimum measurable force of each unit sensor.
   static const double forceMin = 0;
