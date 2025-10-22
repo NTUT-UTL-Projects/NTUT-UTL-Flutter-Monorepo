@@ -103,22 +103,46 @@ class CharacteristicTile extends StatelessWidget {
         final write = context.select<BluetoothCharacteristic, bool>(
           (c) => c.properties.write,
         );
+        final characteristic = context.watch<BluetoothCharacteristic>();
+        return (write)
+            ? TextButton(
+                onPressed: () async {
+                  try {
+                    await characteristic.write(
+                      allowLongWrite: true,
+                      withoutResponse: false,
+                      writeValueGetter?.call() ?? [],
+                    );
+                  } catch(e) {}
+                },
+                child: Text(
+                  "Write",
+                ),
+              )
+            : Column();
+      },
+    );
+
+    final writeNoRespButton = Builder(
+      builder: (context) {
         final writeWithoutResponse = context
             .select<BluetoothCharacteristic, bool>(
               (c) => c.properties.writeWithoutResponse,
             );
         final characteristic = context.watch<BluetoothCharacteristic>();
-        return (write || writeWithoutResponse)
+        return (writeWithoutResponse)
             ? TextButton(
                 onPressed: () async {
                   try {
-                    await characteristic.write(writeValueGetter?.call() ?? []);
+                    await characteristic.write(
+                      allowLongWrite: true,
+                      withoutResponse: true,
+                      writeValueGetter?.call() ?? [],
+                    );
                   } catch(e) {}
                 },
                 child: Text(
-                  writeWithoutResponse
-                  ? "WriteNoResp"
-                  : "Write",
+                  "WriteNoResp",
                 ),
               )
             : Column();
@@ -178,6 +202,7 @@ class CharacteristicTile extends StatelessWidget {
                   children: [
                     readButton,
                     writeButton,
+                    writeNoRespButton,
                     notifyButton,
                   ],
                 ),
