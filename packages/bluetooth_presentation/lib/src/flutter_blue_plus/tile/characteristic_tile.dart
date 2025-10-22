@@ -197,14 +197,17 @@ class CharacteristicTile extends StatelessWidget {
                 titleText,
                 uuidText,
                 const Divider(),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    readButton,
-                    writeButton,
-                    writeNoRespButton,
-                    notifyButton,
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      readButton,
+                      writeButton,
+                      writeNoRespButton,
+                      notifyButton,
+                    ],
+                  ),
                 ),
                 valueField,
               ],
