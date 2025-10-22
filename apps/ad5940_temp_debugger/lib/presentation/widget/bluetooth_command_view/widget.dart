@@ -11,6 +11,7 @@ class BluetoothCommandView extends StatelessWidget {
         .select<BluetoothCommandViewController, TextEditingController>(
           (c) => c.textEditingController,
         );
+    final message = 'Hex Input: ${(controller.text.length / 2).toInt()}';
 
     final triggerClear = context
         .select<BluetoothCommandViewController, VoidCallback>(
@@ -54,8 +55,9 @@ class BluetoothCommandView extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 decoration: InputDecoration(
-                  labelText: 'Hex Input',
                   border: OutlineInputBorder(),
+                  counterText: message,
+                  labelText: message,
                 ),
                 keyboardType: TextInputType.multiline,
                 inputFormatters: [HexFormatter()],
