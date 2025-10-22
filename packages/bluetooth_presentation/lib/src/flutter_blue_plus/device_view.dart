@@ -423,8 +423,13 @@ class DeviceView extends StatelessWidget {
           idTile,
           statusTile,
           mtuTile,
-          writeTile,
           Expanded(
+            child: SingleChildScrollView(
+              child: writeTile,
+            ),
+          ),
+          Expanded(
+            flex: 4,
             child: SingleChildScrollView(
               child: servicesList,
             ),

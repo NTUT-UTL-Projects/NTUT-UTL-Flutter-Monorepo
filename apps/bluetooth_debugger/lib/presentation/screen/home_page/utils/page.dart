@@ -126,12 +126,20 @@ class HomePage extends StatelessWidget {
     final writeField = Builder(
       builder: (context) {
         final controller = context.watch<_ValueEditingController>();
+        final message = 'Hex Input: ${(controller.text.length / 2).toInt()}';
         return TextField(
           controller: controller,
-          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            counterText: message,
+            labelText: message,
+          ),
+          keyboardType: TextInputType.multiline,
           inputFormatters: [
             HexFormatter(),
           ],
+          maxLines: null,
+          minLines: null,
+          showCursor: true,
         );
       },
     );
