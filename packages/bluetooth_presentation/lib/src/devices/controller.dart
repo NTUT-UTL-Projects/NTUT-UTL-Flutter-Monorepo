@@ -133,7 +133,7 @@ mixin BluetoothDevicesController on ChangeNotifier {
             .firstOrNull
             ?.advertisementData
             .connectable ??
-        false;
+        device.isConnected;
     VoidCallback? togglePairing;
     if (device.isBondable && !device.isBonded) {
       togglePairing = () async {
