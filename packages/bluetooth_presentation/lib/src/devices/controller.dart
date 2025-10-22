@@ -134,6 +134,10 @@ mixin BluetoothDevicesController on ChangeNotifier {
             ?.advertisementData
             .connectable ??
         device.isConnected;
+    final isScanned = ScanResultFlutterBluePlus
+            .lastScannedDevices
+            .contains(device) ||
+        device.isConnected;
     VoidCallback? togglePairing;
     if (device.isBondable && !device.isBonded) {
       togglePairing = () async {
@@ -165,7 +169,7 @@ mixin BluetoothDevicesController on ChangeNotifier {
       isPaired: BondFlutterBluePlus.bondedDevices.contains(device),
       isConnectable: isConnectable,
       isConnected: device.isConnected,
-      isScanned: ScanResultFlutterBluePlus.lastScannedDevices.contains(device),
+      isScanned: isScanned,
       isSelected: fbpIsSelected?.call(device) ?? false,
       name: device.platformName,
       rssi: device.rssi ?? 0,
