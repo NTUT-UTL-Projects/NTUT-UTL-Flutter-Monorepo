@@ -50,21 +50,35 @@ class Sensor {
   Sensor({required this.fbpIsSupported}) {
     _sub.add(
       valueStream.listen((values) async {
-        // final event = values.elementAt(0);
+        // final header = values.elementAt(0);
+
         final id = Uint32List.view(
           Uint8List.fromList(values.skip(1).take(4).toList()).buffer,
         ).elementAt(0);
+
+        // Find the exists target.
         var target = _dataList.where((d) => d.id == id).firstOrNull;
+        // Find the data doesn't exists, create a new one.
         if (target == null) {
           target = Data(id: id, data: []);
           _dataList.add(target);
         }
-
+        // If there are too many data inside the _dataList, remove the oldest one.
         if (_dataList.length > max) {
           _dataList.removeAt(0);
         }
 
-        for (final v in values.skip(5).slices(5).toList()) {
+        // final type = ResultType.values[values.elementAt(5)];
+
+        // final index = Uint16List.view(
+        //   Uint8List.fromList(values.skip(6).take(2).toList()).buffer,
+        // ).elementAt(0);
+
+        // final maxIndex = Uint16List.view(
+        //   Uint8List.fromList(values.skip(8).take(2).toList()).buffer,
+        // ).elementAt(0);
+
+        for (final v in values.skip(10).slices(5).toList()) {
           // final type = ResultType.values[v.elementAt(0)];
           double newValue = Float32List.view(
             Uint8List.fromList(v.skip(1).take(4).toList()).buffer,
