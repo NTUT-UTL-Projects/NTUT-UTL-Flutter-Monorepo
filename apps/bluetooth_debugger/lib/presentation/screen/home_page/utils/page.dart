@@ -1,7 +1,7 @@
 part of '../home_page.dart';
 
 class BluetoothDeviceTileTheme extends BluetoothDeviceDetailsTileTheme {
-  BluetoothDeviceTileTheme({
+  const BluetoothDeviceTileTheme({
     required super.classicIcon,
     required super.connectedColor,
     required super.connectedIcon,
